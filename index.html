@@ -566,7 +566,7 @@ function renderTankGrid(machineId, containerId) {
     const s = getStatusLabel(t.status);
     const dateInfo = t.lastChanged ? `เปลี่ยน: ${t.lastChanged}` : t.lastSwitched ? `สลับ: ${t.lastSwitched}` : '—';
     return `<div class="tank-item ${s.cls}" onclick="quickAction('${machineId}','${id}')">
-      <div class="tank-type-label">${t.type === 'pre' ? 'PRE-FILTER' : 'CLEAN-FILTER'}</div>
+      <div class="tank-type-label">${t.type === 'pre' ? 'PRE-TANK' : 'CLEAN-TANK'}</div>
       <div class="tank-id">${id}</div>
       <div class="tank-status-row"><div class="dot"></div><div class="tank-status-text">${s.text}</div></div>
       <div class="tank-date">${dateInfo}</div>
