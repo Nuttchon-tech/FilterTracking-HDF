@@ -317,7 +317,7 @@
   <div class="machine-card">
     <div class="machine-header">
       <div>
-        <div class="machine-name">🏭 เครื่อง HF-01</div>
+        <div class="machine-name">🏭 เครื่อง HDF-01</div>
         <div class="machine-meta" id="hf1-meta">กำลังใช้: — Pre-Tank / — Clean Tank</div>
       </div>
       <div class="machine-badge" id="hf1-badge">ปกติ</div>
@@ -348,7 +348,7 @@
     <div class="form-group">
       <label class="form-label">เครื่อง</label>
       <select class="form-select" id="act-machine" onchange="updateTankOptions()">
-        <option value="HF-01">HF-01</option>
+        <option value="HDF-01">HDF-01</option>
         <option value="HF-02">HF-02</option>
       </select>
     </div>
@@ -489,7 +489,7 @@
 // ===== STATE =====
 const STATE = {
   tanks: {
-    'HF-01': {
+    'HDF-01': {
       'Pre-A1': { type:'pre', status:'active', lastChanged:null, lastSwitched:null },
       'Pre-A2': { type:'pre', status:'ready',  lastChanged:dateStr(-3), lastSwitched:null },
       'Clean-B1': { type:'clean', status:'dirty', lastChanged:null, lastSwitched:dateStr(-8) },
@@ -587,8 +587,8 @@ function renderDashboard() {
   const ac = document.getElementById('alert-container');
   ac.innerHTML = alerts.map(a => `<div class="alert-banner"><div class="alert-icon">🚨</div><div class="alert-text">${a}</div></div>`).join('');
 
-  ['HF-01','HF-02'].forEach(m => {
-    const idx = m === 'HF-01' ? 1 : 2;
+  ['HDF-01','HF-02'].forEach(m => {
+    const idx = m === 'HDF-01' ? 1 : 2;
     renderTankGrid(m, `hf${idx}-tanks`);
     const tanks = STATE.tanks[m];
     const activePre = Object.entries(tanks).find(([,t]) => t.type==='pre' && t.status==='active');
