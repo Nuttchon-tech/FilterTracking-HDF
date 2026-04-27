@@ -986,8 +986,14 @@ function openQuickSwitchModal(machine, tankId) {
 }
 
 function doQuickSwitch(machine, fromId) {
-  const toId = document.getElementById('quick-target').value; // ⭐ เพิ่มบรรทัดนี้
+  const toId = document.getElementById('quick-target').value;
   const operator = document.getElementById('quick-operator').value || 'ไม่ระบุ';
+
+  // ⭐ แนะนำเพิ่ม (กันเลือกถังเดียวกัน)
+  if (fromId === toId) {
+    showToast('❌ ห้ามเลือกถังเดียวกัน', 'error');
+    return;
+  }
 
   if (!toId) {
     showToast('❌ กรุณาเลือกถังปลายทาง', 'error');
