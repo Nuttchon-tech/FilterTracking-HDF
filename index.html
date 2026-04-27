@@ -382,12 +382,8 @@
   <div class="section-label">จำนวน Filter คงเหลือ</div>
   <div id="spare-cards"></div>
 
-  <div class="section-label" style="margin-top:20px;">เพิ่ม/แก้ไขประเภท Filter</div>
+  <div class="section-label" style="margin-top:20px;">อัปเดตจำนวน Spare</div>
   <div class="action-card">
-    <div class="form-group">
-      <label class="form-label">ประเภท Filter</label>
-      <select class="form-select" id="spare-sel"></select>
-    </div>
     <div class="form-group">
       <label class="form-label">จำนวนคงเหลือ (ชิ้น)</label>
       <div class="qty-row">
@@ -397,8 +393,8 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="form-label">แจ้งเตือนเมื่อเหลือน้อยกว่า</label>
-      <input class="form-input" type="number" id="spare-threshold" value="5" min="1">
+      <label class="form-label">แจ้งเตือนเมื่อเหลือน้อยกว่า (ชิ้น)</label>
+      <input class="form-input" type="number" id="spare-threshold" value="14" min="1">
     </div>
     <button class="btn-primary" onclick="saveSpare()">💾 บันทึก</button>
   </div>
@@ -507,8 +503,7 @@ const STATE = {
     }
   },
   spare: {
-    'Filter Pre-Tank (ประเภท A)': { qty: 12, threshold: 5, tankType:'pre' },
-    'Filter Clean Tank (ประเภท B)': { qty: 3, threshold: 5, tankType:'clean' }
+    'Filter (รวมทุกประเภท)': { qty: 20, threshold: 14 }
   },
   log: [],
   operators: ['ช่างสมชาย', 'ช่างวิชัย', 'ช่างประสิทธิ์'],
@@ -587,9 +582,8 @@ function renderDashboard() {
       if (t.status === 'dirty') alerts.push(`${m} — ${id} รอเปลี่ยน Filter!`);
     });
   });
-  Object.entries(STATE.spare).forEach(([k, v]) => {
-    if (v.qty <= v.threshold) alerts.push(`Spare ${k} เหลือ ${v.qty} ชิ้น!`);
-  });
+  const sp = STATE.spare['Filter (รวมทุกประเภท)'];
+  if (sp && sp.qty <= sp.threshold) alerts.push(`Filter Spare คงเหลือ ${sp.qty} ชิ้น — ต่ำกว่า ${sp.threshold} ชิ้น กรุณาสั่งซื้อ!`);
   const ac = document.getElementById('alert-container');
   ac.innerHTML = alerts.map(a => `<div class="alert-banner"><div class="alert-icon">🚨</div><div class="alert-text">${a}</div></div>`).join('');
 
@@ -611,15 +605,15 @@ function renderDashboard() {
 
   // Dash spare
   const ds = document.getElementById('dash-spare');
-  ds.innerHTML = Object.entries(STATE.spare).map(([k,v]) => {
-    const cls = v.qty <= v.threshold ? 'spare-low' : v.qty <= v.threshold*2 ? 'spare-warn' : 'spare-ok';
-    return `<div class="spare-card ${cls}">
-      <div class="spare-label">คงเหลือ</div>
-      <div class="spare-type">${k}</div>
-      <div class="spare-count">${v.qty}</div>
-      <div class="spare-unit">ชิ้น ${v.qty <= v.threshold ? '⚠️' : ''}</div>
+  const sp2 = STATE.spare['Filter (รวมทุกประเภท)'];
+  if (sp2) {
+    const cls = sp2.qty <= sp2.threshold ? 'spare-low' : sp2.qty <= sp2.threshold*1.5 ? 'spare-warn' : 'spare-ok';
+    ds.innerHTML = `<div class="spare-card ${cls}" style="grid-column:1/-1;">
+      <div class="spare-label">Filter Spare คงเหลือ (รวมทุกประเภท)</div>
+      <div class="spare-count">${sp2.qty}</div>
+      <div class="spare-unit">ชิ้น ${sp2.qty <= sp2.threshold ? '⚠️ ต่ำกว่า ' + sp2.threshold + ' ชิ้น!' : '✓ พอเพียง'}</div>
     </div>`;
-  }).join('');
+  }
 }
 
 // ===== QUICK ACTION from Dashboard =====
@@ -700,22 +694,16 @@ function openModal(action) {
     `;
   } else {
     // change filter
-    const spareKeys = Object.keys(STATE.spare);
-    const defaultSpare = spareKeys.find(k => (tank.type==='pre' ? k.includes('Pre') : k.includes('Clean'))) || spareKeys[0];
     document.getElementById('modal-title').textContent = '🔧 บันทึกการเปลี่ยน Filter';
+    const spQty = STATE.spare['Filter (รวมทุกประเภท)']?.qty ?? 0;
     document.getElementById('modal-body').innerHTML = `
       <div class="modal-info">
         เปลี่ยน Filter ถัง <b style="color:var(--text);">${t}</b><br>
-        ถังจะเปลี่ยนสถานะเป็น <span style="color:var(--green);">🟢 READY</span>
+        ถังจะเปลี่ยนสถานะเป็น <span style="color:var(--green);">🟢 READY</span><br>
+        Spare คงเหลือ: <b style="color:var(--text);">${spQty} ชิ้น</b>
       </div>
       <div class="form-group">
-        <label class="form-label">ประเภท Filter</label>
-        <select class="form-select" id="modal-filter-type">
-          ${spareKeys.map(k => `<option value="${k}" ${k===defaultSpare?'selected':''}>${k}</option>`).join('')}
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">จำนวนที่เปลี่ยน</label>
+        <label class="form-label">จำนวนที่เปลี่ยน (ชิ้น)</label>
         <div class="qty-row">
           <button class="qty-btn" onclick="changeModalQty(-1)">−</button>
           <div class="qty-display" id="modal-qty">1</div>
@@ -772,20 +760,20 @@ function doChangeFilter() {
   const m = document.getElementById('act-machine').value;
   const tankId = document.getElementById('act-tank').value;
   const operator = document.getElementById('act-operator').value || 'ไม่ระบุ';
-  const filterType = document.getElementById('modal-filter-type').value;
   const qty = modalQty;
   const note = document.getElementById('modal-note').value;
+  const spareKey = 'Filter (รวมทุกประเภท)';
 
-  const stockBefore = STATE.spare[filterType]?.qty ?? 0;
+  const stockBefore = STATE.spare[spareKey]?.qty ?? 0;
   const stockAfter = Math.max(0, stockBefore - qty);
 
   STATE.tanks[m][tankId].status = 'ready';
   STATE.tanks[m][tankId].lastChanged = now();
-  if (STATE.spare[filterType]) STATE.spare[filterType].qty = stockAfter;
+  if (STATE.spare[spareKey]) STATE.spare[spareKey].qty = stockAfter;
 
   const entry = {
     ts: now(), machine: m, tankId, action: 'change_filter',
-    operator, filterType, qty, stockBefore, stockAfter, note
+    operator, filterType: spareKey, qty, stockBefore, stockAfter, note
   };
   STATE.log.unshift(entry);
   sendToSheets(entry);
@@ -847,28 +835,19 @@ async function testConnection() {
 
 // ===== SPARE PAGE =====
 function renderSparePage() {
+  const spareKey = 'Filter (รวมทุกประเภท)';
+  const v = STATE.spare[spareKey];
   const cards = document.getElementById('spare-cards');
-  cards.innerHTML = Object.entries(STATE.spare).map(([k,v]) => {
-    const cls = v.qty <= v.threshold ? 'spare-low' : v.qty <= v.threshold*2 ? 'spare-warn' : 'spare-ok';
-    return `<div class="spare-card ${cls}" style="margin-bottom:10px;">
-      <div class="spare-label">คงเหลือ</div>
-      <div class="spare-type">${k}</div>
-      <div class="spare-count">${v.qty}</div>
-      <div class="spare-unit">ชิ้น — แจ้งเตือนเมื่อ ≤ ${v.threshold} ชิ้น</div>
-    </div>`;
-  }).join('');
+  const cls = v.qty <= v.threshold ? 'spare-low' : v.qty <= v.threshold*1.5 ? 'spare-warn' : 'spare-ok';
+  cards.innerHTML = `<div class="spare-card ${cls}" style="margin-bottom:10px;">
+    <div class="spare-label">Filter Spare คงเหลือ (รวมทุกประเภท)</div>
+    <div class="spare-count">${v.qty}</div>
+    <div class="spare-unit">ชิ้น — แจ้งเตือนเมื่อ ≤ ${v.threshold} ชิ้น ${v.qty <= v.threshold ? '⚠️' : '✓'}</div>
+  </div>`;
 
-  const sel = document.getElementById('spare-sel');
-  sel.innerHTML = Object.keys(STATE.spare).map(k => `<option value="${k}">${k}</option>`).join('');
-  sel.onchange = function() {
-    const v = STATE.spare[this.value];
-    document.getElementById('spare-qty-disp').textContent = v.qty;
-    document.getElementById('spare-threshold').value = v.threshold;
-    spareQtyEdit = v.qty;
-  };
-  spareQtyEdit = STATE.spare[sel.value]?.qty ?? 0;
+  spareQtyEdit = v.qty;
   document.getElementById('spare-qty-disp').textContent = spareQtyEdit;
-  document.getElementById('spare-threshold').value = STATE.spare[sel.value]?.threshold ?? 5;
+  document.getElementById('spare-threshold').value = v.threshold;
 }
 
 let spareQtyEdit = 0;
@@ -877,12 +856,10 @@ function changeSpareQty(d) {
   document.getElementById('spare-qty-disp').textContent = spareQtyEdit;
 }
 function saveSpare() {
-  const sel = document.getElementById('spare-sel').value;
-  const threshold = parseInt(document.getElementById('spare-threshold').value) || 5;
-  if (STATE.spare[sel]) {
-    STATE.spare[sel].qty = spareQtyEdit;
-    STATE.spare[sel].threshold = threshold;
-  }
+  const spareKey = 'Filter (รวมทุกประเภท)';
+  const threshold = parseInt(document.getElementById('spare-threshold').value) || 14;
+  STATE.spare[spareKey].qty = spareQtyEdit;
+  STATE.spare[spareKey].threshold = threshold;
   save();
   renderSparePage();
   showToast('✅ บันทึก Spare Part แล้ว', 'success');
@@ -909,7 +886,7 @@ function renderLog() {
       </div>
       <div>
         <span class="log-tag">${e.machine}</span>
-        ${e.action !== 'switch' && e.stockAfter <= 5 ? '<span class="log-tag" style="background:var(--red-bg);color:var(--red);border-color:var(--red-border);">Stock ต่ำ!</span>' : ''}
+        ${e.action !== 'switch' && e.stockAfter <= 14 ? '<span class="log-tag" style="background:var(--red-bg);color:var(--red);border-color:var(--red-border);">Stock ต่ำ!</span>' : ''}
       </div>
     </div>`;
   }).join('');
