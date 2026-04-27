@@ -618,14 +618,7 @@ function renderDashboard() {
 
 // ===== QUICK ACTION from Dashboard =====
 function quickAction(machine, tankId) {
-  const tab = document.querySelector('.nav-tab:nth-child(2)');
-  showPage('action', tab);
-  document.getElementById('act-machine').value = machine;
-  updateTankOptions();
-  setTimeout(() => {
-    document.getElementById('act-tank').value = tankId;
-    updateCurrentStatus();
-  }, 50);
+  openQuickSwitchModal(machine, tankId);
 }
 
 // ===== ACTION PAGE =====
@@ -949,7 +942,72 @@ function showToast(msg, type='') {
   t.className = 'toast show ' + type;
   setTimeout(() => t.classList.remove('show'), 2500);
 }
+function openQuickSwitchModal(machine, tankId) {
+  const tank = STATE.tanks[machine][tankId];
 
+  const sameType = Object.entries(STATE.tanks[machine])
+    .filter(([id, t]) => t.type === tank.type && id !== tankId);
+
+  document.getElementById('modal-title').textContent = '🔄 สลับถัง (Quick)';
+
+  document.getElementById('modal-body').innerHTML = `
+    <div class="modal-info">
+      <b>${machine}</b><br>
+      สลับจาก <b style="color:var(--yellow);">${tankId}</b><br>
+      ไปยังถังใหม่
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">เลือกถังปลายทาง</label>
+      <select class="form-select" id="quick-target">
+        ${sameType.map(([id]) => `<option value="${id}">${id}</option>`).join('')}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">👤 ผู้ดำเนินการ</label>
+      <input class="form-input" id="quick-operator" placeholder="กรอกชื่อ">
+    </div>
+
+    <button class="btn-switch" onclick="doQuickSwitch('${machine}','${tankId}')">
+      ✅ ยืนยันสลับ
+    </button>
+    <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>
+  `;
+
+  document.getElementById('modal').classList.add('open');
+}
+
+function doQuickSwitch(machine, fromId) {
+  const toId = document.getElementById('quick-target').value;
+  const operator = document.getElementById('quick-operator').value || 'ไม่ระบุ';
+
+  STATE.tanks[machine][fromId].status = 'dirty';
+  STATE.tanks[machine][fromId].lastSwitched = now();
+
+  STATE.tanks[machine][toId].status = 'active';
+
+  const entry = {
+    ts: now(),
+    machine,
+    tankFrom: fromId,
+    tankTo: toId,
+    action: 'switch',
+    operator,
+    note: '(Quick Switch)',
+    filterType: '—',
+    qty: 0
+  };
+
+  STATE.log.unshift(entry);
+  sendToSheets(entry);
+  save();
+
+  closeModal();
+  renderDashboard();
+
+  showToast(`✅ ${fromId} → ${toId}`, 'success');
+}
 // ===== INIT =====
 load();
 renderDashboard();
