@@ -985,8 +985,14 @@ function openQuickSwitchModal(machine, tankId) {
   document.getElementById('modal').classList.add('open');
 }
 
-function doQuickSwitch(machine, fromId, toId) {
+function doQuickSwitch(machine, fromId) {
+  const toId = document.getElementById('quick-target').value; // ⭐ เพิ่มบรรทัดนี้
   const operator = document.getElementById('quick-operator').value || 'ไม่ระบุ';
+
+  if (!toId) {
+    showToast('❌ กรุณาเลือกถังปลายทาง', 'error');
+    return;
+  }
 
   STATE.tanks[machine][fromId].status = 'dirty';
   STATE.tanks[machine][fromId].lastSwitched = now();
