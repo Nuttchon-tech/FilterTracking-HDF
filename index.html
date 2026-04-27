@@ -491,15 +491,15 @@ const STATE = {
   tanks: {
     'HDF-01': {
       'Pre-A1': { type:'pre', status:'active', lastChanged:null, lastSwitched:null },
-      'Pre-A2': { type:'pre', status:'ready',  lastChanged:dateStr(-3), lastSwitched:null },
-      'Clean-B1': { type:'clean', status:'dirty', lastChanged:null, lastSwitched:dateStr(-8) },
-      'Clean-B2': { type:'clean', status:'active', lastChanged:dateStr(-5), lastSwitched:null }
+      'Pre-A2': { type:'pre', status:'dirty',  lastChanged:dateStr(-3), lastSwitched:null },
+      'Clean-B1': { type:'clean', status:'active', lastChanged:null, lastSwitched:dateStr(-8) },
+      'Clean-B2': { type:'clean', status:'ready', lastChanged:dateStr(-5), lastSwitched:null }
     },
     'HDF-02': {
-      'Pre-C1': { type:'pre', status:'ready', lastChanged:dateStr(-2), lastSwitched:null },
-      'Pre-C2': { type:'pre', status:'active', lastChanged:dateStr(-7), lastSwitched:null },
+      'Pre-C1': { type:'pre', status:'active', lastChanged:dateStr(-2), lastSwitched:null },
+      'Pre-C2': { type:'pre', status:'ready', lastChanged:dateStr(-7), lastSwitched:null },
       'Clean-D1': { type:'clean', status:'active', lastChanged:dateStr(-4), lastSwitched:null },
-      'Clean-D2': { type:'clean', status:'idle', lastChanged:null, lastSwitched:null }
+      'Clean-D2': { type:'clean', status:'dirty', lastChanged:null, lastSwitched:null }
     }
   },
   spare: {
