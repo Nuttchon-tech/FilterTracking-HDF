@@ -26,6 +26,9 @@
     --blue: #3b82f6;
     --blue-bg: rgba(59,130,246,0.10);
     --blue-border: rgba(59,130,246,0.35);
+    --purple: #8b5cf6;
+    --purple-bg: rgba(139,92,246,0.10);
+    --purple-border: rgba(139,92,246,0.35);
     --radius: 14px;
     --radius-sm: 9px;
     --font: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
@@ -73,60 +76,98 @@
   .page.active { display: block; }
 
   /* Section */
-.section-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: var(--text3);
-  text-transform: uppercase;
-  margin: 24px 0 10px; /* เพิ่มระยะด้านบน */
-}
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin: 24px 0 10px;
+  }
 
   /* Machine Card */
   .machine-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  margin-bottom: 20px; /* เพิ่มจาก 12px → 20px */
-  overflow: hidden;
-}
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
   .machine-header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 14px; border-bottom: 1px solid var(--border);
+    padding: 13px 14px; border-bottom: 1px solid var(--border);
   }
-  .machine-name { font-size: 14px; font-weight: 600; }
-  .machine-meta { font-size: 11px; color: var(--text2); }
+  .machine-name { font-size: 17px; font-weight: 700; }
+  .machine-meta { font-size: 11px; color: var(--text2); margin-top: 2px; }
   .machine-badge {
     font-size: 10px; padding: 3px 8px; border-radius: 6px;
     background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border);
   }
 
-  /* Tank Grid */
-  .tank-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
-  .tank-item {
-    background: var(--bg2); padding: 12px 12px 10px;
-    cursor: pointer; transition: background 0.15s; position: relative;
+  /* ===== TANK LAYOUT: LEFT=CLEAN(2 side-by-side) RIGHT=PRE(2 side-by-side) ===== */
+  .tank-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--border);
   }
+  /* Each column = header + row of 2 tanks */
+  .tank-col {
+    display: flex;
+    flex-direction: column;
+  }
+  .tank-col.clean-col {
+    border-right: 1px solid var(--border);
+  }
+  .tank-col-header {
+    text-align: center;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 6px 4px 5px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tank-col-header.clean-header {
+    background: rgba(59,130,246,0.07);
+    color: var(--blue);
+  }
+  .tank-col-header.pre-header {
+    background: rgba(245,158,11,0.07);
+    color: var(--yellow);
+  }
+  /* Inner row: 2 tanks sitting side by side within each col */
+  .tank-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    flex: 1;
+  }
+  .tank-item {
+    background: var(--bg2); padding: 12px 10px 10px;
+    cursor: pointer; transition: background 0.15s; position: relative;
+    border-right: 1px solid var(--border);
+  }
+  .tank-item:last-child { border-right: none; }
   .tank-item:active { background: var(--bg3); }
-  .tank-type-label { font-size: 10px; color: var(--text3); margin-bottom: 3px; font-weight: 500; letter-spacing: 0.05em; }
-  .tank-id { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-  .tank-status-row { display: flex; align-items: center; gap: 5px; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .tank-status-text { font-size: 11px; font-weight: 500; }
-  .tank-date { font-size: 10px; color: var(--text3); margin-top: 5px; }
+  .tank-id { font-size: 12px; font-weight: 600; margin-bottom: 7px; }
+  .tank-status-row { display: flex; align-items: center; gap: 4px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .tank-status-text { font-size: 10px; font-weight: 500; }
+  .tank-date { font-size: 9px; color: var(--text3); margin-top: 5px; line-height: 1.4; }
 
   /* Status colors */
   .status-active  .dot { background: var(--yellow); box-shadow: 0 0 6px rgba(245,158,11,0.5); }
   .status-active  .tank-status-text { color: var(--yellow); }
-  .status-active  { border-left: 2px solid var(--yellow); }
+  .status-active  { border-left: 3px solid var(--yellow) !important; }
   .status-ready   .dot { background: var(--green); box-shadow: 0 0 6px rgba(16,185,129,0.4); }
   .status-ready   .tank-status-text { color: var(--green); }
-  .status-ready   { border-left: 2px solid var(--green); }
+  .status-ready   { border-left: 3px solid var(--green) !important; }
   .status-dirty   .dot { background: var(--red); box-shadow: 0 0 6px rgba(239,68,68,0.5); animation: blink 1.2s infinite; }
   .status-dirty   .tank-status-text { color: var(--red); }
-  .status-dirty   { border-left: 2px solid var(--red); }
+  .status-dirty   { border-left: 3px solid var(--red) !important; }
   .status-idle    .dot { background: var(--text3); }
   .status-idle    .tank-status-text { color: var(--text2); }
+  .status-idle    { border-left: 3px solid var(--text3) !important; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
   /* Alert Banner */
@@ -158,7 +199,21 @@
   }
   .spare-edit-btn:active { opacity: 0.7; }
 
-  /* Action Page */
+  /* ===== ACTION PAGE: Status Badge ===== */
+  .tank-status-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .tsb-active  { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+  .tsb-ready   { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+  .tsb-dirty   { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+  .tsb-idle    { background: var(--bg3);       color: var(--text2);  border: 1px solid var(--border2); }
+  .tsb-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .tsb-dirty .tsb-dot { animation: blink 1.2s infinite; }
+  .tank-status-extra { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+  /* Action Card */
   .action-card {
     background: var(--bg2); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 16px; margin-bottom: 12px;
@@ -212,6 +267,11 @@
     background: rgba(245,158,11,0.12); color: var(--yellow); font-size: 15px; font-weight: 600;
     border: 1px solid rgba(245,158,11,0.35); cursor: pointer; margin-bottom: 10px;
   }
+  .btn-purple {
+    width: 100%; padding: 14px; border-radius: var(--radius);
+    background: var(--purple-bg); color: var(--purple); font-size: 15px; font-weight: 600;
+    border: 1px solid var(--purple-border); cursor: pointer; margin-bottom: 10px;
+  }
 
   /* Log Page */
   .log-item {
@@ -227,7 +287,22 @@
     border-radius: 5px; margin-right: 4px; margin-top: 4px;
     background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border);
   }
+  .log-tag-receive {
+    background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border);
+  }
   .log-empty { text-align: center; color: var(--text3); font-size: 13px; padding: 40px 0; }
+
+  /* Log filter tabs */
+  .log-filter-row {
+    display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; scrollbar-width: none;
+  }
+  .log-filter-row::-webkit-scrollbar { display: none; }
+  .log-filter-btn {
+    padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 500;
+    cursor: pointer; border: 1px solid var(--border2); background: var(--bg2);
+    color: var(--text2); white-space: nowrap; transition: all 0.15s;
+  }
+  .log-filter-btn.active { background: var(--blue-bg); color: var(--blue); border-color: var(--blue-border); }
 
   /* Config Page */
   .config-row {
@@ -281,6 +356,15 @@
   }
   .url-input:focus { outline: none; border-color: var(--blue); }
 
+  /* Receive stock card */
+  .receive-summary-card {
+    background: var(--purple-bg); border: 1px solid var(--purple-border);
+    border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .receive-summary-icon { font-size: 22px; }
+  .receive-summary-text { font-size: 12px; color: var(--purple); font-weight: 500; line-height: 1.5; }
+
   /* Responsive */
   @media (min-width: 500px) {
     .page { max-width: 480px; margin: 0 auto; }
@@ -292,7 +376,7 @@
 <div class="app-header">
   <div>
     <div class="app-title">⚙️ Filter Tracker</div>
-    <div class="app-sub">Hydroforming — SUT Facility</div>
+    <div class="app-sub">Hydroforming — TSAT4 Facility</div>
   </div>
   <button class="sync-btn" onclick="syncNow()" id="syncBtn">⟳ Sync</button>
 </div>
@@ -324,11 +408,11 @@
     <div class="machine-header">
       <div>
         <div class="machine-name">🏭 เครื่อง HDF-01</div>
-        <div class="machine-meta" id="hf1-meta">กำลังใช้: — Pre-Tank / — Clean Tank</div>
+        <div class="machine-meta" id="hf1-meta">กำลังใช้: — Clean Tank / — Pre Tank</div>
       </div>
       <div class="machine-badge" id="hf1-badge">ปกติ</div>
     </div>
-    <div class="tank-grid" id="hf1-tanks"></div>
+    <div id="hf1-tanks"></div>
   </div>
 
   <div class="section-label">Hydroforming #2</div>
@@ -336,11 +420,11 @@
     <div class="machine-header">
       <div>
         <div class="machine-name">🏭 เครื่อง HDF-02</div>
-        <div class="machine-meta" id="hf2-meta">กำลังใช้: — Pre-Tank / — Clean Tank</div>
+        <div class="machine-meta" id="hf2-meta">กำลังใช้: — Clean Tank / — Pre Tank</div>
       </div>
       <div class="machine-badge" id="hf2-badge">ปกติ</div>
     </div>
-    <div class="tank-grid" id="hf2-tanks"></div>
+    <div id="hf2-tanks"></div>
   </div>
 
   <div class="section-label">Spare Part คงเหลือ</div>
@@ -360,11 +444,12 @@
     </div>
     <div class="form-group">
       <label class="form-label">ถัง</label>
-      <select class="form-select" id="act-tank"></select>
+      <select class="form-select" id="act-tank" onchange="updateCurrentStatus()"></select>
     </div>
+    <!-- ===== [1] สถานะถังที่เลือก ===== -->
     <div class="form-group">
-      <label class="form-label">สถานะปัจจุบัน</label>
-      <div id="act-current-status" style="font-size:13px;color:var(--text2);padding:8px 0;">—</div>
+      <label class="form-label">สถานะถังที่เลือก</label>
+      <div id="act-current-status">—</div>
     </div>
   </div>
 
@@ -380,7 +465,12 @@
   <div class="section-label">เลือกการดำเนินการ</div>
 
   <button class="btn-switch" onclick="openModal('switch')">🔄 สลับถังใช้งาน (Switch)</button>
-  <button class="btn-danger" onclick="openModal('change')">🔧 บันทึกการเปลี่ยน Filter</button>
+  <div id="change-filter-wrapper">
+    <button class="btn-danger" id="btn-change-filter" onclick="openModal('change')">🔧 บันทึกการเปลี่ยน Filter</button>
+    <div id="change-filter-hint" style="display:none;margin-top:6px;background:var(--bg3);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;font-size:12px;color:var(--text2);text-align:center;">
+      🔒 สามารถเปลี่ยน Filter ได้เฉพาะถังที่มีสถานะ <b style="color:var(--red);">⚠ ต้องเปลี่ยน (DIRTY)</b> เท่านั้น
+    </div>
+  </div>
 </div>
 
 <!-- ===== SPARE PAGE ===== -->
@@ -388,7 +478,7 @@
   <div class="section-label">จำนวน Filter คงเหลือ</div>
   <div id="spare-cards"></div>
 
-  <div class="section-label" style="margin-top:20px;">อัปเดตจำนวน Spare</div>
+  <div class="section-label">อัปเดตจำนวน Spare</div>
   <div class="action-card">
     <div class="form-group">
       <label class="form-label">จำนวนคงเหลือ (ชิ้น)</label>
@@ -404,6 +494,33 @@
     </div>
     <button class="btn-primary" onclick="saveSpare()">💾 บันทึก</button>
   </div>
+
+  <!-- ===== [3] รับ Spare Part เข้า Stock ===== -->
+  <div class="section-label">รับ Spare Part เข้า Stock</div>
+  <div class="action-card">
+    <div class="receive-summary-card" id="last-receive-banner" style="display:none;"></div>
+    <div class="form-group">
+      <label class="form-label">จำนวนที่รับเข้า (ชิ้น)</label>
+      <div class="qty-row">
+        <button class="qty-btn" onclick="changeReceiveQty(-1)">−</button>
+        <div class="qty-display" id="receive-qty-disp">1</div>
+        <button class="qty-btn" onclick="changeReceiveQty(1)">+</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">วันที่รับเข้า</label>
+      <input class="form-input" type="date" id="receive-date">
+    </div>
+    <div class="form-group">
+      <label class="form-label">ผู้รับ / หมายเหตุ</label>
+      <input class="form-input" type="text" id="receive-note" placeholder="ชื่อผู้รับ / เลข PO / ยี่ห้อ ฯลฯ">
+    </div>
+    <button class="btn-purple" onclick="receiveSpare()">📥 บันทึกรับ Spare เข้า Stock</button>
+  </div>
+
+  <!-- ประวัติการรับ -->
+  <div class="section-label">ประวัติการรับ Spare Part</div>
+  <div id="receive-history"></div>
 </div>
 
 <!-- ===== LOG PAGE ===== -->
@@ -411,6 +528,12 @@
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
     <div class="section-label" style="margin:0;">ประวัติการดำเนินการ</div>
     <button style="font-size:11px;color:var(--text2);background:none;border:none;cursor:pointer;" onclick="clearLog()">ล้าง Log</button>
+  </div>
+  <div class="log-filter-row">
+    <button class="log-filter-btn active" onclick="setLogFilter('all', this)">ทั้งหมด</button>
+    <button class="log-filter-btn" onclick="setLogFilter('switch', this)">🔄 สลับถัง</button>
+    <button class="log-filter-btn" onclick="setLogFilter('change_filter', this)">🔧 เปลี่ยน Filter</button>
+    <button class="log-filter-btn" onclick="setLogFilter('receive_spare', this)">📥 รับ Spare</button>
   </div>
   <div id="log-list"></div>
 </div>
@@ -496,16 +619,20 @@
 const STATE = {
   tanks: {
     'HDF-01': {
-      'Pre-A1': { type:'pre', status:'active', lastChanged:null, lastSwitched:null },
-      'Pre-A2': { type:'pre', status:'dirty',  lastChanged:dateStr(-3), lastSwitched:null },
-      'Clean-B1': { type:'clean', status:'active', lastChanged:null, lastSwitched:dateStr(-8) },
-      'Clean-B2': { type:'clean', status:'ready', lastChanged:dateStr(-5), lastSwitched:null }
+      // CLEAN tanks (ซ้าย)
+      'Clean-B1': { type:'clean', status:'active',  lastChanged:null,       lastSwitched:dateStr(-8) },
+      'Clean-B2': { type:'clean', status:'ready',   lastChanged:dateStr(-5), lastSwitched:null },
+      // PRE tanks (ขวา)
+      'Pre-A1':  { type:'pre',   status:'active',  lastChanged:null,       lastSwitched:null },
+      'Pre-A2':  { type:'pre',   status:'dirty',   lastChanged:dateStr(-3), lastSwitched:null }
     },
     'HDF-02': {
-      'Pre-C1': { type:'pre', status:'active', lastChanged:dateStr(-2), lastSwitched:null },
-      'Pre-C2': { type:'pre', status:'ready', lastChanged:dateStr(-7), lastSwitched:null },
+      // CLEAN tanks (ซ้าย)
       'Clean-D1': { type:'clean', status:'active', lastChanged:dateStr(-4), lastSwitched:null },
-      'Clean-D2': { type:'clean', status:'dirty', lastChanged:null, lastSwitched:null }
+      'Clean-D2': { type:'clean', status:'dirty',  lastChanged:null,        lastSwitched:null },
+      // PRE tanks (ขวา)
+      'Pre-C1':  { type:'pre',  status:'active', lastChanged:dateStr(-2), lastSwitched:null },
+      'Pre-C2':  { type:'pre',  status:'ready',  lastChanged:dateStr(-7), lastSwitched:null }
     }
   },
   spare: {
@@ -565,19 +692,44 @@ function getStatusLabel(status) {
   return { text: 'ไม่ได้ใช้', cls: 'status-idle' };
 }
 
+// ===== [2] Layout: Clean ซ้าย (B1|B2 คู่) / Pre ขวา (A1|A2 คู่) =====
 function renderTankGrid(machineId, containerId) {
   const tanks = STATE.tanks[machineId];
   const el = document.getElementById(containerId);
-  el.innerHTML = Object.entries(tanks).map(([id, t]) => {
+
+  const cleanTanks = Object.entries(tanks).filter(([,t]) => t.type === 'clean');
+  const preTanks   = Object.entries(tanks).filter(([,t]) => t.type === 'pre');
+
+  function tankHTML(id, t) {
     const s = getStatusLabel(t.status);
-    const dateInfo = t.lastChanged ? `เปลี่ยน: ${t.lastChanged}` : t.lastSwitched ? `สลับ: ${t.lastSwitched}` : '—';
+    const dateInfo = t.lastChanged
+      ? `เปลี่ยน: ${t.lastChanged}`
+      : t.lastSwitched
+        ? `สลับ: ${t.lastSwitched}`
+        : '—';
     return `<div class="tank-item ${s.cls}" onclick="quickAction('${machineId}','${id}')">
-      <div class="tank-type-label">${t.type === 'pre' ? 'PRE-TANK' : 'CLEAN-TANK'}</div>
       <div class="tank-id">${id}</div>
       <div class="tank-status-row"><div class="dot"></div><div class="tank-status-text">${s.text}</div></div>
       <div class="tank-date">${dateInfo}</div>
     </div>`;
-  }).join('');
+  }
+
+  el.innerHTML = `
+    <div class="tank-layout">
+      <div class="tank-col clean-col">
+        <div class="tank-col-header clean-header">🔵 CLEAN TANK</div>
+        <div class="tank-row">
+          ${cleanTanks.map(([id, t]) => tankHTML(id, t)).join('')}
+        </div>
+      </div>
+      <div class="tank-col pre-col">
+        <div class="tank-col-header pre-header">🟡 PRE TANK</div>
+        <div class="tank-row">
+          ${preTanks.map(([id, t]) => tankHTML(id, t)).join('')}
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function renderDashboard() {
@@ -597,10 +749,10 @@ function renderDashboard() {
     const idx = m === 'HDF-01' ? 1 : 2;
     renderTankGrid(m, `hf${idx}-tanks`);
     const tanks = STATE.tanks[m];
-    const activePre = Object.entries(tanks).find(([,t]) => t.type==='pre' && t.status==='active');
     const activeClean = Object.entries(tanks).find(([,t]) => t.type==='clean' && t.status==='active');
+    const activePre   = Object.entries(tanks).find(([,t]) => t.type==='pre'   && t.status==='active');
     document.getElementById(`hf${idx}-meta`).textContent =
-      `กำลังใช้: ${activePre?activePre[0]:'—'} / ${activeClean?activeClean[0]:'—'}`;
+      `กำลังใช้: ${activeClean?activeClean[0]:'—'} / ${activePre?activePre[0]:'—'}`;
     const hasDirty = Object.values(tanks).some(t => t.status==='dirty');
     const badge = document.getElementById(`hf${idx}-badge`);
     badge.textContent = hasDirty ? '⚠ ต้องดำเนินการ' : 'ปกติ';
@@ -636,23 +788,60 @@ function renderActionPage() {
 function updateTankOptions() {
   const m = document.getElementById('act-machine').value;
   const sel = document.getElementById('act-tank');
-  sel.innerHTML = Object.keys(STATE.tanks[m]).map(id =>
-    `<option value="${id}">${id}</option>`
+  // เรียง CLEAN ก่อน PRE
+  const tanks = STATE.tanks[m];
+  const clean = Object.keys(tanks).filter(id => tanks[id].type === 'clean');
+  const pre   = Object.keys(tanks).filter(id => tanks[id].type === 'pre');
+  sel.innerHTML = [...clean, ...pre].map(id =>
+    `<option value="${id}">${id} (${tanks[id].type === 'clean' ? 'Clean' : 'Pre'})</option>`
   ).join('');
   updateCurrentStatus();
 }
 
+// ===== [1] อัปเดตสถานะด้วย Badge + [4] ล็อคปุ่มเปลี่ยน Filter =====
 function updateCurrentStatus() {
   const m = document.getElementById('act-machine').value;
   const t = document.getElementById('act-tank').value;
   const tank = STATE.tanks[m]?.[t];
-  if (!tank) return;
-  const s = getStatusLabel(tank.status);
-  const cls = {'status-active':'var(--yellow)','status-ready':'var(--green)','status-dirty':'var(--red)','status-idle':'var(--text2)'}[s.cls];
-  document.getElementById('act-current-status').innerHTML =
-    `<span style="color:${cls};font-weight:600;">${s.text}</span>` +
-    (tank.lastChanged ? `<br><span style="font-size:11px;color:var(--text3);">เปลี่ยน Filter: ${tank.lastChanged}</span>` : '') +
-    (tank.lastSwitched ? `<br><span style="font-size:11px;color:var(--text3);">สลับถัง: ${tank.lastSwitched}</span>` : '');
+  const el = document.getElementById('act-current-status');
+  if (!tank) { el.innerHTML = '—'; return; }
+
+  const statusMap = {
+    active: { cls: 'tsb-active', icon: '🟡', text: 'ใช้งานอยู่ (ACTIVE)' },
+    ready:  { cls: 'tsb-ready',  icon: '🟢', text: 'พร้อมใช้ (READY)' },
+    dirty:  { cls: 'tsb-dirty',  icon: '🔴', text: '⚠ ต้องเปลี่ยน Filter! (DIRTY)' },
+    idle:   { cls: 'tsb-idle',   icon: '⚪', text: 'ไม่ได้ใช้งาน (IDLE)' }
+  };
+  const s = statusMap[tank.status] || statusMap.idle;
+  const typeLabel = tank.type === 'clean' ? '🔵 Clean Tank' : '🟡 Pre Tank';
+  const dateInfo = tank.lastChanged
+    ? `🗓 เปลี่ยน Filter ล่าสุด: ${tank.lastChanged}`
+    : tank.lastSwitched
+      ? `🔄 สลับถังล่าสุด: ${tank.lastSwitched}`
+      : '';
+
+  el.innerHTML = `
+    <div class="tank-status-badge ${s.cls}">
+      <div class="tsb-dot"></div>
+      ${s.text}
+    </div>
+    <div class="tank-status-extra">${typeLabel}${dateInfo ? ' &nbsp;|&nbsp; ' + dateInfo : ''}</div>
+  `;
+
+  // [4] ล็อคปุ่มเปลี่ยน Filter เฉพาะสถานะ dirty เท่านั้น
+  const btn = document.getElementById('btn-change-filter');
+  const hint = document.getElementById('change-filter-hint');
+  if (tank.status === 'dirty') {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    if (hint) hint.style.display = 'none';
+  } else {
+    btn.disabled = true;
+    btn.style.opacity = '0.35';
+    btn.style.cursor = 'not-allowed';
+    if (hint) hint.style.display = 'block';
+  }
 }
 
 function renderOperatorList() {
@@ -661,58 +850,57 @@ function renderOperatorList() {
 }
 
 // ===== MODAL =====
-let currentAction = '';
+let modalQty = 1;
+
 function openModal(action) {
-  currentAction = action;
   const m = document.getElementById('act-machine').value;
   const t = document.getElementById('act-tank').value;
   const tank = STATE.tanks[m]?.[t];
+  modalQty = 1;
 
   if (action === 'switch') {
     document.getElementById('modal-title').textContent = '🔄 สลับถังใช้งาน';
-    // find other tank of same type
-    const sametype = Object.entries(STATE.tanks[m]).filter(([id,tk]) => tk.type===tank.type && id!==t);
-   document.getElementById('modal-body').innerHTML = `
-  <div class="modal-info">
-    <b>${machine}</b><br>
-    สลับจาก <b style="color:var(--yellow);">${tankId}</b><br>
-    ไปยัง <b>${sameType[0][0]}</b>
-  </div>
-
-  <div class="form-group">
-    <label class="form-label">👤 ผู้ดำเนินการ</label>
-    <input class="form-input" id="quick-operator" placeholder="กรอกชื่อ">
-  </div>
-
-  <button class="btn-switch" onclick="doQuickSwitch('${machine}','${tankId}','${sameType[0][0]}')">
-    ✅ ยืนยันสลับ
-  </button>
-
-  <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>
-`;
-  } else {
-    // change filter
-    document.getElementById('modal-title').textContent = '🔧 บันทึกการเปลี่ยน Filter';
-    const spQty = STATE.spare['Filter (รวมทุกประเภท)']?.qty ?? 0;
+    const sameType = Object.entries(STATE.tanks[m]).filter(([id,tk]) => tk.type===tank.type && id!==t && tk.status==='ready');
+    if (!sameType.length) {
+      showToast('❌ ไม่มีถัง READY ให้สลับ', 'error');
+      return;
+    }
     document.getElementById('modal-body').innerHTML = `
       <div class="modal-info">
-        เปลี่ยน Filter ถัง <b style="color:var(--text);">${t}</b><br>
-        ถังจะเปลี่ยนสถานะเป็น <span style="color:var(--green);">🟢 READY</span><br>
-        Spare คงเหลือ: <b style="color:var(--text);">${spQty} ชิ้น</b>
+        <b>${m}</b> — สลับจาก <b style="color:var(--yellow);">${t}</b><br>
+        ถัง ${t} จะเปลี่ยนเป็น <span style="color:var(--red);">🔴 DIRTY</span><br>
+        ถังปลายทางจะเปลี่ยนเป็น <span style="color:var(--yellow);">🟡 ACTIVE</span>
       </div>
       <div class="form-group">
-        <label class="form-label">จำนวนที่เปลี่ยน (ชิ้น)</label>
-        <div class="qty-row">
-          <button class="qty-btn" onclick="changeModalQty(-1)">−</button>
-          <div class="qty-display" id="modal-qty">1</div>
-          <button class="qty-btn" onclick="changeModalQty(1)">+</button>
-        </div>
+        <label class="form-label">เลือกถังปลายทาง</label>
+        <select class="form-select" id="modal-target">
+          ${sameType.map(([id]) => `<option value="${id}">${id}</option>`).join('')}
+        </select>
       </div>
       <div class="form-group">
         <label class="form-label">หมายเหตุ</label>
         <textarea class="form-textarea" id="modal-note" placeholder="(ไม่บังคับ)"></textarea>
       </div>
-      <button class="btn-primary" onclick="doChangeFilter()">🔧 ยืนยันการเปลี่ยน Filter</button>
+      <button class="btn-switch" onclick="doSwitch()">✅ ยืนยันสลับ</button>
+      <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>
+    `;
+  } else {
+    document.getElementById('modal-title').textContent = '🔧 บันทึกการเปลี่ยน Filter';
+    const spQty = STATE.spare['Filter (รวมทุกประเภท)']?.qty ?? 0;
+    const s = getStatusLabel(tank.status);
+    document.getElementById('modal-body').innerHTML = `
+      <div class="modal-info">
+        เปลี่ยน Filter ถัง <b style="color:var(--text);">${t}</b><br>
+        สถานะปัจจุบัน: <b style="color:var(--red);">${s.text}</b><br>
+        ถังจะเปลี่ยนสถานะเป็น <span style="color:var(--green);">🟢 READY</span><br>
+        จำนวน Filter ที่ใช้: <b style="color:var(--text);">7 ชิ้น / ครั้ง</b><br>
+        Spare คงเหลือ: <b style="color:var(--text);">${spQty} ชิ้น</b> → หลังเปลี่ยน: <b style="color:${spQty-7<=0?'var(--red)':'var(--text)'};">${Math.max(0,spQty-7)} ชิ้น</b>
+      </div>
+      <div class="form-group">
+        <label class="form-label">หมายเหตุ</label>
+        <textarea class="form-textarea" id="modal-note" placeholder="(ไม่บังคับ)"></textarea>
+      </div>
+      <button class="btn-primary" onclick="doChangeFilter()">🔧 ยืนยันการเปลี่ยน Filter (7 ชิ้น)</button>
       <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>
     `;
   }
@@ -723,7 +911,6 @@ function closeModal() {
   document.getElementById('modal').classList.remove('open');
 }
 
-let modalQty = 1;
 function changeModalQty(d) {
   modalQty = Math.max(1, modalQty + d);
   document.getElementById('modal-qty').textContent = modalQty;
@@ -752,13 +939,14 @@ function doSwitch() {
   closeModal();
   showToast(`✅ สลับ ${fromId} → ${toId} สำเร็จ`, 'success');
   renderDashboard();
+  updateCurrentStatus();
 }
 
 function doChangeFilter() {
   const m = document.getElementById('act-machine').value;
   const tankId = document.getElementById('act-tank').value;
   const operator = document.getElementById('act-operator').value || 'ไม่ระบุ';
-  const qty = modalQty;
+  const qty = 7; // ล็อคที่ 7 ชิ้น/ครั้ง
   const note = document.getElementById('modal-note').value;
   const spareKey = 'Filter (รวมทุกประเภท)';
 
@@ -779,6 +967,7 @@ function doChangeFilter() {
   closeModal();
   showToast(`✅ บันทึกการเปลี่ยน Filter สำเร็จ`, 'success');
   renderDashboard();
+  updateCurrentStatus();
 }
 
 // ===== GOOGLE SHEETS =====
@@ -788,9 +977,11 @@ async function sendToSheets(data) {
   const payload = {
     timestamp: data.ts,
     machine: data.machine,
-    tankId: data.tankId || (data.tankFrom + '→' + data.tankTo),
+    tankId: data.tankId || ((data.tankFrom || '') + '→' + (data.tankTo || '')),
     tankType: data.tankType || '',
-    action: data.action === 'switch' ? 'สลับถัง' : 'เปลี่ยน Filter',
+    action: data.action === 'switch' ? 'สลับถัง'
+          : data.action === 'receive_spare' ? 'รับ Spare เข้า Stock'
+          : 'เปลี่ยน Filter',
     operator: data.operator,
     filterType: data.filterType || '—',
     qty: data.qty,
@@ -824,7 +1015,7 @@ async function testConnection() {
   if (!url) { st.innerHTML = '<span style="color:var(--red)">กรุณากรอก URL ก่อน</span>'; return; }
   st.innerHTML = '<span style="color:var(--text2)">กำลังทดสอบ...</span>';
   try {
-    const r = await fetch(url + '?test=1', { mode: 'no-cors' });
+    await fetch(url + '?test=1', { mode: 'no-cors' });
     st.innerHTML = '<span style="color:var(--green)">✅ เชื่อมต่อสำเร็จ (no-cors)</span>';
   } catch(e) {
     st.innerHTML = '<span style="color:var(--red)">❌ เชื่อมต่อไม่ได้: ' + e.message + '</span>';
@@ -846,13 +1037,29 @@ function renderSparePage() {
   spareQtyEdit = v.qty;
   document.getElementById('spare-qty-disp').textContent = spareQtyEdit;
   document.getElementById('spare-threshold').value = v.threshold;
+
+  // ตั้งค่าวันที่รับ default = วันนี้
+  const todayISO = new Date().toISOString().slice(0, 10);
+  if (!document.getElementById('receive-date').value)
+    document.getElementById('receive-date').value = todayISO;
+
+  renderReceiveHistory();
+  updateLastReceiveBanner();
 }
 
 let spareQtyEdit = 0;
+let receiveQtyEdit = 1;
+
 function changeSpareQty(d) {
   spareQtyEdit = Math.max(0, spareQtyEdit + d);
   document.getElementById('spare-qty-disp').textContent = spareQtyEdit;
 }
+
+function changeReceiveQty(d) {
+  receiveQtyEdit = Math.max(1, receiveQtyEdit + d);
+  document.getElementById('receive-qty-disp').textContent = receiveQtyEdit;
+}
+
 function saveSpare() {
   const spareKey = 'Filter (รวมทุกประเภท)';
   const threshold = parseInt(document.getElementById('spare-threshold').value) || 14;
@@ -863,30 +1070,147 @@ function saveSpare() {
   showToast('✅ บันทึก Spare Part แล้ว', 'success');
 }
 
-// ===== LOG =====
-function renderLog() {
-  const el = document.getElementById('log-list');
-  if (!STATE.log.length) {
-    el.innerHTML = '<div class="log-empty">ยังไม่มีประวัติการดำเนินการ</div>';
+// ===== [3] รับ Spare Part เข้า Stock =====
+function receiveSpare() {
+  const spareKey = 'Filter (รวมทุกประเภท)';
+  const qty = receiveQtyEdit;
+  const dateVal = document.getElementById('receive-date').value;
+  const note = document.getElementById('receive-note').value.trim();
+
+  if (!dateVal) { showToast('❌ กรุณาเลือกวันที่รับ', 'error'); return; }
+  if (qty < 1)  { showToast('❌ จำนวนต้องมากกว่า 0', 'error'); return; }
+
+  const receiveDate = new Date(dateVal).toLocaleDateString('th-TH');
+  const stockBefore = STATE.spare[spareKey]?.qty ?? 0;
+  const stockAfter = stockBefore + qty;
+
+  if (STATE.spare[spareKey]) STATE.spare[spareKey].qty = stockAfter;
+
+  const entry = {
+    ts: now(),
+    receiveDate,
+    action: 'receive_spare',
+    filterType: spareKey,
+    qty,
+    stockBefore,
+    stockAfter,
+    note: note || '—',
+    operator: note || '—',
+    machine: '—',
+    tankId: '—'
+  };
+
+  STATE.log.unshift(entry);
+  sendToSheets(entry);
+  save();
+
+  // reset
+  receiveQtyEdit = 1;
+  document.getElementById('receive-qty-disp').textContent = 1;
+  document.getElementById('receive-note').value = '';
+
+  renderSparePage();
+  showToast(`✅ รับ Filter ${qty} ชิ้น เข้า Stock (รวม ${stockAfter} ชิ้น)`, 'success');
+}
+
+function renderReceiveHistory() {
+  const history = STATE.log.filter(e => e.action === 'receive_spare').slice(0, 10);
+  const el = document.getElementById('receive-history');
+  if (!history.length) {
+    el.innerHTML = '<div class="log-empty" style="padding:20px 0;font-size:12px;">ยังไม่มีประวัติการรับ Spare</div>';
     return;
   }
-  el.innerHTML = STATE.log.slice(0, 50).map(e => {
-    const isSwitch = e.action === 'switch';
-    return `<div class="log-item">
+  el.innerHTML = history.map(e => `
+    <div class="log-item" style="border-left:3px solid var(--purple);">
       <div class="log-header">
-        <div class="log-action">${isSwitch ? '🔄 สลับถัง' : '🔧 เปลี่ยน Filter'}</div>
+        <div class="log-action" style="color:var(--purple);">📥 รับ Spare เข้า Stock</div>
         <div class="log-time">${e.ts}</div>
       </div>
       <div class="log-detail">
-        ${isSwitch ? `${e.tankFrom} → ${e.tankTo}` : `${e.tankId} | ${e.filterType} x${e.qty} ชิ้น`}<br>
-        ผู้ดำเนินการ: ${e.operator}${e.note ? '<br>หมายเหตุ: ' + e.note : ''}
-        ${!isSwitch ? `<br>Stock: ${e.stockBefore} → ${e.stockAfter}` : ''}
+        วันที่รับ: <b>${e.receiveDate}</b><br>
+        จำนวน: <b style="color:var(--purple);">+${e.qty} ชิ้น</b> &nbsp;|&nbsp; Stock: ${e.stockBefore} → ${e.stockAfter}<br>
+        ${e.note && e.note !== '—' ? 'รายละเอียด: ' + e.note : ''}
       </div>
-      <div>
-        <span class="log-tag">${e.machine}</span>
-        ${e.action !== 'switch' && e.stockAfter <= 14 ? '<span class="log-tag" style="background:var(--red-bg);color:var(--red);border-color:var(--red-border);">Stock ต่ำ!</span>' : ''}
-      </div>
-    </div>`;
+    </div>
+  `).join('');
+}
+
+function updateLastReceiveBanner() {
+  const last = STATE.log.find(e => e.action === 'receive_spare');
+  const banner = document.getElementById('last-receive-banner');
+  if (!last) { banner.style.display = 'none'; return; }
+  banner.style.display = 'flex';
+  banner.innerHTML = `
+    <div class="receive-summary-icon">📦</div>
+    <div class="receive-summary-text">
+      รับล่าสุด: <b>+${last.qty} ชิ้น</b> (${last.receiveDate || last.ts})<br>
+      ${last.note && last.note !== '—' ? last.note : ''}
+    </div>
+  `;
+}
+
+// ===== LOG =====
+let currentLogFilter = 'all';
+
+function setLogFilter(filter, btn) {
+  currentLogFilter = filter;
+  document.querySelectorAll('.log-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLog();
+}
+
+function renderLog() {
+  const el = document.getElementById('log-list');
+  let logs = STATE.log;
+  if (currentLogFilter !== 'all') logs = logs.filter(e => e.action === currentLogFilter);
+  if (!logs.length) {
+    el.innerHTML = '<div class="log-empty">ยังไม่มีประวัติการดำเนินการ</div>';
+    return;
+  }
+  el.innerHTML = logs.slice(0, 50).map(e => {
+    if (e.action === 'switch') {
+      return `<div class="log-item">
+        <div class="log-header">
+          <div class="log-action">🔄 สลับถัง</div>
+          <div class="log-time">${e.ts}</div>
+        </div>
+        <div class="log-detail">
+          ${e.tankFrom} → ${e.tankTo}<br>
+          ผู้ดำเนินการ: ${e.operator}${e.note && e.note !== '(Quick Switch)' ? '<br>หมายเหตุ: ' + e.note : ''}
+        </div>
+        <div><span class="log-tag">${e.machine}</span></div>
+      </div>`;
+    } else if (e.action === 'change_filter') {
+      return `<div class="log-item">
+        <div class="log-header">
+          <div class="log-action">🔧 เปลี่ยน Filter</div>
+          <div class="log-time">${e.ts}</div>
+        </div>
+        <div class="log-detail">
+          ${e.tankId} | ${e.filterType} x${e.qty} ชิ้น<br>
+          ผู้ดำเนินการ: ${e.operator}${e.note ? '<br>หมายเหตุ: ' + e.note : ''}
+          <br>Stock: ${e.stockBefore} → ${e.stockAfter}
+        </div>
+        <div>
+          <span class="log-tag">${e.machine}</span>
+          ${e.stockAfter <= 14 ? '<span class="log-tag" style="background:var(--red-bg);color:var(--red);border-color:var(--red-border);">Stock ต่ำ!</span>' : ''}
+        </div>
+      </div>`;
+    } else if (e.action === 'receive_spare') {
+      return `<div class="log-item" style="border-left:3px solid var(--purple);border-radius:var(--radius-sm);">
+        <div class="log-header">
+          <div class="log-action" style="color:var(--purple);">📥 รับ Spare เข้า Stock</div>
+          <div class="log-time">${e.ts}</div>
+        </div>
+        <div class="log-detail">
+          วันที่รับ: <b>${e.receiveDate || '—'}</b><br>
+          จำนวน: <b style="color:var(--purple);">+${e.qty} ชิ้น</b> &nbsp;|&nbsp; Stock: ${e.stockBefore} → ${e.stockAfter}<br>
+          ${e.note && e.note !== '—' ? 'รายละเอียด: ' + e.note : ''}
+        </div>
+        <div><span class="log-tag log-tag-receive">📦 Spare</span></div>
+      </div>`;
+    }
+    return '';
   }).join('');
 }
 
@@ -940,6 +1264,64 @@ function renderOperatorDisplay() {
     ).join('');
 }
 
+// ===== QUICK SWITCH MODAL =====
+function openQuickSwitchModal(machine, tankId) {
+  const tank = STATE.tanks[machine][tankId];
+  const sameType = Object.entries(STATE.tanks[machine])
+    .filter(([id, t]) => t.type === tank.type && id !== tankId && t.status === 'ready');
+
+  if (sameType.length === 0) {
+    showToast('❌ ไม่มีถัง READY ให้สลับ', 'error');
+    return;
+  }
+
+  const s = getStatusLabel(tank.status);
+  document.getElementById('modal-title').textContent = '🔄 สลับถัง (Quick)';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="modal-info">
+      <b>${machine}</b><br>
+      ถัง <b style="color:var(--yellow);">${tankId}</b> — สถานะ: <b>${s.text}</b><br>
+      ถัง ${tankId} จะเปลี่ยนเป็น <span style="color:var(--red);">🔴 DIRTY</span>
+    </div>
+    <div class="form-group">
+      <label class="form-label">เลือกถังปลายทาง</label>
+      <select class="form-select" id="quick-target">
+        ${sameType.map(([id]) => `<option value="${id}">${id}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">👤 ผู้ดำเนินการ</label>
+      <input class="form-input" id="quick-operator" placeholder="กรอกชื่อ" list="operator-list">
+    </div>
+    <button class="btn-switch" onclick="doQuickSwitch('${machine}','${tankId}')">✅ ยืนยันสลับ</button>
+    <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>
+  `;
+  document.getElementById('modal').classList.add('open');
+}
+
+function doQuickSwitch(machine, fromId) {
+  const toId = document.getElementById('quick-target').value;
+  const operator = document.getElementById('quick-operator').value || 'ไม่ระบุ';
+  if (fromId === toId) { showToast('❌ ห้ามเลือกถังเดียวกัน', 'error'); return; }
+  if (!toId) { showToast('❌ กรุณาเลือกถังปลายทาง', 'error'); return; }
+
+  STATE.tanks[machine][fromId].status = 'dirty';
+  STATE.tanks[machine][fromId].lastSwitched = now();
+  STATE.tanks[machine][toId].status = 'active';
+
+  const entry = {
+    ts: now(), machine, tankFrom: fromId, tankTo: toId,
+    action: 'switch', operator, note: '(Quick Switch)',
+    filterType: '—', qty: 0
+  };
+  STATE.log.unshift(entry);
+  sendToSheets(entry);
+  save();
+  closeModal();
+  renderDashboard();
+  showToast(`✅ ${fromId} → ${toId}`, 'success');
+}
+
 // ===== TOAST =====
 function showToast(msg, type='') {
   const t = document.getElementById('toast');
@@ -947,96 +1329,13 @@ function showToast(msg, type='') {
   t.className = 'toast show ' + type;
   setTimeout(() => t.classList.remove('show'), 2500);
 }
-function openQuickSwitchModal(machine, tankId) {
-  const tank = STATE.tanks[machine][tankId];
 
-  const sameType = Object.entries(STATE.tanks[machine])
-  .filter(([id, t]) => 
-    t.type === tank.type && 
-    id !== tankId &&
-    t.status === 'ready'   // ⭐ เงื่อนไขสำคัญ
-  );
-  if (sameType.length === 0) {
-  showToast('❌ ไม่มีถัง READY ให้สลับ', 'error');
-  return;
-}
-
-  document.getElementById('modal-title').textContent = '🔄 สลับถัง (Quick)';
-
-  document.getElementById('modal-body').innerHTML = `
-    <div class="modal-info">
-      <b>${machine}</b><br>
-      สลับจาก <b style="color:var(--yellow);">${tankId}</b><br>
-      ไปยังถังใหม่
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">เลือกถังปลายทาง</label>
-      <select class="form-select" id="quick-target">
-        ${sameType.map(([id]) => `<option value="${id}">${id}</option>`).join('')}
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">👤 ผู้ดำเนินการ</label>
-      <input class="form-input" id="quick-operator" placeholder="กรอกชื่อ">
-    </div>
-
-    <button class="btn-switch" onclick="doQuickSwitch('${machine}','${tankId}')">
-      ✅ ยืนยันสลับ
-    </button>
-    <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>
-  `;
-
-  document.getElementById('modal').classList.add('open');
-}
-
-function doQuickSwitch(machine, fromId) {
-  const toId = document.getElementById('quick-target').value;
-  const operator = document.getElementById('quick-operator').value || 'ไม่ระบุ';
-
-  // ⭐ แนะนำเพิ่ม (กันเลือกถังเดียวกัน)
-  if (fromId === toId) {
-    showToast('❌ ห้ามเลือกถังเดียวกัน', 'error');
-    return;
-  }
-
-  if (!toId) {
-    showToast('❌ กรุณาเลือกถังปลายทาง', 'error');
-    return;
-  }
-
-  STATE.tanks[machine][fromId].status = 'dirty';
-  STATE.tanks[machine][fromId].lastSwitched = now();
-
-  STATE.tanks[machine][toId].status = 'active';
-
-  const entry = {
-    ts: now(),
-    machine,
-    tankFrom: fromId,
-    tankTo: toId,
-    action: 'switch',
-    operator,
-    note: '(Quick Switch)',
-    filterType: '—',
-    qty: 0
-  };
-
-  STATE.log.unshift(entry);
-  sendToSheets(entry);
-  save();
-
-  closeModal();
-  renderDashboard();
-
-  showToast(`✅ ${fromId} → ${toId}`, 'success');
-}
 // ===== INIT =====
 load();
 renderDashboard();
 renderOperatorList();
 modalQty = 1;
+receiveQtyEdit = 1;
 </script>
 </body>
 </html>
