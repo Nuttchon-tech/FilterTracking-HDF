@@ -1123,32 +1123,22 @@ async function sendToSheets(data) {
     timestamp: data.ts,
     machine: data.machine || '',
     tankId: data.tankId || ((data.tankFrom || '') + '→' + (data.tankTo || '')),
-    tankType: data.tankType || '',
     action: data.action,
-    operator: data.operator || '',
-    filterType: data.filterType || '',
-    qty: data.qty || 0,
-    stockBefore: data.stockBefore || '',
-    stockAfter: data.stockAfter || '',
-    note: data.note || '',
-    receiveDate: data.receiveDate || ''
+    operator: data.operator || ''
   };
 
   try {
-    const resp = await fetch(url, {
+    await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });//
+      body: JSON.stringify(payload),
+      mode: 'no-cors'   // ✅ สำคัญ
+    });
 
-    const result = await resp.json();
-    console.log('Sheets:', result);
-
+    console.log("✅ ส่งแล้ว (no-cors)");
     updateSyncStatus(true);
+
   } catch (err) {
-    console.error(err);
+    console.error("❌ fail:", err);
     updateSyncStatus(false);
   }
 }
