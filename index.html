@@ -1141,7 +1141,7 @@ async function sendToSheets(data) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(payload)
-    });
+    });//
 
     const result = await resp.json();
     console.log('Sheets:', result);
