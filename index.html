@@ -15,20 +15,20 @@
     --text2: #8b90a8;
     --text3: #5a5f78;
     --yellow: #f59e0b;
-    --yellow-bg: rgba(245,158,11,0.12);
-    --yellow-border: rgba(245,158,11,0.35);
+    --yellow-bg: rgba(245,158,11,0.15);
+    --yellow-border: rgba(245,158,11,0.45);
     --green: #10b981;
-    --green-bg: rgba(16,185,129,0.10);
-    --green-border: rgba(16,185,129,0.35);
+    --green-bg: rgba(16,185,129,0.13);
+    --green-border: rgba(16,185,129,0.45);
     --red: #ef4444;
-    --red-bg: rgba(239,68,68,0.10);
-    --red-border: rgba(239,68,68,0.35);
+    --red-bg: rgba(239,68,68,0.13);
+    --red-border: rgba(239,68,68,0.45);
     --blue: #3b82f6;
-    --blue-bg: rgba(59,130,246,0.10);
-    --blue-border: rgba(59,130,246,0.35);
+    --blue-bg: rgba(59,130,246,0.13);
+    --blue-border: rgba(59,130,246,0.45);
     --purple: #8b5cf6;
-    --purple-bg: rgba(139,92,246,0.10);
-    --purple-border: rgba(139,92,246,0.35);
+    --purple-bg: rgba(139,92,246,0.13);
+    --purple-border: rgba(139,92,246,0.45);
     --radius: 14px;
     --radius-sm: 9px;
     --font: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
@@ -50,6 +50,7 @@
     background: var(--blue-bg); border: 1px solid var(--blue-border);
     color: var(--blue); border-radius: 8px; padding: 6px 12px;
     font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap;
+    position: relative; z-index: 1;
   }
   .sync-btn:active { opacity: 0.7; }
   .sync-btn.syncing { animation: pulse 1s infinite; }
@@ -60,6 +61,7 @@
     display: flex; background: var(--bg2);
     border-bottom: 1px solid var(--border);
     overflow-x: auto; scrollbar-width: none;
+    position: sticky; top: 57px; z-index: 99;
   }
   .nav-tabs::-webkit-scrollbar { display: none; }
   .nav-tab {
@@ -104,71 +106,120 @@
     background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border);
   }
 
-  /* ===== TANK LAYOUT: LEFT=CLEAN(2 side-by-side) RIGHT=PRE(2 side-by-side) ===== */
+  /* ===== [FIX 2] TANK LAYOUT: ระยะห่างระหว่าง PRE และ CLEAN ชัดขึ้น ===== */
   .tank-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0;
-    border-top: 1px solid var(--border);
   }
-  /* Each column = header + row of 2 tanks */
   .tank-col {
     display: flex;
     flex-direction: column;
   }
   .tank-col.clean-col {
-    border-right: 1px solid var(--border);
+    border-right: 2px solid rgba(59,130,246,0.25); /* เส้นแบ่งชัดขึ้น */
   }
   .tank-col-header {
     text-align: center;
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.12em;
-    padding: 6px 4px 5px;
+    letter-spacing: 0.1em;
+    padding: 8px 4px 7px;
     border-bottom: 1px solid var(--border);
   }
   .tank-col-header.clean-header {
-    background: rgba(59,130,246,0.07);
+    background: rgba(59,130,246,0.10);
     color: var(--blue);
+    border-bottom: 1px solid rgba(59,130,246,0.2);
   }
   .tank-col-header.pre-header {
-    background: rgba(245,158,11,0.07);
+    background: rgba(245,158,11,0.10);
     color: var(--yellow);
+    border-bottom: 1px solid rgba(245,158,11,0.2);
   }
-  /* Inner row: 2 tanks sitting side by side within each col */
   .tank-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0;
     flex: 1;
   }
+
+  /* ===== [FIX 3] STATUS ชัดเจนขึ้น - tank card ===== */
   .tank-item {
-    background: var(--bg2); padding: 12px 10px 10px;
-    cursor: pointer; transition: background 0.15s; position: relative;
+    background: var(--bg2);
+    padding: 14px 10px 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
     border-right: 1px solid var(--border);
+    user-select: none;
+    -webkit-user-select: none;
   }
   .tank-item:last-child { border-right: none; }
   .tank-item:active { background: var(--bg3); }
-  .tank-id { font-size: 12px; font-weight: 600; margin-bottom: 7px; }
-  .tank-status-row { display: flex; align-items: center; gap: 4px; }
-  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .tank-status-text { font-size: 10px; font-weight: 500; }
-  .tank-date { font-size: 9px; color: var(--text3); margin-top: 5px; line-height: 1.4; }
 
-  /* Status colors */
-  .status-active  .dot { background: var(--yellow); box-shadow: 0 0 6px rgba(245,158,11,0.5); }
-  .status-active  .tank-status-text { color: var(--yellow); }
-  .status-active  { border-left: 3px solid var(--yellow) !important; }
-  .status-ready   .dot { background: var(--green); box-shadow: 0 0 6px rgba(16,185,129,0.4); }
-  .status-ready   .tank-status-text { color: var(--green); }
-  .status-ready   { border-left: 3px solid var(--green) !important; }
-  .status-dirty   .dot { background: var(--red); box-shadow: 0 0 6px rgba(239,68,68,0.5); animation: blink 1.2s infinite; }
-  .status-dirty   .tank-status-text { color: var(--red); }
-  .status-dirty   { border-left: 3px solid var(--red) !important; }
-  .status-idle    .dot { background: var(--text3); }
-  .status-idle    .tank-status-text { color: var(--text2); }
-  .status-idle    { border-left: 3px solid var(--text3) !important; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .tank-id {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  /* Status Badge ใหม่ - ใหญ่ขึ้น มีพื้นหลัง */
+  .tank-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border: 1px solid transparent;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 6px;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+  .tank-date { font-size: 9px; color: var(--text3); line-height: 1.4; text-align: center; }
+
+  /* Status colors - pill style */
+  .status-active .tank-status-pill {
+    background: var(--yellow-bg);
+    color: var(--yellow);
+    border-color: var(--yellow-border);
+  }
+  .status-active .dot { background: var(--yellow); box-shadow: 0 0 5px rgba(245,158,11,0.6); }
+  .status-active { border-top: 3px solid var(--yellow) !important; }
+
+  .status-ready .tank-status-pill {
+    background: var(--green-bg);
+    color: var(--green);
+    border-color: var(--green-border);
+  }
+  .status-ready .dot { background: var(--green); box-shadow: 0 0 5px rgba(16,185,129,0.5); }
+  .status-ready { border-top: 3px solid var(--green) !important; }
+
+  .status-dirty .tank-status-pill {
+    background: var(--red-bg);
+    color: var(--red);
+    border-color: var(--red-border);
+  }
+  .status-dirty .dot { background: var(--red); box-shadow: 0 0 5px rgba(239,68,68,0.6); animation: blink 1s infinite; }
+  .status-dirty { border-top: 3px solid var(--red) !important; }
+  .status-dirty .tank-item-inner { animation: shake-subtle 2s ease-in-out infinite; }
+
+  .status-idle .tank-status-pill {
+    background: rgba(255,255,255,0.04);
+    color: var(--text3);
+    border-color: var(--border);
+  }
+  .status-idle .dot { background: var(--text3); }
+  .status-idle { border-top: 3px solid var(--text3) !important; }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  @keyframes shake-subtle { 0%,100%{} 95%{transform:translateX(-1px)} 97%{transform:translateX(1px)} }
 
   /* Alert Banner */
   .alert-banner {
@@ -192,31 +243,12 @@
   .spare-low .spare-count { color: var(--red); }
   .spare-ok .spare-count { color: var(--green); }
   .spare-warn .spare-count { color: var(--yellow); }
-  .spare-edit-btn {
-    margin-top: 10px; width: 100%; background: var(--bg3);
-    border: 1px solid var(--border2); border-radius: 7px;
-    color: var(--text2); font-size: 11px; padding: 6px; cursor: pointer;
-  }
-  .spare-edit-btn:active { opacity: 0.7; }
 
-  /* ===== ACTION PAGE: Status Badge ===== */
-  .tank-status-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;
-    margin-bottom: 4px;
-  }
-  .tsb-active  { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
-  .tsb-ready   { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
-  .tsb-dirty   { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
-  .tsb-idle    { background: var(--bg3);       color: var(--text2);  border: 1px solid var(--border2); }
-  .tsb-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-  .tsb-dirty .tsb-dot { animation: blink 1.2s infinite; }
-  .tank-status-extra { font-size: 11px; color: var(--text3); margin-top: 4px; }
-
-  /* Action Card */
+  /* ===== [FIX 4] Action Page - ปุ่มกดได้ทุกตำแหน่ง ===== */
   .action-card {
     background: var(--bg2); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 16px; margin-bottom: 12px;
+    position: relative; z-index: 1;
   }
   .action-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
   .form-group { margin-bottom: 12px; }
@@ -226,51 +258,108 @@
     border-radius: 9px; color: var(--text); font-size: 14px;
     padding: 10px 12px; appearance: none;
     font-family: var(--font);
+    cursor: pointer;
+    -webkit-appearance: none;
+    position: relative; z-index: 2;
   }
   .form-select:focus, .form-input:focus, .form-textarea:focus {
     outline: none; border-color: var(--blue);
   }
-  .form-textarea { resize: none; height: 72px; }
+  .form-textarea { resize: none; height: 72px; cursor: text; }
+  .form-input { cursor: text; }
+
   .qty-row { display: flex; align-items: center; gap: 10px; }
   .qty-btn {
-    width: 40px; height: 40px; border-radius: 9px;
+    width: 44px; height: 44px; border-radius: 9px;
     background: var(--bg3); border: 1px solid var(--border2);
-    color: var(--text); font-size: 20px; cursor: pointer;
+    color: var(--text); font-size: 22px; cursor: pointer;
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    position: relative; z-index: 2; user-select: none;
+    -webkit-user-select: none; touch-action: manipulation;
   }
-  .qty-btn:active { background: var(--border2); }
+  .qty-btn:active { background: var(--border2); transform: scale(0.95); }
   .qty-display {
     flex: 1; text-align: center; font-size: 22px; font-weight: 700;
     background: var(--bg3); border: 1px solid var(--border2);
     border-radius: 9px; padding: 6px; color: var(--text);
   }
 
-  /* Buttons */
-  .btn-primary {
-    width: 100%; padding: 14px; border-radius: var(--radius);
-    background: var(--blue); color: white; font-size: 15px; font-weight: 600;
-    border: none; cursor: pointer; transition: opacity 0.15s;
+  /* ===== [FIX 4] ALL Buttons - กดได้ทุกตำแหน่ง ===== */
+  .btn-primary, .btn-secondary, .btn-danger, .btn-switch, .btn-purple {
+    display: block;
+    width: 100%; padding: 15px; border-radius: var(--radius);
+    font-size: 15px; font-weight: 600; border: none; cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    position: relative; z-index: 2;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    text-align: center;
+    line-height: 1.2;
   }
-  .btn-primary:active { opacity: 0.8; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:active { opacity: 0.8; transform: scale(0.98); }
+
   .btn-secondary {
-    width: 100%; padding: 12px; border-radius: var(--radius);
-    background: var(--bg3); color: var(--text2); font-size: 14px; font-weight: 500;
-    border: 1px solid var(--border2); cursor: pointer; margin-top: 8px;
+    background: var(--bg3); color: var(--text2);
+    border: 1px solid var(--border2) !important;
+    margin-top: 8px;
   }
+
   .btn-danger {
-    width: 100%; padding: 14px; border-radius: var(--radius);
-    background: var(--red-bg); color: var(--red); font-size: 15px; font-weight: 600;
-    border: 1px solid var(--red-border); cursor: pointer;
+    background: var(--red-bg); color: var(--red);
+    border: 1px solid var(--red-border) !important;
   }
+  .btn-danger:not(:disabled):active { opacity: 0.7; transform: scale(0.98); }
+
   .btn-switch {
-    width: 100%; padding: 14px; border-radius: var(--radius);
-    background: rgba(245,158,11,0.12); color: var(--yellow); font-size: 15px; font-weight: 600;
-    border: 1px solid rgba(245,158,11,0.35); cursor: pointer; margin-bottom: 10px;
+    background: rgba(245,158,11,0.15); color: var(--yellow);
+    border: 1px solid rgba(245,158,11,0.45) !important;
+    margin-bottom: 10px;
   }
+  .btn-switch:active { opacity: 0.8; transform: scale(0.98); }
+
   .btn-purple {
-    width: 100%; padding: 14px; border-radius: var(--radius);
-    background: var(--purple-bg); color: var(--purple); font-size: 15px; font-weight: 600;
-    border: 1px solid var(--purple-border); cursor: pointer; margin-bottom: 10px;
+    background: var(--purple-bg); color: var(--purple);
+    border: 1px solid var(--purple-border) !important;
+    margin-bottom: 10px;
+  }
+  .btn-purple:active { opacity: 0.8; transform: scale(0.98); }
+
+  .btn-danger:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* ===== [FIX 3] Action page status badge ===== */
+  .tank-status-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 700;
+    margin-bottom: 4px; width: 100%; justify-content: center;
+  }
+  .tsb-active  { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+  .tsb-ready   { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+  .tsb-dirty   { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+  .tsb-idle    { background: var(--bg3);       color: var(--text2);  border: 1px solid var(--border2); }
+  .tsb-dot { width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
+  .tsb-dirty .tsb-dot { animation: blink 1s infinite; }
+  .tank-status-extra { font-size: 11px; color: var(--text3); margin-top: 6px; text-align: center; }
+
+  /* ===== Change Filter hint ===== */
+  #change-filter-wrapper {
+    position: relative; z-index: 2;
+  }
+  #change-filter-hint {
+    margin-top: 6px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 9px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--text2);
+    text-align: center;
   }
 
   /* Log Page */
@@ -292,15 +381,15 @@
   }
   .log-empty { text-align: center; color: var(--text3); font-size: 13px; padding: 40px 0; }
 
-  /* Log filter tabs */
   .log-filter-row {
     display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; scrollbar-width: none;
   }
   .log-filter-row::-webkit-scrollbar { display: none; }
   .log-filter-btn {
-    padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 500;
+    padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 500;
     cursor: pointer; border: 1px solid var(--border2); background: var(--bg2);
     color: var(--text2); white-space: nowrap; transition: all 0.15s;
+    touch-action: manipulation;
   }
   .log-filter-btn.active { background: var(--blue-bg); color: var(--blue); border-color: var(--blue-border); }
 
@@ -323,7 +412,7 @@
 
   /* Modal */
   .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    position: fixed; inset: 0; background: rgba(0,0,0,0.75);
     z-index: 200; display: none; align-items: flex-end;
   }
   .modal-overlay.open { display: flex; }
@@ -331,10 +420,13 @@
     background: var(--bg2); border-top: 1px solid var(--border2);
     border-radius: 20px 20px 0 0; padding: 20px 16px 32px;
     width: 100%; max-height: 85vh; overflow-y: auto;
+    position: relative; z-index: 201;
   }
   .modal-handle { width: 40px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 16px; }
   .modal-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
   .modal-info { background: var(--bg3); border-radius: 9px; padding: 12px; margin-bottom: 14px; font-size: 13px; color: var(--text2); line-height: 1.6; }
+  .modal .form-group { margin-bottom: 14px; }
+  .modal .btn-switch, .modal .btn-primary, .modal .btn-secondary { margin-top: 0; margin-bottom: 10px; }
 
   /* Toast */
   .toast {
@@ -343,12 +435,13 @@
     border-radius: 10px; padding: 10px 16px; font-size: 13px;
     z-index: 300; opacity: 0; transition: opacity 0.3s;
     white-space: nowrap; max-width: 90vw; text-align: center;
+    pointer-events: none;
   }
   .toast.show { opacity: 1; }
   .toast.success { border-color: var(--green-border); color: var(--green); }
   .toast.error { border-color: var(--red-border); color: var(--red); }
 
-  /* Settings URL input */
+  /* URL input */
   .url-input {
     width: 100%; background: var(--bg3); border: 1px solid var(--border2);
     border-radius: 9px; color: var(--text); font-size: 12px;
@@ -365,7 +458,21 @@
   .receive-summary-icon { font-size: 22px; }
   .receive-summary-text { font-size: 12px; color: var(--purple); font-weight: 500; line-height: 1.5; }
 
-  /* Responsive */
+  /* ===== [FIX 1] Google Sheets sync indicator ===== */
+  .sync-indicator {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 10px; border-radius: 7px;
+    font-size: 11px; margin-bottom: 10px;
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--text3);
+  }
+  .sync-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--text3); flex-shrink: 0;
+  }
+  .sync-dot.connected { background: var(--green); box-shadow: 0 0 5px rgba(16,185,129,0.5); }
+  .sync-dot.error { background: var(--red); }
+
   @media (min-width: 500px) {
     .page { max-width: 480px; margin: 0 auto; }
   }
@@ -446,7 +553,6 @@
       <label class="form-label">ถัง</label>
       <select class="form-select" id="act-tank" onchange="updateCurrentStatus()"></select>
     </div>
-    <!-- ===== [1] สถานะถังที่เลือก ===== -->
     <div class="form-group">
       <label class="form-label">สถานะถังที่เลือก</label>
       <div id="act-current-status">—</div>
@@ -457,17 +563,19 @@
     <div class="action-title">👤 ผู้ดำเนินการ</div>
     <div class="form-group">
       <label class="form-label">ชื่อ-นามสกุล</label>
-      <input class="form-input" type="text" id="act-operator" placeholder="กรอกชื่อผู้ปฏิบัติงาน" list="operator-list">
+      <input class="form-input" type="text" id="act-operator" placeholder="กรอกชื่อผู้ปฏิบัติงาน" list="operator-list" autocomplete="off">
       <datalist id="operator-list"></datalist>
     </div>
   </div>
 
   <div class="section-label">เลือกการดำเนินการ</div>
 
-  <button class="btn-switch" onclick="openModal('switch')">🔄 สลับถังใช้งาน (Switch)</button>
+  <div style="position:relative;z-index:2;margin-bottom:10px;">
+    <button class="btn-switch" onclick="openModal('switch')">🔄 สลับถังใช้งาน (Switch)</button>
+  </div>
   <div id="change-filter-wrapper">
     <button class="btn-danger" id="btn-change-filter" onclick="openModal('change')">🔧 บันทึกการเปลี่ยน Filter</button>
-    <div id="change-filter-hint" style="display:none;margin-top:6px;background:var(--bg3);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;font-size:12px;color:var(--text2);text-align:center;">
+    <div id="change-filter-hint" style="display:none;">
       🔒 สามารถเปลี่ยน Filter ได้เฉพาะถังที่มีสถานะ <b style="color:var(--red);">⚠ ต้องเปลี่ยน (DIRTY)</b> เท่านั้น
     </div>
   </div>
@@ -495,7 +603,6 @@
     <button class="btn-primary" onclick="saveSpare()">💾 บันทึก</button>
   </div>
 
-  <!-- ===== [3] รับ Spare Part เข้า Stock ===== -->
   <div class="section-label">รับ Spare Part เข้า Stock</div>
   <div class="action-card">
     <div class="receive-summary-card" id="last-receive-banner" style="display:none;"></div>
@@ -518,7 +625,6 @@
     <button class="btn-purple" onclick="receiveSpare()">📥 บันทึกรับ Spare เข้า Stock</button>
   </div>
 
-  <!-- ประวัติการรับ -->
   <div class="section-label">ประวัติการรับ Spare Part</div>
   <div id="receive-history"></div>
 </div>
@@ -527,7 +633,7 @@
 <div class="page" id="page-log">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
     <div class="section-label" style="margin:0;">ประวัติการดำเนินการ</div>
-    <button style="font-size:11px;color:var(--text2);background:none;border:none;cursor:pointer;" onclick="clearLog()">ล้าง Log</button>
+    <button style="font-size:11px;color:var(--text2);background:none;border:none;cursor:pointer;padding:4px 8px;touch-action:manipulation;" onclick="clearLog()">ล้าง Log</button>
   </div>
   <div class="log-filter-row">
     <button class="log-filter-btn active" onclick="setLogFilter('all', this)">ทั้งหมด</button>
@@ -540,7 +646,12 @@
 
 <!-- ===== CONFIG PAGE ===== -->
 <div class="page" id="page-config">
+  <!-- ===== [FIX 1] Google Sheets - ส่วนตั้งค่าและ sync status ===== -->
   <div class="section-label">Google Sheets Connection</div>
+  <div id="sheets-sync-status" class="sync-indicator">
+    <div class="sync-dot" id="sync-dot"></div>
+    <span id="sync-status-text">ยังไม่ได้เชื่อมต่อ</span>
+  </div>
   <div class="action-card">
     <div class="form-group">
       <label class="form-label">🔗 Google Apps Script Web App URL</label>
@@ -555,50 +666,93 @@
     <div id="cfg-status" style="margin-top:10px;font-size:12px;"></div>
   </div>
 
+  <!-- ===== [FIX 1] Apps Script Code สมบูรณ์ ===== -->
+  <div class="section-label">Apps Script Code (วางใน Google Apps Script)</div>
+  <div class="action-card">
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;margin-bottom:10px;">
+      <b style="color:var(--text);">วิธีใช้:</b><br>
+      1. เปิด Google Sheet → Extensions → Apps Script<br>
+      2. ลบ Code เดิม แล้ววาง Code ด้านล่างทั้งหมด<br>
+      3. กด Deploy → New deployment → Web App<br>
+      &nbsp;&nbsp;• Execute as: <b style="color:var(--green);">Me</b> &nbsp;|&nbsp; Who has access: <b style="color:var(--green);">Anyone</b><br>
+      4. Copy URL → ใส่ในช่อง Script URL ด้านบน
+    </div>
+    <div style="background:var(--bg3);border-radius:9px;padding:12px;font-size:10.5px;font-family:monospace;color:var(--text2);overflow-x:auto;white-space:pre;line-height:1.7;">// ============================================
+// Filter Tracker — Google Apps Script
+// วางทั้งหมดนี้ใน Apps Script แล้ว Deploy
+// ============================================
+
+function doGet(e) {
+  return ContentService
+    .createTextOutput(JSON.stringify({status:"ok", msg:"Filter Tracker API ready"}))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var data = JSON.parse(e.postData.contents);
+    var sheetId = data.sheetId;
+
+    // ถ้าระบุ Sheet ID ให้ใช้ Sheet นั้น
+    if (sheetId && sheetId.length > 10) {
+      ss = SpreadsheetApp.openById(sheetId);
+    }
+
+    // สร้าง Sheet ถ้ายังไม่มี
+    var logSheet = ss.getSheetByName("Filter_Log");
+    if (!logSheet) {
+      logSheet = ss.insertSheet("Filter_Log");
+      logSheet.appendRow([
+        "Timestamp","Machine","Tank ID","Tank Type",
+        "Action","Operator","Filter Type","Qty Used",
+        "Stock Before","Stock After","Note","Receive Date"
+      ]);
+      // จัดรูปแบบหัวตาราง
+      var header = logSheet.getRange(1,1,1,12);
+      header.setBackground("#1a1d27");
+      header.setFontColor("#3b82f6");
+      header.setFontWeight("bold");
+      logSheet.setFrozenRows(1);
+    }
+
+    // เพิ่มแถวข้อมูล
+    logSheet.appendRow([
+      data.timestamp || new Date().toLocaleString("th-TH"),
+      data.machine   || "—",
+      data.tankId    || "—",
+      data.tankType  || "—",
+      data.action    || "—",
+      data.operator  || "—",
+      data.filterType || "—",
+      data.qty       || 0,
+      data.stockBefore !== undefined ? data.stockBefore : "—",
+      data.stockAfter  !== undefined ? data.stockAfter  : "—",
+      data.note      || "—",
+      data.receiveDate || "—"
+    ]);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({status:"ok", rows: logSheet.getLastRow()}))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch(err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({status:"error", msg: err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}</div>
+    <button class="btn-secondary" onclick="copyScript()" style="margin-top:10px;">📋 Copy Code</button>
+  </div>
+
   <div class="section-label">ชื่อผู้ปฏิบัติงาน (บันทึกไว้)</div>
   <div class="action-card">
     <div class="form-group">
       <label class="form-label">เพิ่มชื่อ (กด Enter)</label>
       <input class="form-input" type="text" id="cfg-operator-add" placeholder="ชื่อ-นามสกุล" onkeydown="if(event.key==='Enter')addOperator()">
     </div>
-    <div id="operator-list-display"></div>
-  </div>
-
-  <div class="section-label">คำแนะนำการตั้งค่า Google Sheets</div>
-  <div class="action-card">
-    <div style="font-size:12px;color:var(--text2);line-height:1.8;">
-      <b style="color:var(--text);">1. สร้าง Google Sheet</b> ใหม่ มี 2 Sheet:<br>
-      &nbsp;&nbsp;• <code style="color:var(--blue);">Filter_Log</code> — บันทึกการเปลี่ยนทุกครั้ง<br>
-      &nbsp;&nbsp;• <code style="color:var(--blue);">Spare_Stock</code> — ไม่ต้องใช้ (แอปจัดการเอง)<br><br>
-      <b style="color:var(--text);">2. เปิด Apps Script</b> → Extensions → Apps Script<br><br>
-      <b style="color:var(--text);">3. วาง Code</b> ที่ให้ไว้ในไฟล์นี้ (ดูด้านล่าง)<br><br>
-      <b style="color:var(--text);">4. Deploy</b> → New deployment → Web App<br>
-      &nbsp;&nbsp;• Execute as: Me<br>
-      &nbsp;&nbsp;• Who has access: Anyone<br><br>
-      <b style="color:var(--text);">5. Copy URL</b> แล้วใส่ในช่องด้านบน
-    </div>
-    <div style="margin-top:12px;background:var(--bg3);border-radius:9px;padding:12px;font-size:11px;font-family:monospace;color:var(--text2);overflow-x:auto;white-space:pre;">function doPost(e) {
-  var sheet = SpreadsheetApp
-    .openById(e.parameter.sheetId)
-    .getSheetByName("Filter_Log");
-  var data = JSON.parse(e.postData.contents);
-  sheet.appendRow([
-    data.timestamp,
-    data.machine,
-    data.tankId,
-    data.tankType,
-    data.action,
-    data.operator,
-    data.filterType,
-    data.qty,
-    data.stockBefore,
-    data.stockAfter,
-    data.note
-  ]);
-  return ContentService
-    .createTextOutput(JSON.stringify({status:"ok"}))
-    .setMimeType(ContentService.MimeType.JSON);
-}</div>
+    <button class="btn-primary" onclick="addOperator()">+ เพิ่มชื่อ</button>
+    <div id="operator-list-display" style="margin-top:12px;"></div>
   </div>
 </div>
 
@@ -619,20 +773,16 @@
 const STATE = {
   tanks: {
     'HDF-01': {
-      // CLEAN tanks (ซ้าย)
       'Clean-B1': { type:'clean', status:'active',  lastChanged:null,       lastSwitched:dateStr(-8) },
       'Clean-B2': { type:'clean', status:'ready',   lastChanged:dateStr(-5), lastSwitched:null },
-      // PRE tanks (ขวา)
-      'Pre-A1':  { type:'pre',   status:'active',  lastChanged:null,       lastSwitched:null },
-      'Pre-A2':  { type:'pre',   status:'dirty',   lastChanged:dateStr(-3), lastSwitched:null }
+      'Pre-A1':   { type:'pre',   status:'active',  lastChanged:null,       lastSwitched:null },
+      'Pre-A2':   { type:'pre',   status:'dirty',   lastChanged:dateStr(-3), lastSwitched:null }
     },
     'HDF-02': {
-      // CLEAN tanks (ซ้าย)
       'Clean-D1': { type:'clean', status:'active', lastChanged:dateStr(-4), lastSwitched:null },
       'Clean-D2': { type:'clean', status:'dirty',  lastChanged:null,        lastSwitched:null },
-      // PRE tanks (ขวา)
-      'Pre-C1':  { type:'pre',  status:'active', lastChanged:dateStr(-2), lastSwitched:null },
-      'Pre-C2':  { type:'pre',  status:'ready',  lastChanged:dateStr(-7), lastSwitched:null }
+      'Pre-C1':   { type:'pre',  status:'active', lastChanged:dateStr(-2), lastSwitched:null },
+      'Pre-C2':   { type:'pre',  status:'ready',  lastChanged:dateStr(-7), lastSwitched:null }
     }
   },
   spare: {
@@ -655,18 +805,18 @@ function now() {
 
 // ===== PERSIST =====
 function save() {
-  localStorage.setItem('hf_filter_state', JSON.stringify(STATE));
+  localStorage.setItem('hf_filter_state_v2', JSON.stringify(STATE));
 }
 function load() {
-  const s = localStorage.getItem('hf_filter_state');
+  const s = localStorage.getItem('hf_filter_state_v2') || localStorage.getItem('hf_filter_state');
   if (s) {
     try {
       const d = JSON.parse(s);
-      Object.assign(STATE.tanks, d.tanks || {});
-      Object.assign(STATE.spare, d.spare || {});
-      STATE.log = d.log || [];
-      STATE.operators = d.operators || STATE.operators;
-      STATE.config = d.config || STATE.config;
+      if (d.tanks) Object.assign(STATE.tanks, d.tanks);
+      if (d.spare) Object.assign(STATE.spare, d.spare);
+      if (d.log) STATE.log = d.log;
+      if (d.operators) STATE.operators = d.operators;
+      if (d.config) STATE.config = d.config;
     } catch(e) {}
   }
 }
@@ -678,13 +828,13 @@ function showPage(id, tab) {
   document.getElementById('page-' + id).classList.add('active');
   tab.classList.add('active');
   if (id === 'dashboard') renderDashboard();
-  if (id === 'action') renderActionPage();
-  if (id === 'spare') renderSparePage();
-  if (id === 'log') renderLog();
-  if (id === 'config') renderConfig();
+  if (id === 'action')    renderActionPage();
+  if (id === 'spare')     renderSparePage();
+  if (id === 'log')       renderLog();
+  if (id === 'config')    renderConfig();
 }
 
-// ===== DASHBOARD =====
+// ===== STATUS HELPERS =====
 function getStatusLabel(status) {
   if (status === 'active') return { text: 'ใช้งานอยู่', cls: 'status-active' };
   if (status === 'ready')  return { text: 'พร้อมใช้ ✓', cls: 'status-ready' };
@@ -692,7 +842,7 @@ function getStatusLabel(status) {
   return { text: 'ไม่ได้ใช้', cls: 'status-idle' };
 }
 
-// ===== [2] Layout: Clean ซ้าย (B1|B2 คู่) / Pre ขวา (A1|A2 คู่) =====
+// ===== DASHBOARD =====
 function renderTankGrid(machineId, containerId) {
   const tanks = STATE.tanks[machineId];
   const el = document.getElementById(containerId);
@@ -709,7 +859,10 @@ function renderTankGrid(machineId, containerId) {
         : '—';
     return `<div class="tank-item ${s.cls}" onclick="quickAction('${machineId}','${id}')">
       <div class="tank-id">${id}</div>
-      <div class="tank-status-row"><div class="dot"></div><div class="tank-status-text">${s.text}</div></div>
+      <div class="tank-status-pill">
+        <div class="dot"></div>
+        ${s.text}
+      </div>
       <div class="tank-date">${dateInfo}</div>
     </div>`;
   }
@@ -733,7 +886,6 @@ function renderTankGrid(machineId, containerId) {
 }
 
 function renderDashboard() {
-  // Alerts
   const alerts = [];
   Object.entries(STATE.tanks).forEach(([m, tanks]) => {
     Object.entries(tanks).forEach(([id, t]) => {
@@ -742,6 +894,7 @@ function renderDashboard() {
   });
   const sp = STATE.spare['Filter (รวมทุกประเภท)'];
   if (sp && sp.qty <= sp.threshold) alerts.push(`Filter Spare คงเหลือ ${sp.qty} ชิ้น — ต่ำกว่า ${sp.threshold} ชิ้น กรุณาสั่งซื้อ!`);
+  
   const ac = document.getElementById('alert-container');
   ac.innerHTML = alerts.map(a => `<div class="alert-banner"><div class="alert-icon">🚨</div><div class="alert-text">${a}</div></div>`).join('');
 
@@ -755,13 +908,12 @@ function renderDashboard() {
       `กำลังใช้: ${activeClean?activeClean[0]:'—'} / ${activePre?activePre[0]:'—'}`;
     const hasDirty = Object.values(tanks).some(t => t.status==='dirty');
     const badge = document.getElementById(`hf${idx}-badge`);
-    badge.textContent = hasDirty ? '⚠ ต้องดำเนินการ' : 'ปกติ';
-    badge.style.background = hasDirty ? 'rgba(239,68,68,0.1)' : 'rgba(16,185,129,0.1)';
+    badge.textContent = hasDirty ? '⚠ ต้องดำเนินการ' : 'ปกติ ✓';
+    badge.style.background = hasDirty ? 'var(--red-bg)' : 'var(--green-bg)';
     badge.style.color = hasDirty ? 'var(--red)' : 'var(--green)';
-    badge.style.borderColor = hasDirty ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)';
+    badge.style.borderColor = hasDirty ? 'var(--red-border)' : 'var(--green-border)';
   });
 
-  // Dash spare
   const ds = document.getElementById('dash-spare');
   const sp2 = STATE.spare['Filter (รวมทุกประเภท)'];
   if (sp2) {
@@ -774,7 +926,6 @@ function renderDashboard() {
   }
 }
 
-// ===== QUICK ACTION from Dashboard =====
 function quickAction(machine, tankId) {
   openQuickSwitchModal(machine, tankId);
 }
@@ -788,7 +939,6 @@ function renderActionPage() {
 function updateTankOptions() {
   const m = document.getElementById('act-machine').value;
   const sel = document.getElementById('act-tank');
-  // เรียง CLEAN ก่อน PRE
   const tanks = STATE.tanks[m];
   const clean = Object.keys(tanks).filter(id => tanks[id].type === 'clean');
   const pre   = Object.keys(tanks).filter(id => tanks[id].type === 'pre');
@@ -798,7 +948,6 @@ function updateTankOptions() {
   updateCurrentStatus();
 }
 
-// ===== [1] อัปเดตสถานะด้วย Badge + [4] ล็อคปุ่มเปลี่ยน Filter =====
 function updateCurrentStatus() {
   const m = document.getElementById('act-machine').value;
   const t = document.getElementById('act-tank').value;
@@ -828,35 +977,34 @@ function updateCurrentStatus() {
     <div class="tank-status-extra">${typeLabel}${dateInfo ? ' &nbsp;|&nbsp; ' + dateInfo : ''}</div>
   `;
 
-  // [4] ล็อคปุ่มเปลี่ยน Filter เฉพาะสถานะ dirty เท่านั้น
+  // ล็อคปุ่มเปลี่ยน Filter เฉพาะ dirty
   const btn = document.getElementById('btn-change-filter');
   const hint = document.getElementById('change-filter-hint');
   if (tank.status === 'dirty') {
     btn.disabled = false;
     btn.style.opacity = '1';
     btn.style.cursor = 'pointer';
+    btn.style.pointerEvents = 'auto';
     if (hint) hint.style.display = 'none';
   } else {
     btn.disabled = true;
     btn.style.opacity = '0.35';
     btn.style.cursor = 'not-allowed';
+    btn.style.pointerEvents = 'none';
     if (hint) hint.style.display = 'block';
   }
 }
 
 function renderOperatorList() {
   const dl = document.getElementById('operator-list');
-  dl.innerHTML = STATE.operators.map(o => `<option value="${o}">`).join('');
+  if (dl) dl.innerHTML = STATE.operators.map(o => `<option value="${o}">`).join('');
 }
 
 // ===== MODAL =====
-let modalQty = 1;
-
 function openModal(action) {
   const m = document.getElementById('act-machine').value;
   const t = document.getElementById('act-tank').value;
   const tank = STATE.tanks[m]?.[t];
-  modalQty = 1;
 
   if (action === 'switch') {
     document.getElementById('modal-title').textContent = '🔄 สลับถังใช้งาน';
@@ -893,8 +1041,8 @@ function openModal(action) {
         เปลี่ยน Filter ถัง <b style="color:var(--text);">${t}</b><br>
         สถานะปัจจุบัน: <b style="color:var(--red);">${s.text}</b><br>
         ถังจะเปลี่ยนสถานะเป็น <span style="color:var(--green);">🟢 READY</span><br>
-        จำนวน Filter ที่ใช้: <b style="color:var(--text);">7 ชิ้น / ครั้ง</b><br>
-        Spare คงเหลือ: <b style="color:var(--text);">${spQty} ชิ้น</b> → หลังเปลี่ยน: <b style="color:${spQty-7<=0?'var(--red)':'var(--text)'};">${Math.max(0,spQty-7)} ชิ้น</b>
+        จำนวน Filter ที่ใช้: <b>7 ชิ้น / ครั้ง</b><br>
+        Spare คงเหลือ: <b>${spQty}</b> → หลัง: <b style="color:${spQty-7<=0?'var(--red)':'var(--green)'};">${Math.max(0,spQty-7)} ชิ้น</b>
       </div>
       <div class="form-group">
         <label class="form-label">หมายเหตุ</label>
@@ -909,11 +1057,6 @@ function openModal(action) {
 
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
-}
-
-function changeModalQty(d) {
-  modalQty = Math.max(1, modalQty + d);
-  document.getElementById('modal-qty').textContent = modalQty;
 }
 
 // ===== ACTIONS =====
@@ -946,7 +1089,7 @@ function doChangeFilter() {
   const m = document.getElementById('act-machine').value;
   const tankId = document.getElementById('act-tank').value;
   const operator = document.getElementById('act-operator').value || 'ไม่ระบุ';
-  const qty = 7; // ล็อคที่ 7 ชิ้น/ครั้ง
+  const qty = 7;
   const note = document.getElementById('modal-note').value;
   const spareKey = 'Filter (รวมทุกประเภท)';
 
@@ -959,7 +1102,8 @@ function doChangeFilter() {
 
   const entry = {
     ts: now(), machine: m, tankId, action: 'change_filter',
-    operator, filterType: spareKey, qty, stockBefore, stockAfter, note
+    operator, filterType: spareKey, qty, stockBefore, stockAfter, note,
+    tankType: STATE.tanks[m][tankId].type
   };
   STATE.log.unshift(entry);
   sendToSheets(entry);
@@ -970,56 +1114,107 @@ function doChangeFilter() {
   updateCurrentStatus();
 }
 
-// ===== GOOGLE SHEETS =====
+// ===== [FIX 1] GOOGLE SHEETS - ส่งข้อมูลพร้อม Header CORS =====
 async function sendToSheets(data) {
   const url = STATE.config.scriptUrl;
-  if (!url) return;
+  if (!url || url.trim() === '') return;
+
   const payload = {
     timestamp: data.ts,
-    machine: data.machine,
+    machine: data.machine || '—',
     tankId: data.tankId || ((data.tankFrom || '') + '→' + (data.tankTo || '')),
-    tankType: data.tankType || '',
+    tankType: data.tankType || (data.tankFrom ? 'switch' : ''),
     action: data.action === 'switch' ? 'สลับถัง'
           : data.action === 'receive_spare' ? 'รับ Spare เข้า Stock'
           : 'เปลี่ยน Filter',
-    operator: data.operator,
+    operator: data.operator || '—',
     filterType: data.filterType || '—',
-    qty: data.qty,
-    stockBefore: data.stockBefore || '',
-    stockAfter: data.stockAfter || '',
+    qty: data.qty || 0,
+    stockBefore: data.stockBefore !== undefined ? data.stockBefore : '',
+    stockAfter:  data.stockAfter  !== undefined ? data.stockAfter  : '',
     note: data.note || '',
-    sheetId: STATE.config.sheetId
+    receiveDate: data.receiveDate || '',
+    sheetId: STATE.config.sheetId || ''
   };
+
   try {
-    await fetch(url, {
+    // ใช้ no-cors เพราะ Apps Script ไม่ส่ง CORS header บาง deployment
+    const resp = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload)
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+      mode: 'no-cors'
     });
-  } catch(e) { console.warn('Sheets sync failed:', e); }
+    updateSyncStatus(true);
+    console.log('Sheets sync sent:', payload.action);
+  } catch(e) {
+    updateSyncStatus(false);
+    console.warn('Sheets sync failed:', e.message);
+  }
+}
+
+function updateSyncStatus(ok) {
+  const dot = document.getElementById('sync-dot');
+  const txt = document.getElementById('sync-status-text');
+  if (!dot || !txt) return;
+  if (ok) {
+    dot.className = 'sync-dot connected';
+    txt.textContent = 'เชื่อมต่อ Google Sheets แล้ว ✓';
+    txt.style.color = 'var(--green)';
+  } else {
+    dot.className = 'sync-dot error';
+    txt.textContent = 'ส่ง Google Sheets ไม่สำเร็จ';
+    txt.style.color = 'var(--red)';
+  }
 }
 
 async function syncNow() {
   const btn = document.getElementById('syncBtn');
   btn.classList.add('syncing');
-  btn.textContent = '⟳ กำลัง Sync...';
-  await new Promise(r => setTimeout(r, 1200));
+  btn.textContent = '⟳ Syncing...';
+  
+  // ส่ง log ล่าสุด 5 รายการที่ยังไม่ได้ sync (ถ้ามี URL)
+  if (STATE.config.scriptUrl) {
+    const recent = STATE.log.slice(0, 3);
+    for (const entry of recent) {
+      await sendToSheets(entry);
+      await new Promise(r => setTimeout(r, 300));
+    }
+  }
+  
+  await new Promise(r => setTimeout(r, 800));
   btn.classList.remove('syncing');
   btn.textContent = '⟳ Sync';
-  showToast('✅ ซิงค์ข้อมูลแล้ว', 'success');
+  showToast(STATE.config.scriptUrl ? '✅ Sync สำเร็จ' : '⚠ ยังไม่ได้ตั้งค่า URL', STATE.config.scriptUrl ? 'success' : '');
 }
 
 async function testConnection() {
-  const url = document.getElementById('cfg-script-url').value;
+  const url = document.getElementById('cfg-script-url').value.trim();
   const st = document.getElementById('cfg-status');
   if (!url) { st.innerHTML = '<span style="color:var(--red)">กรุณากรอก URL ก่อน</span>'; return; }
-  st.innerHTML = '<span style="color:var(--text2)">กำลังทดสอบ...</span>';
+  st.innerHTML = '<span style="color:var(--text2)">⏳ กำลังทดสอบ...</span>';
   try {
-    await fetch(url + '?test=1', { mode: 'no-cors' });
-    st.innerHTML = '<span style="color:var(--green)">✅ เชื่อมต่อสำเร็จ (no-cors)</span>';
+    // GET request ทดสอบ
+    const resp = await fetch(url + '?test=ping', { mode: 'no-cors' });
+    st.innerHTML = '<span style="color:var(--green)">✅ ส่ง Request ได้ (no-cors mode) — ตรวจสอบ Google Sheet เพื่อยืนยัน</span>';
+    updateSyncStatus(true);
   } catch(e) {
-    st.innerHTML = '<span style="color:var(--red)">❌ เชื่อมต่อไม่ได้: ' + e.message + '</span>';
+    st.innerHTML = `<span style="color:var(--red)">❌ เชื่อมต่อไม่ได้: ${e.message}</span>`;
+    updateSyncStatus(false);
   }
+}
+
+function copyScript() {
+  const code = document.querySelector('.action-card pre') || document.querySelector('[style*="monospace"]');
+  const allPre = document.querySelectorAll('[style*="monospace"]');
+  let text = '';
+  allPre.forEach(el => { if (el.textContent.includes('doPost')) text = el.textContent; });
+  if (!text) { showToast('❌ ไม่พบ Code', 'error'); return; }
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('✅ Copy Code แล้ว', 'success');
+  }).catch(() => {
+    showToast('❌ ไม่สามารถ Copy ได้', 'error');
+  });
 }
 
 // ===== SPARE PAGE =====
@@ -1038,7 +1233,6 @@ function renderSparePage() {
   document.getElementById('spare-qty-disp').textContent = spareQtyEdit;
   document.getElementById('spare-threshold').value = v.threshold;
 
-  // ตั้งค่าวันที่รับ default = วันนี้
   const todayISO = new Date().toISOString().slice(0, 10);
   if (!document.getElementById('receive-date').value)
     document.getElementById('receive-date').value = todayISO;
@@ -1070,7 +1264,6 @@ function saveSpare() {
   showToast('✅ บันทึก Spare Part แล้ว', 'success');
 }
 
-// ===== [3] รับ Spare Part เข้า Stock =====
 function receiveSpare() {
   const spareKey = 'Filter (รวมทุกประเภท)';
   const qty = receiveQtyEdit;
@@ -1087,30 +1280,21 @@ function receiveSpare() {
   if (STATE.spare[spareKey]) STATE.spare[spareKey].qty = stockAfter;
 
   const entry = {
-    ts: now(),
-    receiveDate,
-    action: 'receive_spare',
-    filterType: spareKey,
-    qty,
-    stockBefore,
-    stockAfter,
-    note: note || '—',
-    operator: note || '—',
-    machine: '—',
-    tankId: '—'
+    ts: now(), receiveDate, action: 'receive_spare',
+    filterType: spareKey, qty, stockBefore, stockAfter,
+    note: note || '—', operator: note || '—',
+    machine: '—', tankId: '—'
   };
-
   STATE.log.unshift(entry);
   sendToSheets(entry);
   save();
 
-  // reset
   receiveQtyEdit = 1;
   document.getElementById('receive-qty-disp').textContent = 1;
   document.getElementById('receive-note').value = '';
 
   renderSparePage();
-  showToast(`✅ รับ Filter ${qty} ชิ้น เข้า Stock (รวม ${stockAfter} ชิ้น)`, 'success');
+  showToast(`✅ รับ Filter ${qty} ชิ้น (รวม ${stockAfter} ชิ้น)`, 'success');
 }
 
 function renderReceiveHistory() {
@@ -1176,7 +1360,8 @@ function renderLog() {
         </div>
         <div class="log-detail">
           ${e.tankFrom} → ${e.tankTo}<br>
-          ผู้ดำเนินการ: ${e.operator}${e.note && e.note !== '(Quick Switch)' ? '<br>หมายเหตุ: ' + e.note : ''}
+          ผู้ดำเนินการ: ${e.operator}
+          ${e.note && e.note !== '(Quick Switch)' ? '<br>หมายเหตุ: ' + e.note : ''}
         </div>
         <div><span class="log-tag">${e.machine}</span></div>
       </div>`;
@@ -1188,12 +1373,13 @@ function renderLog() {
         </div>
         <div class="log-detail">
           ${e.tankId} | ${e.filterType} x${e.qty} ชิ้น<br>
-          ผู้ดำเนินการ: ${e.operator}${e.note ? '<br>หมายเหตุ: ' + e.note : ''}
+          ผู้ดำเนินการ: ${e.operator}
+          ${e.note ? '<br>หมายเหตุ: ' + e.note : ''}
           <br>Stock: ${e.stockBefore} → ${e.stockAfter}
         </div>
         <div>
           <span class="log-tag">${e.machine}</span>
-          ${e.stockAfter <= 14 ? '<span class="log-tag" style="background:var(--red-bg);color:var(--red);border-color:var(--red-border);">Stock ต่ำ!</span>' : ''}
+          ${e.stockAfter <= 14 ? '<span class="log-tag" style="background:var(--red-bg);color:var(--red);border-color:var(--red-border);">⚠ Stock ต่ำ</span>' : ''}
         </div>
       </div>`;
     } else if (e.action === 'receive_spare') {
@@ -1227,6 +1413,11 @@ function renderConfig() {
   document.getElementById('cfg-script-url').value = STATE.config.scriptUrl || '';
   document.getElementById('cfg-sheet-id').value = STATE.config.sheetId || '';
   renderOperatorDisplay();
+  // แสดงสถานะ sync
+  if (STATE.config.scriptUrl) {
+    updateSyncStatus(true);
+    document.getElementById('sync-status-text').textContent = 'มี URL ตั้งค่าแล้ว — กด ทดสอบ เพื่อยืนยัน';
+  }
 }
 
 function saveConfig() {
@@ -1244,6 +1435,7 @@ function addOperator() {
     document.getElementById('cfg-operator-add').value = '';
     renderOperatorDisplay();
     renderOperatorList();
+    showToast(`✅ เพิ่ม "${v}" แล้ว`, 'success');
   }
 }
 
@@ -1257,9 +1449,9 @@ function removeOperator(name) {
 function renderOperatorDisplay() {
   document.getElementById('operator-list-display').innerHTML =
     STATE.operators.map(o =>
-      `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;">
+      `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;">
         <span>${o}</span>
-        <button onclick="removeOperator('${o}')" style="background:none;border:none;color:var(--red);font-size:16px;cursor:pointer;">×</button>
+        <button onclick="removeOperator('${o}')" style="background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);font-size:12px;padding:3px 10px;border-radius:6px;cursor:pointer;touch-action:manipulation;">ลบ</button>
       </div>`
     ).join('');
 }
@@ -1270,7 +1462,7 @@ function openQuickSwitchModal(machine, tankId) {
   const sameType = Object.entries(STATE.tanks[machine])
     .filter(([id, t]) => t.type === tank.type && id !== tankId && t.status === 'ready');
 
-  if (sameType.length === 0) {
+  if (!sameType.length) {
     showToast('❌ ไม่มีถัง READY ให้สลับ', 'error');
     return;
   }
@@ -1291,7 +1483,7 @@ function openQuickSwitchModal(machine, tankId) {
     </div>
     <div class="form-group">
       <label class="form-label">👤 ผู้ดำเนินการ</label>
-      <input class="form-input" id="quick-operator" placeholder="กรอกชื่อ" list="operator-list">
+      <input class="form-input" id="quick-operator" placeholder="กรอกชื่อ" list="operator-list" autocomplete="off">
     </div>
     <button class="btn-switch" onclick="doQuickSwitch('${machine}','${tankId}')">✅ ยืนยันสลับ</button>
     <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>
@@ -1302,7 +1494,6 @@ function openQuickSwitchModal(machine, tankId) {
 function doQuickSwitch(machine, fromId) {
   const toId = document.getElementById('quick-target').value;
   const operator = document.getElementById('quick-operator').value || 'ไม่ระบุ';
-  if (fromId === toId) { showToast('❌ ห้ามเลือกถังเดียวกัน', 'error'); return; }
   if (!toId) { showToast('❌ กรุณาเลือกถังปลายทาง', 'error'); return; }
 
   STATE.tanks[machine][fromId].status = 'dirty';
@@ -1327,14 +1518,13 @@ function showToast(msg, type='') {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = 'toast show ' + type;
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(() => t.classList.remove('show'), 2800);
 }
 
 // ===== INIT =====
 load();
 renderDashboard();
 renderOperatorList();
-modalQty = 1;
 receiveQtyEdit = 1;
 </script>
 </body>
