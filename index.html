@@ -1117,39 +1117,39 @@ function doChangeFilter() {
 // ===== [FIX 1] GOOGLE SHEETS - ส่งข้อมูลพร้อม Header CORS =====
 async function sendToSheets(data) {
   const url = STATE.config.scriptUrl;
-  if (!url || url.trim() === '') return;
+  if (!url) return;
 
   const payload = {
     timestamp: data.ts,
-    machine: data.machine || '—',
+    machine: data.machine || '',
     tankId: data.tankId || ((data.tankFrom || '') + '→' + (data.tankTo || '')),
-    tankType: data.tankType || (data.tankFrom ? 'switch' : ''),
-    action: data.action === 'switch' ? 'สลับถัง'
-          : data.action === 'receive_spare' ? 'รับ Spare เข้า Stock'
-          : 'เปลี่ยน Filter',
-    operator: data.operator || '—',
-    filterType: data.filterType || '—',
+    tankType: data.tankType || '',
+    action: data.action,
+    operator: data.operator || '',
+    filterType: data.filterType || '',
     qty: data.qty || 0,
-    stockBefore: data.stockBefore !== undefined ? data.stockBefore : '',
-    stockAfter:  data.stockAfter  !== undefined ? data.stockAfter  : '',
+    stockBefore: data.stockBefore || '',
+    stockAfter: data.stockAfter || '',
     note: data.note || '',
-    receiveDate: data.receiveDate || '',
-    sheetId: STATE.config.sheetId || ''
+    receiveDate: data.receiveDate || ''
   };
 
   try {
-    // ใช้ no-cors เพราะ Apps Script ไม่ส่ง CORS header บาง deployment
     const resp = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload),
-      mode: 'no-cors'
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
     });
+
+    const result = await resp.json();
+    console.log('Sheets:', result);
+
     updateSyncStatus(true);
-    console.log('Sheets sync sent:', payload.action);
-  } catch(e) {
+  } catch (err) {
+    console.error(err);
     updateSyncStatus(false);
-    console.warn('Sheets sync failed:', e.message);
   }
 }
 
