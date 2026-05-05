@@ -36,7 +36,6 @@
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overscroll-behavior: none; }
 
-  /* Header */
   .app-header {
     background: var(--bg2);
     border-bottom: 1px solid var(--border);
@@ -50,13 +49,11 @@
     background: var(--blue-bg); border: 1px solid var(--blue-border);
     color: var(--blue); border-radius: 8px; padding: 6px 12px;
     font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap;
-    position: relative; z-index: 1;
   }
   .sync-btn:active { opacity: 0.7; }
   .sync-btn.syncing { animation: pulse 1s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
-  /* Nav Tabs */
   .nav-tabs {
     display: flex; background: var(--bg2);
     border-bottom: 1px solid var(--border);
@@ -73,27 +70,17 @@
   .nav-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
   .nav-tab .tab-icon { font-size: 16px; display: block; margin-bottom: 2px; }
 
-  /* Pages */
   .page { display: none; padding: 14px 12px 80px; }
   .page.active { display: block; }
 
-  /* Section */
   .section-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    color: var(--text3);
-    text-transform: uppercase;
-    margin: 24px 0 10px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+    color: var(--text3); text-transform: uppercase; margin: 24px 0 10px;
   }
 
-  /* Machine Card */
   .machine-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 20px;
-    overflow: hidden;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 20px; overflow: hidden;
   }
   .machine-header {
     display: flex; align-items: center; justify-content: space-between;
@@ -106,122 +93,48 @@
     background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border);
   }
 
-  /* ===== [FIX 2] TANK LAYOUT: ระยะห่างระหว่าง PRE และ CLEAN ชัดขึ้น ===== */
-  .tank-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-  }
-  .tank-col {
-    display: flex;
-    flex-direction: column;
-  }
-  .tank-col.clean-col {
-    border-right: 2px solid rgba(59,130,246,0.25); /* เส้นแบ่งชัดขึ้น */
-  }
+  .tank-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .tank-col { display: flex; flex-direction: column; }
+  .tank-col.clean-col { border-right: 2px solid rgba(59,130,246,0.25); }
   .tank-col-header {
-    text-align: center;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    padding: 8px 4px 7px;
-    border-bottom: 1px solid var(--border);
+    text-align: center; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; padding: 8px 4px 7px; border-bottom: 1px solid var(--border);
   }
-  .tank-col-header.clean-header {
-    background: rgba(59,130,246,0.10);
-    color: var(--blue);
-    border-bottom: 1px solid rgba(59,130,246,0.2);
-  }
-  .tank-col-header.pre-header {
-    background: rgba(245,158,11,0.10);
-    color: var(--yellow);
-    border-bottom: 1px solid rgba(245,158,11,0.2);
-  }
-  .tank-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    flex: 1;
-  }
+  .tank-col-header.clean-header { background: rgba(59,130,246,0.10); color: var(--blue); border-bottom: 1px solid rgba(59,130,246,0.2); }
+  .tank-col-header.pre-header { background: rgba(245,158,11,0.10); color: var(--yellow); border-bottom: 1px solid rgba(245,158,11,0.2); }
+  .tank-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; flex: 1; }
 
-  /* ===== [FIX 3] STATUS ชัดเจนขึ้น - tank card ===== */
   .tank-item {
-    background: var(--bg2);
-    padding: 14px 10px 12px;
-    cursor: pointer;
-    transition: background 0.15s;
-    position: relative;
-    border-right: 1px solid var(--border);
-    user-select: none;
-    -webkit-user-select: none;
+    background: var(--bg2); padding: 14px 10px 12px; cursor: pointer;
+    transition: background 0.15s; position: relative;
+    border-right: 1px solid var(--border); user-select: none; -webkit-user-select: none;
   }
   .tank-item:last-child { border-right: none; }
   .tank-item:active { background: var(--bg3); }
-
-  .tank-id {
-    font-size: 12px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: var(--text);
-  }
-
-  /* Status Badge ใหม่ - ใหญ่ขึ้น มีพื้นหลัง */
+  .tank-id { font-size: 12px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
   .tank-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 8px;
-    border-radius: 20px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    border: 1px solid transparent;
-    width: 100%;
-    justify-content: center;
-    margin-bottom: 6px;
+    display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px;
+    border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.02em;
+    border: 1px solid transparent; width: 100%; justify-content: center; margin-bottom: 6px;
   }
   .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-
   .tank-date { font-size: 9px; color: var(--text3); line-height: 1.4; text-align: center; }
 
-  /* Status colors - pill style */
-  .status-active .tank-status-pill {
-    background: var(--yellow-bg);
-    color: var(--yellow);
-    border-color: var(--yellow-border);
-  }
+  .status-active .tank-status-pill { background: var(--yellow-bg); color: var(--yellow); border-color: var(--yellow-border); }
   .status-active .dot { background: var(--yellow); box-shadow: 0 0 5px rgba(245,158,11,0.6); }
   .status-active { border-top: 3px solid var(--yellow) !important; }
-
-  .status-ready .tank-status-pill {
-    background: var(--green-bg);
-    color: var(--green);
-    border-color: var(--green-border);
-  }
+  .status-ready .tank-status-pill { background: var(--green-bg); color: var(--green); border-color: var(--green-border); }
   .status-ready .dot { background: var(--green); box-shadow: 0 0 5px rgba(16,185,129,0.5); }
   .status-ready { border-top: 3px solid var(--green) !important; }
-
-  .status-dirty .tank-status-pill {
-    background: var(--red-bg);
-    color: var(--red);
-    border-color: var(--red-border);
-  }
+  .status-dirty .tank-status-pill { background: var(--red-bg); color: var(--red); border-color: var(--red-border); }
   .status-dirty .dot { background: var(--red); box-shadow: 0 0 5px rgba(239,68,68,0.6); animation: blink 1s infinite; }
   .status-dirty { border-top: 3px solid var(--red) !important; }
-  .status-dirty .tank-item-inner { animation: shake-subtle 2s ease-in-out infinite; }
-
-  .status-idle .tank-status-pill {
-    background: rgba(255,255,255,0.04);
-    color: var(--text3);
-    border-color: var(--border);
-  }
+  .status-idle .tank-status-pill { background: rgba(255,255,255,0.04); color: var(--text3); border-color: var(--border); }
   .status-idle .dot { background: var(--text3); }
   .status-idle { border-top: 3px solid var(--text3) !important; }
 
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  @keyframes shake-subtle { 0%,100%{} 95%{transform:translateX(-1px)} 97%{transform:translateX(1px)} }
 
-  /* Alert Banner */
   .alert-banner {
     background: var(--red-bg); border: 1px solid var(--red-border);
     border-radius: var(--radius-sm); padding: 10px 12px;
@@ -230,12 +143,8 @@
   .alert-banner .alert-icon { font-size: 16px; flex-shrink: 0; }
   .alert-banner .alert-text { font-size: 12px; color: var(--red); font-weight: 500; }
 
-  /* Spare Part Cards */
   .spare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .spare-card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 14px;
-  }
+  .spare-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
   .spare-label { font-size: 11px; color: var(--text2); margin-bottom: 2px; }
   .spare-type { font-size: 12px; font-weight: 500; margin-bottom: 10px; }
   .spare-count { font-size: 28px; font-weight: 700; line-height: 1; }
@@ -244,11 +153,9 @@
   .spare-ok .spare-count { color: var(--green); }
   .spare-warn .spare-count { color: var(--yellow); }
 
-  /* ===== [FIX 4] Action Page - ปุ่มกดได้ทุกตำแหน่ง ===== */
   .action-card {
     background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px; margin-bottom: 12px;
-    position: relative; z-index: 1;
+    border-radius: var(--radius); padding: 16px; margin-bottom: 12px; position: relative; z-index: 1;
   }
   .action-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
   .form-group { margin-bottom: 12px; }
@@ -256,15 +163,10 @@
   .form-select, .form-input, .form-textarea {
     width: 100%; background: var(--bg3); border: 1px solid var(--border2);
     border-radius: 9px; color: var(--text); font-size: 14px;
-    padding: 10px 12px; appearance: none;
-    font-family: var(--font);
-    cursor: pointer;
-    -webkit-appearance: none;
-    position: relative; z-index: 2;
+    padding: 10px 12px; appearance: none; font-family: var(--font);
+    cursor: pointer; -webkit-appearance: none; position: relative; z-index: 2;
   }
-  .form-select:focus, .form-input:focus, .form-textarea:focus {
-    outline: none; border-color: var(--blue);
-  }
+  .form-select:focus, .form-input:focus, .form-textarea:focus { outline: none; border-color: var(--blue); }
   .form-textarea { resize: none; height: 72px; cursor: text; }
   .form-input { cursor: text; }
 
@@ -274,8 +176,7 @@
     background: var(--bg3); border: 1px solid var(--border2);
     color: var(--text); font-size: 22px; cursor: pointer;
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    position: relative; z-index: 2; user-select: none;
-    -webkit-user-select: none; touch-action: manipulation;
+    position: relative; z-index: 2; user-select: none; touch-action: manipulation;
   }
   .qty-btn:active { background: var(--border2); transform: scale(0.95); }
   .qty-display {
@@ -284,56 +185,24 @@
     border-radius: 9px; padding: 6px; color: var(--text);
   }
 
-  /* ===== [FIX 4] ALL Buttons - กดได้ทุกตำแหน่ง ===== */
   .btn-primary, .btn-secondary, .btn-danger, .btn-switch, .btn-purple {
-    display: block;
-    width: 100%; padding: 15px; border-radius: var(--radius);
+    display: block; width: 100%; padding: 15px; border-radius: var(--radius);
     font-size: 15px; font-weight: 600; border: none; cursor: pointer;
-    transition: opacity 0.15s, transform 0.1s;
-    position: relative; z-index: 2;
-    touch-action: manipulation;
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-    text-align: center;
-    line-height: 1.2;
+    transition: opacity 0.15s, transform 0.1s; position: relative; z-index: 2;
+    touch-action: manipulation; user-select: none; -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0); text-align: center; line-height: 1.2;
   }
   .btn-primary { background: var(--blue); color: white; }
   .btn-primary:active { opacity: 0.8; transform: scale(0.98); }
-
-  .btn-secondary {
-    background: var(--bg3); color: var(--text2);
-    border: 1px solid var(--border2) !important;
-    margin-top: 8px;
-  }
-
-  .btn-danger {
-    background: var(--red-bg); color: var(--red);
-    border: 1px solid var(--red-border) !important;
-  }
+  .btn-secondary { background: var(--bg3); color: var(--text2); border: 1px solid var(--border2) !important; margin-top: 8px; }
+  .btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border) !important; }
   .btn-danger:not(:disabled):active { opacity: 0.7; transform: scale(0.98); }
-
-  .btn-switch {
-    background: rgba(245,158,11,0.15); color: var(--yellow);
-    border: 1px solid rgba(245,158,11,0.45) !important;
-    margin-bottom: 10px;
-  }
+  .btn-switch { background: rgba(245,158,11,0.15); color: var(--yellow); border: 1px solid rgba(245,158,11,0.45) !important; margin-bottom: 10px; }
   .btn-switch:active { opacity: 0.8; transform: scale(0.98); }
-
-  .btn-purple {
-    background: var(--purple-bg); color: var(--purple);
-    border: 1px solid var(--purple-border) !important;
-    margin-bottom: 10px;
-  }
+  .btn-purple { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border) !important; margin-bottom: 10px; }
   .btn-purple:active { opacity: 0.8; transform: scale(0.98); }
+  .btn-danger:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
 
-  .btn-danger:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  /* ===== [FIX 3] Action page status badge ===== */
   .tank-status-badge {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 700;
@@ -347,22 +216,12 @@
   .tsb-dirty .tsb-dot { animation: blink 1s infinite; }
   .tank-status-extra { font-size: 11px; color: var(--text3); margin-top: 6px; text-align: center; }
 
-  /* ===== Change Filter hint ===== */
-  #change-filter-wrapper {
-    position: relative; z-index: 2;
-  }
+  #change-filter-wrapper { position: relative; z-index: 2; }
   #change-filter-hint {
-    margin-top: 6px;
-    background: var(--bg3);
-    border: 1px solid var(--border2);
-    border-radius: 9px;
-    padding: 10px 12px;
-    font-size: 12px;
-    color: var(--text2);
-    text-align: center;
+    margin-top: 6px; background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 9px; padding: 10px 12px; font-size: 12px; color: var(--text2); text-align: center;
   }
 
-  /* Log Page */
   .log-item {
     background: var(--bg2); border: 1px solid var(--border);
     border-radius: var(--radius-sm); padding: 12px; margin-bottom: 8px;
@@ -376,9 +235,9 @@
     border-radius: 5px; margin-right: 4px; margin-top: 4px;
     background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border);
   }
-  .log-tag-receive {
-    background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border);
-  }
+  .log-tag-receive { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+  .log-tag-sync-ok  { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+  .log-tag-sync-err { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
   .log-empty { text-align: center; color: var(--text3); font-size: 13px; padding: 40px 0; }
 
   .log-filter-row {
@@ -388,12 +247,10 @@
   .log-filter-btn {
     padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 500;
     cursor: pointer; border: 1px solid var(--border2); background: var(--bg2);
-    color: var(--text2); white-space: nowrap; transition: all 0.15s;
-    touch-action: manipulation;
+    color: var(--text2); white-space: nowrap; transition: all 0.15s; touch-action: manipulation;
   }
   .log-filter-btn.active { background: var(--blue-bg); color: var(--blue); border-color: var(--blue-border); }
 
-  /* Config Page */
   .config-row {
     display: flex; align-items: center; justify-content: space-between;
     padding: 14px; background: var(--bg2); border: 1px solid var(--border);
@@ -401,16 +258,38 @@
   }
   .config-label { font-size: 14px; }
   .config-meta { font-size: 11px; color: var(--text2); margin-top: 2px; }
-  .config-input {
-    width: 120px; background: var(--bg3); border: 1px solid var(--border2);
-    border-radius: 8px; color: var(--text); font-size: 14px;
-    padding: 7px 10px; text-align: center;
-  }
-  .config-status { font-size: 12px; }
-  .config-status.ok { color: var(--green); }
-  .config-status.err { color: var(--red); }
 
-  /* Modal */
+  /* ── Sync Status Card ── */
+  .sync-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px; margin-bottom: 12px;
+  }
+  .sync-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text3); flex-shrink: 0; transition: all 0.3s; }
+  .sync-dot.ok   { background: var(--green); box-shadow: 0 0 6px rgba(16,185,129,0.5); }
+  .sync-dot.err  { background: var(--red);   box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+  .sync-dot.wait { background: var(--yellow); animation: pulse 1s infinite; }
+  .sync-label { font-size: 13px; font-weight: 600; flex: 1; }
+  .sync-sublabel { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+  /* Pending queue badge */
+  .queue-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--yellow-bg); border: 1px solid var(--yellow-border);
+    color: var(--yellow); font-size: 11px; font-weight: 600;
+    padding: 3px 8px; border-radius: 6px;
+  }
+  .queue-badge.zero { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+
+  /* Script Code block */
+  .code-block {
+    background: var(--bg3); border-radius: 9px; padding: 12px;
+    font-size: 10.5px; font-family: monospace; color: var(--text2);
+    overflow-x: auto; white-space: pre; line-height: 1.7;
+    max-height: 320px; overflow-y: auto;
+    border: 1px solid var(--border);
+  }
+
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.75);
     z-index: 200; display: none; align-items: flex-end;
@@ -419,29 +298,23 @@
   .modal {
     background: var(--bg2); border-top: 1px solid var(--border2);
     border-radius: 20px 20px 0 0; padding: 20px 16px 32px;
-    width: 100%; max-height: 85vh; overflow-y: auto;
-    position: relative; z-index: 201;
+    width: 100%; max-height: 85vh; overflow-y: auto; position: relative; z-index: 201;
   }
   .modal-handle { width: 40px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 16px; }
   .modal-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
   .modal-info { background: var(--bg3); border-radius: 9px; padding: 12px; margin-bottom: 14px; font-size: 13px; color: var(--text2); line-height: 1.6; }
-  .modal .form-group { margin-bottom: 14px; }
-  .modal .btn-switch, .modal .btn-primary, .modal .btn-secondary { margin-top: 0; margin-bottom: 10px; }
 
-  /* Toast */
   .toast {
     position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
     background: var(--bg3); border: 1px solid var(--border2);
     border-radius: 10px; padding: 10px 16px; font-size: 13px;
     z-index: 300; opacity: 0; transition: opacity 0.3s;
-    white-space: nowrap; max-width: 90vw; text-align: center;
-    pointer-events: none;
+    white-space: nowrap; max-width: 90vw; text-align: center; pointer-events: none;
   }
   .toast.show { opacity: 1; }
   .toast.success { border-color: var(--green-border); color: var(--green); }
   .toast.error { border-color: var(--red-border); color: var(--red); }
 
-  /* URL input */
   .url-input {
     width: 100%; background: var(--bg3); border: 1px solid var(--border2);
     border-radius: 9px; color: var(--text); font-size: 12px;
@@ -449,7 +322,6 @@
   }
   .url-input:focus { outline: none; border-color: var(--blue); }
 
-  /* Receive stock card */
   .receive-summary-card {
     background: var(--purple-bg); border: 1px solid var(--purple-border);
     border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 12px;
@@ -458,20 +330,18 @@
   .receive-summary-icon { font-size: 22px; }
   .receive-summary-text { font-size: 12px; color: var(--purple); font-weight: 500; line-height: 1.5; }
 
-  /* ===== [FIX 1] Google Sheets sync indicator ===== */
-  .sync-indicator {
-    display: flex; align-items: center; gap: 6px;
-    padding: 6px 10px; border-radius: 7px;
-    font-size: 11px; margin-bottom: 10px;
-    background: var(--bg3); border: 1px solid var(--border);
-    color: var(--text3);
+  /* Step guide */
+  .step-row {
+    display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start;
   }
-  .sync-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--text3); flex-shrink: 0;
+  .step-num {
+    width: 24px; height: 24px; border-radius: 50%; background: var(--blue);
+    color: white; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .sync-dot.connected { background: var(--green); box-shadow: 0 0 5px rgba(16,185,129,0.5); }
-  .sync-dot.error { background: var(--red); }
+  .step-text { font-size: 12px; color: var(--text2); line-height: 1.6; padding-top: 2px; }
+  .step-text b { color: var(--text); }
+  .step-text code { background: var(--bg3); padding: 1px 5px; border-radius: 4px; font-size: 11px; color: var(--green); }
 
   @media (min-width: 500px) {
     .page { max-width: 480px; margin: 0 auto; }
@@ -489,27 +359,16 @@
 </div>
 
 <div class="nav-tabs">
-  <div class="nav-tab active" onclick="showPage('dashboard', this)">
-    <span class="tab-icon">📊</span>Dashboard
-  </div>
-  <div class="nav-tab" onclick="showPage('action', this)">
-    <span class="tab-icon">🔄</span>ดำเนินการ
-  </div>
-  <div class="nav-tab" onclick="showPage('spare', this)">
-    <span class="tab-icon">📦</span>Spare
-  </div>
-  <div class="nav-tab" onclick="showPage('log', this)">
-    <span class="tab-icon">📋</span>Log
-  </div>
-  <div class="nav-tab" onclick="showPage('config', this)">
-    <span class="tab-icon">⚙️</span>ตั้งค่า
-  </div>
+  <div class="nav-tab active" onclick="showPage('dashboard', this)"><span class="tab-icon">📊</span>Dashboard</div>
+  <div class="nav-tab" onclick="showPage('action', this)"><span class="tab-icon">🔄</span>ดำเนินการ</div>
+  <div class="nav-tab" onclick="showPage('spare', this)"><span class="tab-icon">📦</span>Spare</div>
+  <div class="nav-tab" onclick="showPage('log', this)"><span class="tab-icon">📋</span>Log</div>
+  <div class="nav-tab" onclick="showPage('config', this)"><span class="tab-icon">⚙️</span>ตั้งค่า</div>
 </div>
 
-<!-- ===== DASHBOARD PAGE ===== -->
+<!-- ===== DASHBOARD ===== -->
 <div class="page active" id="page-dashboard">
   <div id="alert-container"></div>
-
   <div class="section-label">Hydroforming #1</div>
   <div class="machine-card">
     <div class="machine-header">
@@ -521,7 +380,6 @@
     </div>
     <div id="hf1-tanks"></div>
   </div>
-
   <div class="section-label">Hydroforming #2</div>
   <div class="machine-card">
     <div class="machine-header">
@@ -533,7 +391,6 @@
     </div>
     <div id="hf2-tanks"></div>
   </div>
-
   <div class="section-label">Spare Part คงเหลือ</div>
   <div class="spare-grid" id="dash-spare"></div>
 </div>
@@ -558,7 +415,6 @@
       <div id="act-current-status">—</div>
     </div>
   </div>
-
   <div class="action-card">
     <div class="action-title">👤 ผู้ดำเนินการ</div>
     <div class="form-group">
@@ -567,9 +423,7 @@
       <datalist id="operator-list"></datalist>
     </div>
   </div>
-
   <div class="section-label">เลือกการดำเนินการ</div>
-
   <div style="position:relative;z-index:2;margin-bottom:10px;">
     <button class="btn-switch" onclick="openModal('switch')">🔄 สลับถังใช้งาน (Switch)</button>
   </div>
@@ -585,7 +439,6 @@
 <div class="page" id="page-spare">
   <div class="section-label">จำนวน Filter คงเหลือ</div>
   <div id="spare-cards"></div>
-
   <div class="section-label">อัปเดตจำนวน Spare</div>
   <div class="action-card">
     <div class="form-group">
@@ -602,7 +455,6 @@
     </div>
     <button class="btn-primary" onclick="saveSpare()">💾 บันทึก</button>
   </div>
-
   <div class="section-label">รับ Spare Part เข้า Stock</div>
   <div class="action-card">
     <div class="receive-summary-card" id="last-receive-banner" style="display:none;"></div>
@@ -624,7 +476,6 @@
     </div>
     <button class="btn-purple" onclick="receiveSpare()">📥 บันทึกรับ Spare เข้า Stock</button>
   </div>
-
   <div class="section-label">ประวัติการรับ Spare Part</div>
   <div id="receive-history"></div>
 </div>
@@ -646,105 +497,145 @@
 
 <!-- ===== CONFIG PAGE ===== -->
 <div class="page" id="page-config">
-  <!-- ===== [FIX 1] Google Sheets - ส่วนตั้งค่าและ sync status ===== -->
-  <div class="section-label">Google Sheets Connection</div>
-  <div id="sheets-sync-status" class="sync-indicator">
-    <div class="sync-dot" id="sync-dot"></div>
-    <span id="sync-status-text">ยังไม่ได้เชื่อมต่อ</span>
+
+  <!-- Sync Status -->
+  <div class="section-label">สถานะการเชื่อมต่อ</div>
+  <div class="sync-card">
+    <div class="sync-row">
+      <div class="sync-dot" id="sync-dot"></div>
+      <div style="flex:1;">
+        <div class="sync-label" id="sync-label-text">ยังไม่ได้ตั้งค่า URL</div>
+        <div class="sync-sublabel" id="sync-sub-text">ใส่ Script URL แล้วกด บันทึก</div>
+      </div>
+      <div class="queue-badge zero" id="queue-badge">✓ ส่งแล้ว</div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:4px;" id="sync-last-time">—</div>
   </div>
+
+  <!-- Script URL & Sheet ID -->
+  <div class="section-label">การตั้งค่า Google Sheets</div>
   <div class="action-card">
     <div class="form-group">
       <label class="form-label">🔗 Google Apps Script Web App URL</label>
       <input class="url-input" type="url" id="cfg-script-url" placeholder="https://script.google.com/macros/s/.../exec">
     </div>
-    <div class="form-group">
-      <label class="form-label">📊 Google Sheet ID</label>
-      <input class="url-input" type="text" id="cfg-sheet-id" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms">
-    </div>
     <button class="btn-primary" onclick="saveConfig()">💾 บันทึกการตั้งค่า</button>
-    <button class="btn-secondary" onclick="testConnection()">🔍 ทดสอบการเชื่อมต่อ</button>
-    <div id="cfg-status" style="margin-top:10px;font-size:12px;"></div>
+    <button class="btn-secondary" onclick="testConnection()">🔍 ทดสอบการเชื่อมต่อ (GET)</button>
+    <button class="btn-secondary" onclick="testPostConnection()">📤 ทดสอบส่งข้อมูล (POST)</button>
+    <div id="cfg-status" style="margin-top:10px;font-size:12px;line-height:1.6;"></div>
   </div>
 
-  <!-- ===== [FIX 1] Apps Script Code สมบูรณ์ ===== -->
-  <div class="section-label">Apps Script Code (วางใน Google Apps Script)</div>
+  <!-- Step-by-step guide -->
+  <div class="section-label">วิธีเชื่อมต่อ Google Sheets (ทีละขั้น)</div>
   <div class="action-card">
-    <div style="font-size:12px;color:var(--text2);line-height:1.8;margin-bottom:10px;">
-      <b style="color:var(--text);">วิธีใช้:</b><br>
-      1. เปิด Google Sheet → Extensions → Apps Script<br>
-      2. ลบ Code เดิม แล้ววาง Code ด้านล่างทั้งหมด<br>
-      3. กด Deploy → New deployment → Web App<br>
-      &nbsp;&nbsp;• Execute as: <b style="color:var(--green);">Me</b> &nbsp;|&nbsp; Who has access: <b style="color:var(--green);">Anyone</b><br>
-      4. Copy URL → ใส่ในช่อง Script URL ด้านบน
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-text">เปิด <b>Google Sheet</b> ที่ต้องการบันทึกข้อมูล → เมนูบน <b>Extensions</b> → <b>Apps Script</b></div>
     </div>
-    <div style="background:var(--bg3);border-radius:9px;padding:12px;font-size:10.5px;font-family:monospace;color:var(--text2);overflow-x:auto;white-space:pre;line-height:1.7;">// ============================================
-// Filter Tracker — Google Apps Script
-// วางทั้งหมดนี้ใน Apps Script แล้ว Deploy
-// ============================================
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-text">ลบ Code เดิมทั้งหมดออก แล้ว <b>Copy Code</b> ด้านล่างวางแทน แล้วกด <b>💾 Save</b> (Ctrl+S)</div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-text">กด <b>Deploy</b> → <b>New deployment</b> → ประเภท <b>Web App</b><br>
+        • Execute as: <code>Me</code><br>
+        • Who has access: <code>Anyone</code><br>
+        → กด <b>Deploy</b> → อนุญาต Permission → Copy URL
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">4</div>
+      <div class="step-text">นำ URL ที่ได้มาวางในช่อง <b>Script URL</b> ด้านบน → กด <b>บันทึก</b> → กด <b>ทดสอบส่งข้อมูล (POST)</b> เพื่อยืนยัน</div>
+    </div>
+    <div style="background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:9px;padding:10px 12px;margin-top:8px;font-size:12px;color:var(--yellow);">
+      ⚠️ <b>หากแก้ไข Code Apps Script</b> ให้ Deploy ใหม่ทุกครั้ง (New deployment) ไม่ใช่ Manage deployment
+    </div>
+  </div>
 
+  <!-- Apps Script Code -->
+  <div class="section-label">Apps Script Code (Copy ทั้งหมด)</div>
+  <div class="action-card">
+    <div class="code-block" id="apps-script-code">// ============================================================
+// Filter Tracker — Google Apps Script v2
+// วางทั้งหมดนี้ใน Apps Script แล้ว Deploy เป็น Web App
+// Execute as: Me | Who has access: Anyone
+// ============================================================
+
+// ทดสอบ GET (ใช้ตรวจว่า Deploy สำเร็จ)
 function doGet(e) {
   return ContentService
-    .createTextOutput(JSON.stringify({status:"ok", msg:"Filter Tracker API ready"}))
+    .createTextOutput(JSON.stringify({
+      status: "ok",
+      message: "Filter Tracker API is ready",
+      timestamp: new Date().toISOString()
+    }))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+// รับข้อมูล POST จาก App
 function doPost(e) {
   try {
+    // Parse JSON ที่ส่งมา
+    var payload = JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var data = JSON.parse(e.postData.contents);
-    var sheetId = data.sheetId;
 
-    // ถ้าระบุ Sheet ID ให้ใช้ Sheet นั้น
-    if (sheetId && sheetId.length > 10) {
-      ss = SpreadsheetApp.openById(sheetId);
+    // ─── สร้าง Sheet "Filter_Log" ถ้ายังไม่มี ───
+    var sheet = ss.getSheetByName("Filter_Log");
+    if (!sheet) {
+      sheet = ss.insertSheet("Filter_Log");
+      var headers = sheet.getRange(1, 1, 1, 13);
+      headers.setValues([[
+        "Timestamp", "Action", "Machine", "Tank (From/ID)",
+        "Tank To", "Tank Type", "Operator",
+        "Filter Type", "Qty Used", "Stock Before",
+        "Stock After", "Receive Date", "Note"
+      ]]);
+      headers.setBackground("#1a1d27");
+      headers.setFontColor("#3b82f6");
+      headers.setFontWeight("bold");
+      sheet.setFrozenRows(1);
+      sheet.setColumnWidth(1, 150);
+      sheet.setColumnWidth(7, 130);
+      sheet.setColumnWidth(8, 180);
     }
 
-    // สร้าง Sheet ถ้ายังไม่มี
-    var logSheet = ss.getSheetByName("Filter_Log");
-    if (!logSheet) {
-      logSheet = ss.insertSheet("Filter_Log");
-      logSheet.appendRow([
-        "Timestamp","Machine","Tank ID","Tank Type",
-        "Action","Operator","Filter Type","Qty Used",
-        "Stock Before","Stock After","Note","Receive Date"
-      ]);
-      // จัดรูปแบบหัวตาราง
-      var header = logSheet.getRange(1,1,1,12);
-      header.setBackground("#1a1d27");
-      header.setFontColor("#3b82f6");
-      header.setFontWeight("bold");
-      logSheet.setFrozenRows(1);
-    }
-
-    // เพิ่มแถวข้อมูล
-    logSheet.appendRow([
-      data.timestamp || new Date().toLocaleString("th-TH"),
-      data.machine   || "—",
-      data.tankId    || "—",
-      data.tankType  || "—",
-      data.action    || "—",
-      data.operator  || "—",
-      data.filterType || "—",
-      data.qty       || 0,
-      data.stockBefore !== undefined ? data.stockBefore : "—",
-      data.stockAfter  !== undefined ? data.stockAfter  : "—",
-      data.note      || "—",
-      data.receiveDate || "—"
+    // ─── เพิ่มแถวข้อมูล ───
+    sheet.appendRow([
+      payload.timestamp  || new Date().toLocaleString("th-TH"),
+      payload.action     || "—",
+      payload.machine    || "—",
+      payload.tankFrom   || payload.tankId || "—",
+      payload.tankTo     || "—",
+      payload.tankType   || "—",
+      payload.operator   || "—",
+      payload.filterType || "—",
+      payload.qty        || 0,
+      payload.stockBefore !== undefined ? payload.stockBefore : "—",
+      payload.stockAfter  !== undefined ? payload.stockAfter  : "—",
+      payload.receiveDate || "—",
+      payload.note       || "—"
     ]);
 
-    return ContentService
-      .createTextOutput(JSON.stringify({status:"ok", rows: logSheet.getLastRow()}))
-      .setMimeType(ContentService.MimeType.JSON);
+    // ─── ตอบกลับ OK ───
+    return buildResponse({ status: "ok", rows: sheet.getLastRow() });
 
-  } catch(err) {
-    return ContentService
-      .createTextOutput(JSON.stringify({status:"error", msg: err.toString()}))
-      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return buildResponse({ status: "error", message: err.toString() });
   }
+}
+
+// Helper: สร้าง Response พร้อม CORS Header
+function buildResponse(obj) {
+  var output = ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+  return output;
 }</div>
-    <button class="btn-secondary" onclick="copyScript()" style="margin-top:10px;">📋 Copy Code</button>
+    <button class="btn-secondary" onclick="copyScriptCode()" style="margin-top:10px;">📋 Copy Code ทั้งหมด</button>
   </div>
 
+  <!-- Operators -->
   <div class="section-label">ชื่อผู้ปฏิบัติงาน (บันทึกไว้)</div>
   <div class="action-card">
     <div class="form-group">
@@ -769,7 +660,9 @@ function doPost(e) {
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== STATE =====
+// ============================================================
+// STATE
+// ============================================================
 const STATE = {
   tanks: {
     'HDF-01': {
@@ -790,7 +683,8 @@ const STATE = {
   },
   log: [],
   operators: ['ช่างสมชาย', 'ช่างวิชัย', 'ช่างประสิทธิ์'],
-  config: { scriptUrl: '', sheetId: '' }
+  config: { scriptUrl: '' },
+  pendingQueue: []   // ← queue สำหรับ retry
 };
 
 function dateStr(daysAgo) {
@@ -798,30 +692,33 @@ function dateStr(daysAgo) {
   d.setDate(d.getDate() + daysAgo);
   return d.toLocaleDateString('th-TH');
 }
-
 function now() {
   return new Date().toLocaleString('th-TH', { dateStyle:'short', timeStyle:'short' });
 }
 
-// ===== PERSIST =====
-function save() {
-  localStorage.setItem('hf_filter_state_v2', JSON.stringify(STATE));
-}
+// ============================================================
+// PERSIST
+// ============================================================
+function save() { localStorage.setItem('hf_filter_v3', JSON.stringify(STATE)); }
 function load() {
-  const s = localStorage.getItem('hf_filter_state_v2') || localStorage.getItem('hf_filter_state');
-  if (s) {
-    try {
-      const d = JSON.parse(s);
-      if (d.tanks) Object.assign(STATE.tanks, d.tanks);
-      if (d.spare) Object.assign(STATE.spare, d.spare);
-      if (d.log) STATE.log = d.log;
-      if (d.operators) STATE.operators = d.operators;
-      if (d.config) STATE.config = d.config;
-    } catch(e) {}
-  }
+  const s = localStorage.getItem('hf_filter_v3')
+         || localStorage.getItem('hf_filter_state_v2')
+         || localStorage.getItem('hf_filter_state');
+  if (!s) return;
+  try {
+    const d = JSON.parse(s);
+    if (d.tanks)        Object.assign(STATE.tanks, d.tanks);
+    if (d.spare)        Object.assign(STATE.spare, d.spare);
+    if (d.log)          STATE.log = d.log;
+    if (d.operators)    STATE.operators = d.operators;
+    if (d.config)       STATE.config = d.config;
+    if (d.pendingQueue) STATE.pendingQueue = d.pendingQueue;
+  } catch(e) {}
 }
 
-// ===== NAV =====
+// ============================================================
+// NAV
+// ============================================================
 function showPage(id, tab) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -834,35 +731,31 @@ function showPage(id, tab) {
   if (id === 'config')    renderConfig();
 }
 
-// ===== STATUS HELPERS =====
+// ============================================================
+// STATUS HELPERS
+// ============================================================
 function getStatusLabel(status) {
-  if (status === 'active') return { text: 'ใช้งานอยู่', cls: 'status-active' };
-  if (status === 'ready')  return { text: 'พร้อมใช้ ✓', cls: 'status-ready' };
+  if (status === 'active') return { text: 'ใช้งานอยู่',     cls: 'status-active' };
+  if (status === 'ready')  return { text: 'พร้อมใช้ ✓',     cls: 'status-ready' };
   if (status === 'dirty')  return { text: '⚠ ต้องเปลี่ยน!', cls: 'status-dirty' };
   return { text: 'ไม่ได้ใช้', cls: 'status-idle' };
 }
 
-// ===== DASHBOARD =====
+// ============================================================
+// DASHBOARD
+// ============================================================
 function renderTankGrid(machineId, containerId) {
   const tanks = STATE.tanks[machineId];
   const el = document.getElementById(containerId);
-
   const cleanTanks = Object.entries(tanks).filter(([,t]) => t.type === 'clean');
   const preTanks   = Object.entries(tanks).filter(([,t]) => t.type === 'pre');
 
   function tankHTML(id, t) {
     const s = getStatusLabel(t.status);
-    const dateInfo = t.lastChanged
-      ? `เปลี่ยน: ${t.lastChanged}`
-      : t.lastSwitched
-        ? `สลับ: ${t.lastSwitched}`
-        : '—';
+    const dateInfo = t.lastChanged ? `เปลี่ยน: ${t.lastChanged}` : t.lastSwitched ? `สลับ: ${t.lastSwitched}` : '—';
     return `<div class="tank-item ${s.cls}" onclick="quickAction('${machineId}','${id}')">
       <div class="tank-id">${id}</div>
-      <div class="tank-status-pill">
-        <div class="dot"></div>
-        ${s.text}
-      </div>
+      <div class="tank-status-pill"><div class="dot"></div>${s.text}</div>
       <div class="tank-date">${dateInfo}</div>
     </div>`;
   }
@@ -871,18 +764,13 @@ function renderTankGrid(machineId, containerId) {
     <div class="tank-layout">
       <div class="tank-col clean-col">
         <div class="tank-col-header clean-header">🔵 CLEAN TANK</div>
-        <div class="tank-row">
-          ${cleanTanks.map(([id, t]) => tankHTML(id, t)).join('')}
-        </div>
+        <div class="tank-row">${cleanTanks.map(([id, t]) => tankHTML(id, t)).join('')}</div>
       </div>
       <div class="tank-col pre-col">
         <div class="tank-col-header pre-header">🟡 PRE TANK</div>
-        <div class="tank-row">
-          ${preTanks.map(([id, t]) => tankHTML(id, t)).join('')}
-        </div>
+        <div class="tank-row">${preTanks.map(([id, t]) => tankHTML(id, t)).join('')}</div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 function renderDashboard() {
@@ -894,9 +782,9 @@ function renderDashboard() {
   });
   const sp = STATE.spare['Filter (รวมทุกประเภท)'];
   if (sp && sp.qty <= sp.threshold) alerts.push(`Filter Spare คงเหลือ ${sp.qty} ชิ้น — ต่ำกว่า ${sp.threshold} ชิ้น กรุณาสั่งซื้อ!`);
-  
-  const ac = document.getElementById('alert-container');
-  ac.innerHTML = alerts.map(a => `<div class="alert-banner"><div class="alert-icon">🚨</div><div class="alert-text">${a}</div></div>`).join('');
+
+  document.getElementById('alert-container').innerHTML =
+    alerts.map(a => `<div class="alert-banner"><div class="alert-icon">🚨</div><div class="alert-text">${a}</div></div>`).join('');
 
   ['HDF-01','HDF-02'].forEach(m => {
     const idx = m === 'HDF-01' ? 1 : 2;
@@ -905,13 +793,13 @@ function renderDashboard() {
     const activeClean = Object.entries(tanks).find(([,t]) => t.type==='clean' && t.status==='active');
     const activePre   = Object.entries(tanks).find(([,t]) => t.type==='pre'   && t.status==='active');
     document.getElementById(`hf${idx}-meta`).textContent =
-      `กำลังใช้: ${activeClean?activeClean[0]:'—'} / ${activePre?activePre[0]:'—'}`;
+      `กำลังใช้: ${activeClean ? activeClean[0] : '—'} / ${activePre ? activePre[0] : '—'}`;
     const hasDirty = Object.values(tanks).some(t => t.status==='dirty');
     const badge = document.getElementById(`hf${idx}-badge`);
     badge.textContent = hasDirty ? '⚠ ต้องดำเนินการ' : 'ปกติ ✓';
-    badge.style.background = hasDirty ? 'var(--red-bg)' : 'var(--green-bg)';
-    badge.style.color = hasDirty ? 'var(--red)' : 'var(--green)';
-    badge.style.borderColor = hasDirty ? 'var(--red-border)' : 'var(--green-border)';
+    badge.style.cssText = hasDirty
+      ? 'background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);font-size:10px;padding:3px 8px;border-radius:6px;'
+      : 'background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10px;padding:3px 8px;border-radius:6px;';
   });
 
   const ds = document.getElementById('dash-spare');
@@ -926,15 +814,12 @@ function renderDashboard() {
   }
 }
 
-function quickAction(machine, tankId) {
-  openQuickSwitchModal(machine, tankId);
-}
+function quickAction(machine, tankId) { openQuickSwitchModal(machine, tankId); }
 
-// ===== ACTION PAGE =====
-function renderActionPage() {
-  updateTankOptions();
-  renderOperatorList();
-}
+// ============================================================
+// ACTION PAGE
+// ============================================================
+function renderActionPage() { updateTankOptions(); renderOperatorList(); }
 
 function updateTankOptions() {
   const m = document.getElementById('act-machine').value;
@@ -956,41 +841,28 @@ function updateCurrentStatus() {
   if (!tank) { el.innerHTML = '—'; return; }
 
   const statusMap = {
-    active: { cls: 'tsb-active', icon: '🟡', text: 'ใช้งานอยู่ (ACTIVE)' },
-    ready:  { cls: 'tsb-ready',  icon: '🟢', text: 'พร้อมใช้ (READY)' },
-    dirty:  { cls: 'tsb-dirty',  icon: '🔴', text: '⚠ ต้องเปลี่ยน Filter! (DIRTY)' },
-    idle:   { cls: 'tsb-idle',   icon: '⚪', text: 'ไม่ได้ใช้งาน (IDLE)' }
+    active: { cls: 'tsb-active', text: 'ใช้งานอยู่ (ACTIVE)' },
+    ready:  { cls: 'tsb-ready',  text: 'พร้อมใช้ (READY)' },
+    dirty:  { cls: 'tsb-dirty',  text: '⚠ ต้องเปลี่ยน Filter! (DIRTY)' },
+    idle:   { cls: 'tsb-idle',   text: 'ไม่ได้ใช้งาน (IDLE)' }
   };
   const s = statusMap[tank.status] || statusMap.idle;
   const typeLabel = tank.type === 'clean' ? '🔵 Clean Tank' : '🟡 Pre Tank';
-  const dateInfo = tank.lastChanged
-    ? `🗓 เปลี่ยน Filter ล่าสุด: ${tank.lastChanged}`
-    : tank.lastSwitched
-      ? `🔄 สลับถังล่าสุด: ${tank.lastSwitched}`
-      : '';
+  const dateInfo = tank.lastChanged ? `🗓 เปลี่ยน Filter ล่าสุด: ${tank.lastChanged}` : tank.lastSwitched ? `🔄 สลับถังล่าสุด: ${tank.lastSwitched}` : '';
 
   el.innerHTML = `
-    <div class="tank-status-badge ${s.cls}">
-      <div class="tsb-dot"></div>
-      ${s.text}
-    </div>
-    <div class="tank-status-extra">${typeLabel}${dateInfo ? ' &nbsp;|&nbsp; ' + dateInfo : ''}</div>
-  `;
+    <div class="tank-status-badge ${s.cls}"><div class="tsb-dot"></div>${s.text}</div>
+    <div class="tank-status-extra">${typeLabel}${dateInfo ? ' &nbsp;|&nbsp; ' + dateInfo : ''}</div>`;
 
-  // ล็อคปุ่มเปลี่ยน Filter เฉพาะ dirty
   const btn = document.getElementById('btn-change-filter');
   const hint = document.getElementById('change-filter-hint');
   if (tank.status === 'dirty') {
-    btn.disabled = false;
-    btn.style.opacity = '1';
-    btn.style.cursor = 'pointer';
-    btn.style.pointerEvents = 'auto';
+    btn.disabled = false; btn.style.opacity = '1';
+    btn.style.cursor = 'pointer'; btn.style.pointerEvents = 'auto';
     if (hint) hint.style.display = 'none';
   } else {
-    btn.disabled = true;
-    btn.style.opacity = '0.35';
-    btn.style.cursor = 'not-allowed';
-    btn.style.pointerEvents = 'none';
+    btn.disabled = true; btn.style.opacity = '0.35';
+    btn.style.cursor = 'not-allowed'; btn.style.pointerEvents = 'none';
     if (hint) hint.style.display = 'block';
   }
 }
@@ -1000,19 +872,18 @@ function renderOperatorList() {
   if (dl) dl.innerHTML = STATE.operators.map(o => `<option value="${o}">`).join('');
 }
 
-// ===== MODAL =====
+// ============================================================
+// MODAL
+// ============================================================
 function openModal(action) {
   const m = document.getElementById('act-machine').value;
   const t = document.getElementById('act-tank').value;
   const tank = STATE.tanks[m]?.[t];
 
   if (action === 'switch') {
-    document.getElementById('modal-title').textContent = '🔄 สลับถังใช้งาน';
     const sameType = Object.entries(STATE.tanks[m]).filter(([id,tk]) => tk.type===tank.type && id!==t && tk.status==='ready');
-    if (!sameType.length) {
-      showToast('❌ ไม่มีถัง READY ให้สลับ', 'error');
-      return;
-    }
+    if (!sameType.length) { showToast('❌ ไม่มีถัง READY ให้สลับ', 'error'); return; }
+    document.getElementById('modal-title').textContent = '🔄 สลับถังใช้งาน';
     document.getElementById('modal-body').innerHTML = `
       <div class="modal-info">
         <b>${m}</b> — สลับจาก <b style="color:var(--yellow);">${t}</b><br>
@@ -1030,12 +901,11 @@ function openModal(action) {
         <textarea class="form-textarea" id="modal-note" placeholder="(ไม่บังคับ)"></textarea>
       </div>
       <button class="btn-switch" onclick="doSwitch()">✅ ยืนยันสลับ</button>
-      <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>
-    `;
+      <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>`;
   } else {
-    document.getElementById('modal-title').textContent = '🔧 บันทึกการเปลี่ยน Filter';
     const spQty = STATE.spare['Filter (รวมทุกประเภท)']?.qty ?? 0;
     const s = getStatusLabel(tank.status);
+    document.getElementById('modal-title').textContent = '🔧 บันทึกการเปลี่ยน Filter';
     document.getElementById('modal-body').innerHTML = `
       <div class="modal-info">
         เปลี่ยน Filter ถัง <b style="color:var(--text);">${t}</b><br>
@@ -1049,23 +919,22 @@ function openModal(action) {
         <textarea class="form-textarea" id="modal-note" placeholder="(ไม่บังคับ)"></textarea>
       </div>
       <button class="btn-primary" onclick="doChangeFilter()">🔧 ยืนยันการเปลี่ยน Filter (7 ชิ้น)</button>
-      <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>
-    `;
+      <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>`;
   }
   document.getElementById('modal').classList.add('open');
 }
 
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
 
-// ===== ACTIONS =====
+// ============================================================
+// ACTIONS
+// ============================================================
 function doSwitch() {
   const m = document.getElementById('act-machine').value;
   const fromId = document.getElementById('act-tank').value;
   const toId = document.getElementById('modal-target').value;
-  const operator = document.getElementById('act-operator').value || 'ไม่ระบุ';
-  const note = document.getElementById('modal-note').value;
+  const operator = document.getElementById('act-operator').value.trim() || 'ไม่ระบุ';
+  const note = document.getElementById('modal-note').value.trim();
 
   STATE.tanks[m][fromId].status = 'dirty';
   STATE.tanks[m][fromId].lastSwitched = now();
@@ -1073,12 +942,12 @@ function doSwitch() {
 
   const entry = {
     ts: now(), machine: m, tankFrom: fromId, tankTo: toId,
-    action: 'switch', operator, note,
-    filterType: '—', qty: 0
+    tankId: fromId, action: 'switch', operator, note,
+    filterType: '—', qty: 0, tankType: STATE.tanks[m][fromId].type
   };
   STATE.log.unshift(entry);
-  sendToSheets(entry);
   save();
+  sendToSheets(entry);
   closeModal();
   showToast(`✅ สลับ ${fromId} → ${toId} สำเร็จ`, 'success');
   renderDashboard();
@@ -1088,11 +957,10 @@ function doSwitch() {
 function doChangeFilter() {
   const m = document.getElementById('act-machine').value;
   const tankId = document.getElementById('act-tank').value;
-  const operator = document.getElementById('act-operator').value || 'ไม่ระบุ';
+  const operator = document.getElementById('act-operator').value.trim() || 'ไม่ระบุ';
+  const note = document.getElementById('modal-note').value.trim();
   const qty = 7;
-  const note = document.getElementById('modal-note').value;
   const spareKey = 'Filter (รวมทุกประเภท)';
-
   const stockBefore = STATE.spare[spareKey]?.qty ?? 0;
   const stockAfter = Math.max(0, stockBefore - qty);
 
@@ -1101,124 +969,251 @@ function doChangeFilter() {
   if (STATE.spare[spareKey]) STATE.spare[spareKey].qty = stockAfter;
 
   const entry = {
-    ts: now(), machine: m, tankId, action: 'change_filter',
-    operator, filterType: spareKey, qty, stockBefore, stockAfter, note,
+    ts: now(), machine: m, tankId, tankFrom: tankId, tankTo: '—',
+    action: 'change_filter', operator,
+    filterType: spareKey, qty, stockBefore, stockAfter, note,
     tankType: STATE.tanks[m][tankId].type
   };
   STATE.log.unshift(entry);
-  sendToSheets(entry);
   save();
+  sendToSheets(entry);
   closeModal();
-  showToast(`✅ บันทึกการเปลี่ยน Filter สำเร็จ`, 'success');
+  showToast('✅ บันทึกการเปลี่ยน Filter สำเร็จ', 'success');
   renderDashboard();
   updateCurrentStatus();
 }
 
-// ===== [FIX 1] GOOGLE SHEETS - ส่งข้อมูลพร้อม Header CORS =====
-async function sendToSheets(data) {
-  const url = STATE.config.scriptUrl;
-  if (!url) return;
+// ============================================================
+// GOOGLE SHEETS — ส่งผ่าน Fetch POST แบบ no-cors + retry queue
+// ============================================================
 
-  const payload = {
-    timestamp: data.ts,
-    machine: data.machine || '',
-    tankId: data.tankId || ((data.tankFrom || '') + '→' + (data.tankTo || '')),
-    action: data.action,
-    operator: data.operator || ''
+// ── ส่งข้อมูลไปยัง Google Apps Script ──
+async function sendToSheets(entry) {
+  const url = STATE.config.scriptUrl;
+  if (!url) return;   // ยังไม่ได้ตั้งค่า URL
+
+  const payload = buildPayload(entry);
+
+  try {
+    // ✅ วิธีที่ถูกต้องสำหรับ Apps Script: ส่ง POST แบบ no-cors
+    // (CORS header ของ Apps Script ไม่รองรับ cross-origin response อ่าน)
+    // แต่ข้อมูลยังถูกบันทึกใน Sheet ปกติ
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' }, // ← ต้องใช้ text/plain กับ no-cors
+      body: JSON.stringify(payload),
+      mode: 'no-cors'
+    });
+
+    // no-cors ไม่ให้อ่าน response → ถือว่าสำเร็จถ้าไม่ throw
+    entry._synced = true;
+    updateSyncUI(true, `ส่งล่าสุด: ${now()}`);
+    removePending(payload._id);
+
+  } catch (err) {
+    console.error('❌ sendToSheets error:', err);
+    // เพิ่มเข้า queue รอ retry
+    addPending(payload);
+    updateSyncUI(false, `ส่งไม่ได้: ${err.message}`);
+  }
+  save();
+  updateQueueBadge();
+}
+
+function buildPayload(entry) {
+  return {
+    _id: entry.ts + '_' + Math.random().toString(36).slice(2, 7),
+    timestamp:   entry.ts,
+    action:      entry.action,
+    machine:     entry.machine    || '—',
+    tankFrom:    entry.tankFrom   || entry.tankId || '—',
+    tankTo:      entry.tankTo     || '—',
+    tankType:    entry.tankType   || '—',
+    tankId:      entry.tankId     || '—',
+    operator:    entry.operator   || '—',
+    filterType:  entry.filterType || '—',
+    qty:         entry.qty        ?? 0,
+    stockBefore: entry.stockBefore !== undefined ? entry.stockBefore : '—',
+    stockAfter:  entry.stockAfter  !== undefined ? entry.stockAfter  : '—',
+    receiveDate: entry.receiveDate || '—',
+    note:        entry.note       || '—'
+  };
+}
+
+// ── Pending Queue ──
+function addPending(payload) {
+  const exists = STATE.pendingQueue.find(p => p._id === payload._id);
+  if (!exists) STATE.pendingQueue.push(payload);
+  save();
+}
+function removePending(id) {
+  STATE.pendingQueue = STATE.pendingQueue.filter(p => p._id !== id);
+  save();
+}
+
+// ── Retry pending items ──
+async function retryPending() {
+  const url = STATE.config.scriptUrl;
+  if (!url || !STATE.pendingQueue.length) return;
+  const queue = [...STATE.pendingQueue];
+  for (const payload of queue) {
+    try {
+      await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(payload),
+        mode: 'no-cors'
+      });
+      removePending(payload._id);
+    } catch(e) { /* ยังไม่ได้ */ }
+    await delay(400);
+  }
+  updateQueueBadge();
+  save();
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ── Sync Button (Manual) ──
+async function syncNow() {
+  const btn = document.getElementById('syncBtn');
+  btn.classList.add('syncing');
+  btn.textContent = '⟳ Syncing...';
+
+  if (STATE.config.scriptUrl) {
+    await retryPending();
+    updateSyncUI(true, `Sync เสร็จ: ${now()}`);
+    showToast('✅ Sync เสร็จแล้ว', 'success');
+  } else {
+    showToast('⚠ ยังไม่ได้ตั้งค่า Script URL', '');
+  }
+
+  await delay(600);
+  btn.classList.remove('syncing');
+  btn.textContent = '⟳ Sync';
+}
+
+// ── Test Connection (GET) ──
+async function testConnection() {
+  const url = document.getElementById('cfg-script-url').value.trim();
+  const st = document.getElementById('cfg-status');
+  if (!url) { st.innerHTML = '<span style="color:var(--red)">❌ กรุณากรอก URL ก่อน</span>'; return; }
+  st.innerHTML = '<span style="color:var(--text2)">⏳ กำลังทดสอบ GET...</span>';
+  try {
+    const resp = await fetch(url, { method: 'GET' });
+    const text = await resp.text();
+    let parsed;
+    try { parsed = JSON.parse(text); } catch(e) { parsed = null; }
+    if (parsed && parsed.status === 'ok') {
+      st.innerHTML = `<span style="color:var(--green)">✅ GET สำเร็จ! Apps Script ทำงานปกติ<br><small style="color:var(--text3);">${parsed.message || ''}</small></span>`;
+      updateSyncUI(true, 'GET test ผ่าน');
+    } else {
+      st.innerHTML = `<span style="color:var(--yellow)">⚠ ตอบกลับแล้วแต่ format ผิด: ${text.slice(0,100)}</span>`;
+    }
+  } catch(e) {
+    st.innerHTML = `<span style="color:var(--red)">❌ GET ไม่ได้: ${e.message}<br><small>ตรวจสอบ URL และสิทธิ์ Deploy</small></span>`;
+    updateSyncUI(false, e.message);
+  }
+}
+
+// ── Test POST ──
+async function testPostConnection() {
+  const url = document.getElementById('cfg-script-url').value.trim();
+  const st = document.getElementById('cfg-status');
+  if (!url) { st.innerHTML = '<span style="color:var(--red)">❌ กรุณากรอก URL ก่อน</span>'; return; }
+  st.innerHTML = '<span style="color:var(--text2)">⏳ กำลังส่ง POST ทดสอบ...</span>';
+
+  const testPayload = {
+    _id: 'test_' + Date.now(),
+    timestamp: now(),
+    action: 'TEST',
+    machine: 'TEST',
+    tankFrom: 'TEST-TANK',
+    tankTo: '—',
+    tankType: '—',
+    tankId: 'TEST',
+    operator: 'System Test',
+    filterType: '—',
+    qty: 0,
+    stockBefore: '—',
+    stockAfter: '—',
+    receiveDate: '—',
+    note: 'ทดสอบการเชื่อมต่อจาก Filter Tracker App'
   };
 
   try {
     await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(payload),
-      mode: 'no-cors'   // ✅ สำคัญ
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(testPayload),
+      mode: 'no-cors'
     });
-
-    console.log("✅ ส่งแล้ว (no-cors)");
-    updateSyncStatus(true);
-
-  } catch (err) {
-    console.error("❌ fail:", err);
-    updateSyncStatus(false);
-  }
-}
-
-function updateSyncStatus(ok) {
-  const dot = document.getElementById('sync-dot');
-  const txt = document.getElementById('sync-status-text');
-  if (!dot || !txt) return;
-  if (ok) {
-    dot.className = 'sync-dot connected';
-    txt.textContent = 'เชื่อมต่อ Google Sheets แล้ว ✓';
-    txt.style.color = 'var(--green)';
-  } else {
-    dot.className = 'sync-dot error';
-    txt.textContent = 'ส่ง Google Sheets ไม่สำเร็จ';
-    txt.style.color = 'var(--red)';
-  }
-}
-
-async function syncNow() {
-  const btn = document.getElementById('syncBtn');
-  btn.classList.add('syncing');
-  btn.textContent = '⟳ Syncing...';
-  
-  // ส่ง log ล่าสุด 5 รายการที่ยังไม่ได้ sync (ถ้ามี URL)
-  if (STATE.config.scriptUrl) {
-    const recent = STATE.log.slice(0, 3);
-    for (const entry of recent) {
-      await sendToSheets(entry);
-      await new Promise(r => setTimeout(r, 300));
-    }
-  }
-  
-  await new Promise(r => setTimeout(r, 800));
-  btn.classList.remove('syncing');
-  btn.textContent = '⟳ Sync';
-  showToast(STATE.config.scriptUrl ? '✅ Sync สำเร็จ' : '⚠ ยังไม่ได้ตั้งค่า URL', STATE.config.scriptUrl ? 'success' : '');
-}
-
-async function testConnection() {
-  const url = document.getElementById('cfg-script-url').value.trim();
-  const st = document.getElementById('cfg-status');
-  if (!url) { st.innerHTML = '<span style="color:var(--red)">กรุณากรอก URL ก่อน</span>'; return; }
-  st.innerHTML = '<span style="color:var(--text2)">⏳ กำลังทดสอบ...</span>';
-  try {
-    // GET request ทดสอบ
-    const resp = await fetch(url + '?test=ping', { mode: 'no-cors' });
-    st.innerHTML = '<span style="color:var(--green)">✅ ส่ง Request ได้ (no-cors mode) — ตรวจสอบ Google Sheet เพื่อยืนยัน</span>';
-    updateSyncStatus(true);
+    // no-cors: ถ้าไม่ throw = ส่งได้ (ไม่รู้ response แต่ Sheet ควรมีข้อมูล)
+    st.innerHTML = `<span style="color:var(--green)">✅ ส่ง POST สำเร็จ (no-cors mode)<br>
+      <small style="color:var(--text3);">กรุณาตรวจสอบ Google Sheet — ควรมีแถว <b>TEST</b> เพิ่มขึ้นใน Sheet "Filter_Log"</small></span>`;
+    updateSyncUI(true, `POST test: ${now()}`);
   } catch(e) {
-    st.innerHTML = `<span style="color:var(--red)">❌ เชื่อมต่อไม่ได้: ${e.message}</span>`;
-    updateSyncStatus(false);
+    st.innerHTML = `<span style="color:var(--red)">❌ POST ล้มเหลว: ${e.message}<br>
+      <small>ตรวจสอบ:<br>
+      1. URL ถูกต้อง?<br>
+      2. Deploy เป็น Web App หรือยัง?<br>
+      3. Who has access = Anyone?</small></span>`;
+    updateSyncUI(false, e.message);
   }
 }
 
-function copyScript() {
-  const code = document.querySelector('.action-card pre') || document.querySelector('[style*="monospace"]');
-  const allPre = document.querySelectorAll('[style*="monospace"]');
-  let text = '';
-  allPre.forEach(el => { if (el.textContent.includes('doPost')) text = el.textContent; });
-  if (!text) { showToast('❌ ไม่พบ Code', 'error'); return; }
-  navigator.clipboard.writeText(text).then(() => {
-    showToast('✅ Copy Code แล้ว', 'success');
-  }).catch(() => {
-    showToast('❌ ไม่สามารถ Copy ได้', 'error');
-  });
+// ── Update UI ──
+function updateSyncUI(ok, detail) {
+  const dot  = document.getElementById('sync-dot');
+  const lbl  = document.getElementById('sync-label-text');
+  const sub  = document.getElementById('sync-sub-text');
+  const last = document.getElementById('sync-last-time');
+  if (!dot) return;
+  if (ok) {
+    dot.className = 'sync-dot ok';
+    if (lbl) lbl.textContent = '✅ เชื่อมต่อ Google Sheets แล้ว';
+    if (lbl) lbl.style.color = 'var(--green)';
+  } else {
+    dot.className = 'sync-dot err';
+    if (lbl) lbl.textContent = '❌ เชื่อมต่อไม่ได้';
+    if (lbl) lbl.style.color = 'var(--red)';
+  }
+  if (sub) sub.textContent = detail || '';
+  if (last) last.textContent = `อัปเดต: ${now()}`;
 }
 
-// ===== SPARE PAGE =====
+function updateQueueBadge() {
+  const badge = document.getElementById('queue-badge');
+  if (!badge) return;
+  const n = STATE.pendingQueue.length;
+  if (n === 0) {
+    badge.className = 'queue-badge zero';
+    badge.textContent = '✓ ส่งแล้ว';
+  } else {
+    badge.className = 'queue-badge';
+    badge.textContent = `⏳ รอส่ง ${n} รายการ`;
+  }
+}
+
+function copyScriptCode() {
+  const code = document.getElementById('apps-script-code').textContent;
+  navigator.clipboard.writeText(code)
+    .then(() => showToast('✅ Copy Code แล้ว', 'success'))
+    .catch(() => showToast('❌ ไม่สามารถ Copy ได้ — ลองเลือก Text แล้ว Copy เอง', 'error'));
+}
+
+// ============================================================
+// SPARE PAGE
+// ============================================================
 function renderSparePage() {
   const spareKey = 'Filter (รวมทุกประเภท)';
   const v = STATE.spare[spareKey];
-  const cards = document.getElementById('spare-cards');
   const cls = v.qty <= v.threshold ? 'spare-low' : v.qty <= v.threshold*1.5 ? 'spare-warn' : 'spare-ok';
-  cards.innerHTML = `<div class="spare-card ${cls}" style="margin-bottom:10px;">
+  document.getElementById('spare-cards').innerHTML = `<div class="spare-card ${cls}" style="margin-bottom:10px;">
     <div class="spare-label">Filter Spare คงเหลือ (รวมทุกประเภท)</div>
     <div class="spare-count">${v.qty}</div>
     <div class="spare-unit">ชิ้น — แจ้งเตือนเมื่อ ≤ ${v.threshold} ชิ้น ${v.qty <= v.threshold ? '⚠️' : '✓'}</div>
   </div>`;
-
   spareQtyEdit = v.qty;
   document.getElementById('spare-qty-disp').textContent = spareQtyEdit;
   document.getElementById('spare-threshold').value = v.threshold;
@@ -1238,7 +1233,6 @@ function changeSpareQty(d) {
   spareQtyEdit = Math.max(0, spareQtyEdit + d);
   document.getElementById('spare-qty-disp').textContent = spareQtyEdit;
 }
-
 function changeReceiveQty(d) {
   receiveQtyEdit = Math.max(1, receiveQtyEdit + d);
   document.getElementById('receive-qty-disp').textContent = receiveQtyEdit;
@@ -1246,9 +1240,8 @@ function changeReceiveQty(d) {
 
 function saveSpare() {
   const spareKey = 'Filter (รวมทุกประเภท)';
-  const threshold = parseInt(document.getElementById('spare-threshold').value) || 14;
   STATE.spare[spareKey].qty = spareQtyEdit;
-  STATE.spare[spareKey].threshold = threshold;
+  STATE.spare[spareKey].threshold = parseInt(document.getElementById('spare-threshold').value) || 14;
   save();
   renderSparePage();
   showToast('✅ บันทึก Spare Part แล้ว', 'success');
@@ -1259,30 +1252,27 @@ function receiveSpare() {
   const qty = receiveQtyEdit;
   const dateVal = document.getElementById('receive-date').value;
   const note = document.getElementById('receive-note').value.trim();
-
   if (!dateVal) { showToast('❌ กรุณาเลือกวันที่รับ', 'error'); return; }
   if (qty < 1)  { showToast('❌ จำนวนต้องมากกว่า 0', 'error'); return; }
 
   const receiveDate = new Date(dateVal).toLocaleDateString('th-TH');
   const stockBefore = STATE.spare[spareKey]?.qty ?? 0;
-  const stockAfter = stockBefore + qty;
-
-  if (STATE.spare[spareKey]) STATE.spare[spareKey].qty = stockAfter;
+  const stockAfter  = stockBefore + qty;
+  STATE.spare[spareKey].qty = stockAfter;
 
   const entry = {
     ts: now(), receiveDate, action: 'receive_spare',
     filterType: spareKey, qty, stockBefore, stockAfter,
     note: note || '—', operator: note || '—',
-    machine: '—', tankId: '—'
+    machine: '—', tankId: '—', tankFrom: '—', tankTo: '—', tankType: '—'
   };
   STATE.log.unshift(entry);
-  sendToSheets(entry);
   save();
+  sendToSheets(entry);
 
   receiveQtyEdit = 1;
   document.getElementById('receive-qty-disp').textContent = 1;
   document.getElementById('receive-note').value = '';
-
   renderSparePage();
   showToast(`✅ รับ Filter ${qty} ชิ้น (รวม ${stockAfter} ชิ้น)`, 'success');
 }
@@ -1305,8 +1295,7 @@ function renderReceiveHistory() {
         จำนวน: <b style="color:var(--purple);">+${e.qty} ชิ้น</b> &nbsp;|&nbsp; Stock: ${e.stockBefore} → ${e.stockAfter}<br>
         ${e.note && e.note !== '—' ? 'รายละเอียด: ' + e.note : ''}
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 function updateLastReceiveBanner() {
@@ -1316,14 +1305,12 @@ function updateLastReceiveBanner() {
   banner.style.display = 'flex';
   banner.innerHTML = `
     <div class="receive-summary-icon">📦</div>
-    <div class="receive-summary-text">
-      รับล่าสุด: <b>+${last.qty} ชิ้น</b> (${last.receiveDate || last.ts})<br>
-      ${last.note && last.note !== '—' ? last.note : ''}
-    </div>
-  `;
+    <div class="receive-summary-text">รับล่าสุด: <b>+${last.qty} ชิ้น</b> (${last.receiveDate || last.ts})<br>${last.note && last.note !== '—' ? last.note : ''}</div>`;
 }
 
-// ===== LOG =====
+// ============================================================
+// LOG PAGE
+// ============================================================
 let currentLogFilter = 'all';
 
 function setLogFilter(filter, btn) {
@@ -1337,53 +1324,28 @@ function renderLog() {
   const el = document.getElementById('log-list');
   let logs = STATE.log;
   if (currentLogFilter !== 'all') logs = logs.filter(e => e.action === currentLogFilter);
-  if (!logs.length) {
-    el.innerHTML = '<div class="log-empty">ยังไม่มีประวัติการดำเนินการ</div>';
-    return;
-  }
+  if (!logs.length) { el.innerHTML = '<div class="log-empty">ยังไม่มีประวัติการดำเนินการ</div>'; return; }
   el.innerHTML = logs.slice(0, 50).map(e => {
+    const syncTag = e._synced
+      ? '<span class="log-tag log-tag-sync-ok">☁ ส่งแล้ว</span>'
+      : (STATE.config.scriptUrl ? '<span class="log-tag log-tag-sync-err">⏳ รอส่ง</span>' : '');
     if (e.action === 'switch') {
       return `<div class="log-item">
-        <div class="log-header">
-          <div class="log-action">🔄 สลับถัง</div>
-          <div class="log-time">${e.ts}</div>
-        </div>
-        <div class="log-detail">
-          ${e.tankFrom} → ${e.tankTo}<br>
-          ผู้ดำเนินการ: ${e.operator}
-          ${e.note && e.note !== '(Quick Switch)' ? '<br>หมายเหตุ: ' + e.note : ''}
-        </div>
-        <div><span class="log-tag">${e.machine}</span></div>
+        <div class="log-header"><div class="log-action">🔄 สลับถัง</div><div class="log-time">${e.ts}</div></div>
+        <div class="log-detail">${e.tankFrom} → ${e.tankTo}<br>ผู้ดำเนินการ: ${e.operator}${e.note ? '<br>หมายเหตุ: ' + e.note : ''}</div>
+        <div><span class="log-tag">${e.machine}</span>${syncTag}</div>
       </div>`;
     } else if (e.action === 'change_filter') {
       return `<div class="log-item">
-        <div class="log-header">
-          <div class="log-action">🔧 เปลี่ยน Filter</div>
-          <div class="log-time">${e.ts}</div>
-        </div>
-        <div class="log-detail">
-          ${e.tankId} | ${e.filterType} x${e.qty} ชิ้น<br>
-          ผู้ดำเนินการ: ${e.operator}
-          ${e.note ? '<br>หมายเหตุ: ' + e.note : ''}
-          <br>Stock: ${e.stockBefore} → ${e.stockAfter}
-        </div>
-        <div>
-          <span class="log-tag">${e.machine}</span>
-          ${e.stockAfter <= 14 ? '<span class="log-tag" style="background:var(--red-bg);color:var(--red);border-color:var(--red-border);">⚠ Stock ต่ำ</span>' : ''}
-        </div>
+        <div class="log-header"><div class="log-action">🔧 เปลี่ยน Filter</div><div class="log-time">${e.ts}</div></div>
+        <div class="log-detail">${e.tankId} | ${e.filterType} x${e.qty} ชิ้น<br>ผู้ดำเนินการ: ${e.operator}${e.note ? '<br>หมายเหตุ: ' + e.note : ''}<br>Stock: ${e.stockBefore} → ${e.stockAfter}</div>
+        <div><span class="log-tag">${e.machine}</span>${e.stockAfter <= 14 ? '<span class="log-tag" style="background:var(--red-bg);color:var(--red);border-color:var(--red-border);">⚠ Stock ต่ำ</span>' : ''}${syncTag}</div>
       </div>`;
     } else if (e.action === 'receive_spare') {
       return `<div class="log-item" style="border-left:3px solid var(--purple);border-radius:var(--radius-sm);">
-        <div class="log-header">
-          <div class="log-action" style="color:var(--purple);">📥 รับ Spare เข้า Stock</div>
-          <div class="log-time">${e.ts}</div>
-        </div>
-        <div class="log-detail">
-          วันที่รับ: <b>${e.receiveDate || '—'}</b><br>
-          จำนวน: <b style="color:var(--purple);">+${e.qty} ชิ้น</b> &nbsp;|&nbsp; Stock: ${e.stockBefore} → ${e.stockAfter}<br>
-          ${e.note && e.note !== '—' ? 'รายละเอียด: ' + e.note : ''}
-        </div>
-        <div><span class="log-tag log-tag-receive">📦 Spare</span></div>
+        <div class="log-header"><div class="log-action" style="color:var(--purple);">📥 รับ Spare เข้า Stock</div><div class="log-time">${e.ts}</div></div>
+        <div class="log-detail">วันที่รับ: <b>${e.receiveDate || '—'}</b><br>จำนวน: <b style="color:var(--purple);">+${e.qty} ชิ้น</b> &nbsp;|&nbsp; Stock: ${e.stockBefore} → ${e.stockAfter}${e.note && e.note !== '—' ? '<br>รายละเอียด: ' + e.note : ''}</div>
+        <div><span class="log-tag log-tag-receive">📦 Spare</span>${syncTag}</div>
       </div>`;
     }
     return '';
@@ -1391,71 +1353,59 @@ function renderLog() {
 }
 
 function clearLog() {
-  if (confirm('ล้างประวัติทั้งหมด?')) {
-    STATE.log = [];
-    save();
-    renderLog();
-  }
+  if (confirm('ล้างประวัติทั้งหมด?')) { STATE.log = []; save(); renderLog(); }
 }
 
-// ===== CONFIG =====
+// ============================================================
+// CONFIG PAGE
+// ============================================================
 function renderConfig() {
   document.getElementById('cfg-script-url').value = STATE.config.scriptUrl || '';
-  document.getElementById('cfg-sheet-id').value = STATE.config.sheetId || '';
   renderOperatorDisplay();
-  // แสดงสถานะ sync
+  updateQueueBadge();
   if (STATE.config.scriptUrl) {
-    updateSyncStatus(true);
-    document.getElementById('sync-status-text').textContent = 'มี URL ตั้งค่าแล้ว — กด ทดสอบ เพื่อยืนยัน';
+    updateSyncUI(true, 'มี URL ตั้งค่าแล้ว — กด ทดสอบ เพื่อยืนยัน');
   }
 }
 
 function saveConfig() {
   STATE.config.scriptUrl = document.getElementById('cfg-script-url').value.trim();
-  STATE.config.sheetId = document.getElementById('cfg-sheet-id').value.trim();
   save();
+  updateQueueBadge();
   showToast('✅ บันทึกการตั้งค่าแล้ว', 'success');
+  if (STATE.config.scriptUrl && STATE.pendingQueue.length > 0) retryPending();
 }
 
 function addOperator() {
   const v = document.getElementById('cfg-operator-add').value.trim();
   if (v && !STATE.operators.includes(v)) {
-    STATE.operators.push(v);
-    save();
+    STATE.operators.push(v); save();
     document.getElementById('cfg-operator-add').value = '';
-    renderOperatorDisplay();
-    renderOperatorList();
+    renderOperatorDisplay(); renderOperatorList();
     showToast(`✅ เพิ่ม "${v}" แล้ว`, 'success');
   }
 }
-
 function removeOperator(name) {
   STATE.operators = STATE.operators.filter(o => o !== name);
-  save();
-  renderOperatorDisplay();
-  renderOperatorList();
+  save(); renderOperatorDisplay(); renderOperatorList();
 }
-
 function renderOperatorDisplay() {
   document.getElementById('operator-list-display').innerHTML =
-    STATE.operators.map(o =>
-      `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;">
+    STATE.operators.map(o => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;">
         <span>${o}</span>
         <button onclick="removeOperator('${o}')" style="background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);font-size:12px;padding:3px 10px;border-radius:6px;cursor:pointer;touch-action:manipulation;">ลบ</button>
-      </div>`
-    ).join('');
+      </div>`).join('');
 }
 
-// ===== QUICK SWITCH MODAL =====
+// ============================================================
+// QUICK SWITCH MODAL (from Dashboard tap)
+// ============================================================
 function openQuickSwitchModal(machine, tankId) {
   const tank = STATE.tanks[machine][tankId];
   const sameType = Object.entries(STATE.tanks[machine])
     .filter(([id, t]) => t.type === tank.type && id !== tankId && t.status === 'ready');
-
-  if (!sameType.length) {
-    showToast('❌ ไม่มีถัง READY ให้สลับ', 'error');
-    return;
-  }
+  if (!sameType.length) { showToast('❌ ไม่มีถัง READY ให้สลับ', 'error'); return; }
 
   const s = getStatusLabel(tank.status);
   document.getElementById('modal-title').textContent = '🔄 สลับถัง (Quick)';
@@ -1476,14 +1426,13 @@ function openQuickSwitchModal(machine, tankId) {
       <input class="form-input" id="quick-operator" placeholder="กรอกชื่อ" list="operator-list" autocomplete="off">
     </div>
     <button class="btn-switch" onclick="doQuickSwitch('${machine}','${tankId}')">✅ ยืนยันสลับ</button>
-    <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>
-  `;
+    <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>`;
   document.getElementById('modal').classList.add('open');
 }
 
 function doQuickSwitch(machine, fromId) {
   const toId = document.getElementById('quick-target').value;
-  const operator = document.getElementById('quick-operator').value || 'ไม่ระบุ';
+  const operator = document.getElementById('quick-operator').value.trim() || 'ไม่ระบุ';
   if (!toId) { showToast('❌ กรุณาเลือกถังปลายทาง', 'error'); return; }
 
   STATE.tanks[machine][fromId].status = 'dirty';
@@ -1491,19 +1440,21 @@ function doQuickSwitch(machine, fromId) {
   STATE.tanks[machine][toId].status = 'active';
 
   const entry = {
-    ts: now(), machine, tankFrom: fromId, tankTo: toId,
+    ts: now(), machine, tankFrom: fromId, tankTo: toId, tankId: fromId,
     action: 'switch', operator, note: '(Quick Switch)',
-    filterType: '—', qty: 0
+    filterType: '—', qty: 0, tankType: STATE.tanks[machine][fromId].type
   };
   STATE.log.unshift(entry);
-  sendToSheets(entry);
   save();
+  sendToSheets(entry);
   closeModal();
   renderDashboard();
   showToast(`✅ ${fromId} → ${toId}`, 'success');
 }
 
-// ===== TOAST =====
+// ============================================================
+// TOAST
+// ============================================================
 function showToast(msg, type='') {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -1511,11 +1462,18 @@ function showToast(msg, type='') {
   setTimeout(() => t.classList.remove('show'), 2800);
 }
 
-// ===== INIT =====
+// ============================================================
+// INIT
+// ============================================================
 load();
 renderDashboard();
 renderOperatorList();
 receiveQtyEdit = 1;
+updateQueueBadge();
+// Retry pending queue เมื่อ app เปิด (ถ้ามี URL)
+if (STATE.config.scriptUrl && STATE.pendingQueue.length > 0) {
+  setTimeout(retryPending, 2000);
+}
 </script>
 </body>
 </html>
