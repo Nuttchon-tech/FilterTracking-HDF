@@ -135,6 +135,62 @@
 
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
+  /* ── Swap Button Row (under each tank group) ── */
+  .swap-btn-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .swap-group-btn {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 9px 6px;
+    font-size: 11px; font-weight: 600;
+    border: none; cursor: pointer;
+    transition: background 0.15s, opacity 0.15s;
+    touch-action: manipulation; user-select: none; -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+  }
+  .swap-group-btn.clean-swap {
+    border-right: 2px solid rgba(59,130,246,0.25);
+    background: rgba(16,185,129,0.10);
+    color: var(--green);
+    border-top: none;
+  }
+  .swap-group-btn.pre-swap {
+    background: rgba(16,185,129,0.10);
+    color: var(--green);
+    border-top: none;
+  }
+  .swap-group-btn.can-swap {
+    /* glow effect when available */
+    box-shadow: inset 0 0 0 1px rgba(16,185,129,0.3);
+  }
+  .swap-group-btn.can-swap:active {
+    background: rgba(16,185,129,0.22);
+    transform: scale(0.97);
+  }
+  .swap-group-btn.no-swap {
+    background: rgba(255,255,255,0.02);
+    color: var(--text3);
+    cursor: not-allowed;
+    opacity: 0.45;
+    pointer-events: none;
+  }
+  .swap-group-btn .swap-icon { font-size: 13px; }
+  .swap-pulse {
+    display: inline-block;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 0 rgba(16,185,129,0.5);
+    animation: swapPulse 1.6s infinite;
+    flex-shrink: 0;
+  }
+  @keyframes swapPulse {
+    0%   { box-shadow: 0 0 0 0   rgba(16,185,129,0.55); }
+    60%  { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
+    100% { box-shadow: 0 0 0 0   rgba(16,185,129,0); }
+  }
+
   .alert-banner {
     background: var(--red-bg); border: 1px solid var(--red-border);
     border-radius: var(--radius-sm); padding: 10px 12px;
@@ -259,7 +315,6 @@
   .config-label { font-size: 14px; }
   .config-meta { font-size: 11px; color: var(--text2); margin-top: 2px; }
 
-  /* ── Sync Status Card ── */
   .sync-card {
     background: var(--bg2); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 14px; margin-bottom: 12px;
@@ -272,7 +327,6 @@
   .sync-label { font-size: 13px; font-weight: 600; flex: 1; }
   .sync-sublabel { font-size: 11px; color: var(--text2); margin-top: 2px; }
 
-  /* Pending queue badge */
   .queue-badge {
     display: inline-flex; align-items: center; gap: 5px;
     background: var(--yellow-bg); border: 1px solid var(--yellow-border);
@@ -281,7 +335,6 @@
   }
   .queue-badge.zero { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
 
-  /* Script Code block */
   .code-block {
     background: var(--bg3); border-radius: 9px; padding: 12px;
     font-size: 10.5px; font-family: monospace; color: var(--text2);
@@ -330,7 +383,6 @@
   .receive-summary-icon { font-size: 22px; }
   .receive-summary-text { font-size: 12px; color: var(--purple); font-weight: 500; line-height: 1.5; }
 
-  /* Step guide */
   .step-row {
     display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start;
   }
@@ -497,8 +549,6 @@
 
 <!-- ===== CONFIG PAGE ===== -->
 <div class="page" id="page-config">
-
-  <!-- Sync Status -->
   <div class="section-label">สถานะการเชื่อมต่อ</div>
   <div class="sync-card">
     <div class="sync-row">
@@ -512,7 +562,6 @@
     <div style="font-size:11px;color:var(--text3);margin-top:4px;" id="sync-last-time">—</div>
   </div>
 
-  <!-- Script URL & Sheet ID -->
   <div class="section-label">การตั้งค่า Google Sheets</div>
   <div class="action-card">
     <div class="form-group">
@@ -525,7 +574,6 @@
     <div id="cfg-status" style="margin-top:10px;font-size:12px;line-height:1.6;"></div>
   </div>
 
-  <!-- Step-by-step guide -->
   <div class="section-label">วิธีเชื่อมต่อ Google Sheets (ทีละขั้น)</div>
   <div class="action-card">
     <div class="step-row">
@@ -553,7 +601,6 @@
     </div>
   </div>
 
-  <!-- Apps Script Code -->
   <div class="section-label">Apps Script Code (Copy ทั้งหมด)</div>
   <div class="action-card">
     <div class="code-block" id="apps-script-code">// ============================================================
@@ -562,7 +609,6 @@
 // Execute as: Me | Who has access: Anyone
 // ============================================================
 
-// ทดสอบ GET (ใช้ตรวจว่า Deploy สำเร็จ)
 function doGet(e) {
   return ContentService
     .createTextOutput(JSON.stringify({
@@ -573,14 +619,10 @@ function doGet(e) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-// รับข้อมูล POST จาก App
 function doPost(e) {
   try {
-    // Parse JSON ที่ส่งมา
     var payload = JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-
-    // ─── สร้าง Sheet "Filter_Log" ถ้ายังไม่มี ───
     var sheet = ss.getSheetByName("Filter_Log");
     if (!sheet) {
       sheet = ss.insertSheet("Filter_Log");
@@ -595,12 +637,7 @@ function doPost(e) {
       headers.setFontColor("#3b82f6");
       headers.setFontWeight("bold");
       sheet.setFrozenRows(1);
-      sheet.setColumnWidth(1, 150);
-      sheet.setColumnWidth(7, 130);
-      sheet.setColumnWidth(8, 180);
     }
-
-    // ─── เพิ่มแถวข้อมูล ───
     sheet.appendRow([
       payload.timestamp  || new Date().toLocaleString("th-TH"),
       payload.action     || "—",
@@ -616,26 +653,20 @@ function doPost(e) {
       payload.receiveDate || "—",
       payload.note       || "—"
     ]);
-
-    // ─── ตอบกลับ OK ───
     return buildResponse({ status: "ok", rows: sheet.getLastRow() });
-
   } catch (err) {
     return buildResponse({ status: "error", message: err.toString() });
   }
 }
 
-// Helper: สร้าง Response พร้อม CORS Header
 function buildResponse(obj) {
-  var output = ContentService
+  return ContentService
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
-  return output;
 }</div>
     <button class="btn-secondary" onclick="copyScriptCode()" style="margin-top:10px;">📋 Copy Code ทั้งหมด</button>
   </div>
 
-  <!-- Operators -->
   <div class="section-label">ชื่อผู้ปฏิบัติงาน (บันทึกไว้)</div>
   <div class="action-card">
     <div class="form-group">
@@ -684,7 +715,7 @@ const STATE = {
   log: [],
   operators: ['ช่างสมชาย', 'ช่างวิชัย', 'ช่างประสิทธิ์'],
   config: { scriptUrl: '' },
-  pendingQueue: []   // ← queue สำหรับ retry
+  pendingQueue: []
 };
 
 function dateStr(daysAgo) {
@@ -742,6 +773,14 @@ function getStatusLabel(status) {
 }
 
 // ============================================================
+// CHECK: มีถัง READY ให้สลับหรือไม่ (เฉพาะ type เดียวกัน)
+// ============================================================
+function hasReadyTankOfType(machineId, type) {
+  const tanks = STATE.tanks[machineId];
+  return Object.values(tanks).some(t => t.type === type && t.status === 'ready');
+}
+
+// ============================================================
 // DASHBOARD
 // ============================================================
 function renderTankGrid(machineId, containerId) {
@@ -749,6 +788,10 @@ function renderTankGrid(machineId, containerId) {
   const el = document.getElementById(containerId);
   const cleanTanks = Object.entries(tanks).filter(([,t]) => t.type === 'clean');
   const preTanks   = Object.entries(tanks).filter(([,t]) => t.type === 'pre');
+
+  // ตรวจสอบว่าสลับได้หรือไม่
+  const canSwapClean = hasReadyTankOfType(machineId, 'clean');
+  const canSwapPre   = hasReadyTankOfType(machineId, 'pre');
 
   function tankHTML(id, t) {
     const s = getStatusLabel(t.status);
@@ -760,6 +803,18 @@ function renderTankGrid(machineId, containerId) {
     </div>`;
   }
 
+  // ปุ่มสลับถัง Clean
+  const cleanSwapClass = canSwapClean ? 'can-swap' : 'no-swap';
+  const cleanSwapContent = canSwapClean
+    ? `<span class="swap-pulse"></span> สลับ Clean Tank`
+    : `🔒 สลับ Clean Tank`;
+
+  // ปุ่มสลับถัง Pre
+  const preSwapClass = canSwapPre ? 'can-swap' : 'no-swap';
+  const preSwapContent = canSwapPre
+    ? `<span class="swap-pulse"></span> สลับ Pre Tank`
+    : `🔒 สลับ Pre Tank`;
+
   el.innerHTML = `
     <div class="tank-layout">
       <div class="tank-col clean-col">
@@ -770,6 +825,16 @@ function renderTankGrid(machineId, containerId) {
         <div class="tank-col-header pre-header">🟡 PRE TANK</div>
         <div class="tank-row">${preTanks.map(([id, t]) => tankHTML(id, t)).join('')}</div>
       </div>
+    </div>
+    <div class="swap-btn-row">
+      <button class="swap-group-btn clean-swap ${cleanSwapClass}"
+        onclick="openGroupSwapModal('${machineId}', 'clean')">
+        ${cleanSwapContent}
+      </button>
+      <button class="swap-group-btn pre-swap ${preSwapClass}"
+        onclick="openGroupSwapModal('${machineId}', 'pre')">
+        ${preSwapContent}
+      </button>
     </div>`;
 }
 
@@ -815,6 +880,88 @@ function renderDashboard() {
 }
 
 function quickAction(machine, tankId) { openQuickSwitchModal(machine, tankId); }
+
+// ============================================================
+// GROUP SWAP MODAL (จากปุ่มสลับถังใต้ grid)
+// ============================================================
+function openGroupSwapModal(machineId, type) {
+  const tanks = STATE.tanks[machineId];
+  const typeLabel = type === 'clean' ? 'Clean Tank' : 'Pre Tank';
+  const typeIcon  = type === 'clean' ? '🔵' : '🟡';
+
+  // หา active tank ของ type นั้น
+  const activeTanks = Object.entries(tanks).filter(([,t]) => t.type === type && t.status === 'active');
+  // หา ready tank ของ type นั้น
+  const readyTanks  = Object.entries(tanks).filter(([,t]) => t.type === type && t.status === 'ready');
+
+  if (!readyTanks.length) {
+    showToast(`❌ ไม่มีถัง ${typeLabel} ที่พร้อมสลับ`, 'error');
+    return;
+  }
+
+  const fromOptions = activeTanks.length
+    ? activeTanks.map(([id]) => `<option value="${id}">${id} (ACTIVE)</option>`).join('')
+    : Object.entries(tanks)
+        .filter(([,t]) => t.type === type && t.status !== 'ready')
+        .map(([id,t]) => `<option value="${id}">${id} (${getStatusLabel(t.status).text})</option>`).join('');
+
+  const toOptions = readyTanks.map(([id]) => `<option value="${id}">${id} (READY ✓)</option>`).join('');
+
+  document.getElementById('modal-title').textContent = `🔄 สลับ${typeIcon} ${typeLabel} — ${machineId}`;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="modal-info">
+      <b>${machineId}</b> — ${typeIcon} ${typeLabel}<br>
+      ถังต้นทางจะเปลี่ยนเป็น <span style="color:var(--red);">🔴 DIRTY</span><br>
+      ถังปลายทางจะเปลี่ยนเป็น <span style="color:var(--yellow);">🟡 ACTIVE</span>
+    </div>
+    <div class="form-group">
+      <label class="form-label">ถังต้นทาง (ที่ต้องการสลับออก)</label>
+      <select class="form-select" id="group-swap-from">${fromOptions}</select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">ถังปลายทาง (READY)</label>
+      <select class="form-select" id="group-swap-to">${toOptions}</select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">👤 ผู้ดำเนินการ</label>
+      <input class="form-input" id="group-swap-operator" placeholder="กรอกชื่อ" list="operator-list" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label class="form-label">หมายเหตุ</label>
+      <textarea class="form-textarea" id="group-swap-note" placeholder="(ไม่บังคับ)"></textarea>
+    </div>
+    <button class="btn-switch" onclick="doGroupSwap('${machineId}','${type}')">✅ ยืนยันสลับถัง</button>
+    <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>`;
+
+  document.getElementById('modal').classList.add('open');
+}
+
+function doGroupSwap(machineId, type) {
+  const fromId   = document.getElementById('group-swap-from').value;
+  const toId     = document.getElementById('group-swap-to').value;
+  const operator = document.getElementById('group-swap-operator').value.trim() || 'ไม่ระบุ';
+  const note     = document.getElementById('group-swap-note').value.trim();
+
+  if (!fromId || !toId) { showToast('❌ กรุณาเลือกถังให้ครบ', 'error'); return; }
+  if (fromId === toId)   { showToast('❌ ถังต้นทางและปลายทางต้องไม่ใช่ถังเดียวกัน', 'error'); return; }
+
+  STATE.tanks[machineId][fromId].status = 'dirty';
+  STATE.tanks[machineId][fromId].lastSwitched = now();
+  STATE.tanks[machineId][toId].status = 'active';
+
+  const entry = {
+    ts: now(), machine: machineId, tankFrom: fromId, tankTo: toId,
+    tankId: fromId, action: 'switch', operator,
+    note: note || `(สลับจากปุ่ม ${type === 'clean' ? 'Clean' : 'Pre'} Tank)`,
+    filterType: '—', qty: 0, tankType: type
+  };
+  STATE.log.unshift(entry);
+  save();
+  sendToSheets(entry);
+  closeModal();
+  renderDashboard();
+  showToast(`✅ สลับ ${fromId} → ${toId} สำเร็จ`, 'success');
+}
 
 // ============================================================
 // ACTION PAGE
@@ -873,7 +1020,7 @@ function renderOperatorList() {
 }
 
 // ============================================================
-// MODAL
+// MODAL (Action Page)
 // ============================================================
 function openModal(action) {
   const m = document.getElementById('act-machine').value;
@@ -927,7 +1074,7 @@ function openModal(action) {
 function closeModal() { document.getElementById('modal').classList.remove('open'); }
 
 // ============================================================
-// ACTIONS
+// ACTIONS (Action Page)
 // ============================================================
 function doSwitch() {
   const m = document.getElementById('act-machine').value;
@@ -984,35 +1131,23 @@ function doChangeFilter() {
 }
 
 // ============================================================
-// GOOGLE SHEETS — ส่งผ่าน Fetch POST แบบ no-cors + retry queue
+// GOOGLE SHEETS
 // ============================================================
-
-// ── ส่งข้อมูลไปยัง Google Apps Script ──
 async function sendToSheets(entry) {
   const url = STATE.config.scriptUrl;
-  if (!url) return;   // ยังไม่ได้ตั้งค่า URL
-
+  if (!url) return;
   const payload = buildPayload(entry);
-
   try {
-    // ✅ วิธีที่ถูกต้องสำหรับ Apps Script: ส่ง POST แบบ no-cors
-    // (CORS header ของ Apps Script ไม่รองรับ cross-origin response อ่าน)
-    // แต่ข้อมูลยังถูกบันทึกใน Sheet ปกติ
     await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain' }, // ← ต้องใช้ text/plain กับ no-cors
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(payload),
       mode: 'no-cors'
     });
-
-    // no-cors ไม่ให้อ่าน response → ถือว่าสำเร็จถ้าไม่ throw
     entry._synced = true;
     updateSyncUI(true, `ส่งล่าสุด: ${now()}`);
     removePending(payload._id);
-
   } catch (err) {
-    console.error('❌ sendToSheets error:', err);
-    // เพิ่มเข้า queue รอ retry
     addPending(payload);
     updateSyncUI(false, `ส่งไม่ได้: ${err.message}`);
   }
@@ -1040,7 +1175,6 @@ function buildPayload(entry) {
   };
 }
 
-// ── Pending Queue ──
 function addPending(payload) {
   const exists = STATE.pendingQueue.find(p => p._id === payload._id);
   if (!exists) STATE.pendingQueue.push(payload);
@@ -1051,7 +1185,6 @@ function removePending(id) {
   save();
 }
 
-// ── Retry pending items ──
 async function retryPending() {
   const url = STATE.config.scriptUrl;
   if (!url || !STATE.pendingQueue.length) return;
@@ -1065,7 +1198,7 @@ async function retryPending() {
         mode: 'no-cors'
       });
       removePending(payload._id);
-    } catch(e) { /* ยังไม่ได้ */ }
+    } catch(e) {}
     await delay(400);
   }
   updateQueueBadge();
@@ -1074,12 +1207,10 @@ async function retryPending() {
 
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-// ── Sync Button (Manual) ──
 async function syncNow() {
   const btn = document.getElementById('syncBtn');
   btn.classList.add('syncing');
   btn.textContent = '⟳ Syncing...';
-
   if (STATE.config.scriptUrl) {
     await retryPending();
     updateSyncUI(true, `Sync เสร็จ: ${now()}`);
@@ -1087,13 +1218,11 @@ async function syncNow() {
   } else {
     showToast('⚠ ยังไม่ได้ตั้งค่า Script URL', '');
   }
-
   await delay(600);
   btn.classList.remove('syncing');
   btn.textContent = '⟳ Sync';
 }
 
-// ── Test Connection (GET) ──
 async function testConnection() {
   const url = document.getElementById('cfg-script-url').value.trim();
   const st = document.getElementById('cfg-status');
@@ -1111,58 +1240,37 @@ async function testConnection() {
       st.innerHTML = `<span style="color:var(--yellow)">⚠ ตอบกลับแล้วแต่ format ผิด: ${text.slice(0,100)}</span>`;
     }
   } catch(e) {
-    st.innerHTML = `<span style="color:var(--red)">❌ GET ไม่ได้: ${e.message}<br><small>ตรวจสอบ URL และสิทธิ์ Deploy</small></span>`;
+    st.innerHTML = `<span style="color:var(--red)">❌ GET ไม่ได้: ${e.message}</span>`;
     updateSyncUI(false, e.message);
   }
 }
 
-// ── Test POST ──
 async function testPostConnection() {
   const url = document.getElementById('cfg-script-url').value.trim();
   const st = document.getElementById('cfg-status');
   if (!url) { st.innerHTML = '<span style="color:var(--red)">❌ กรุณากรอก URL ก่อน</span>'; return; }
   st.innerHTML = '<span style="color:var(--text2)">⏳ กำลังส่ง POST ทดสอบ...</span>';
-
   const testPayload = {
-    _id: 'test_' + Date.now(),
-    timestamp: now(),
-    action: 'TEST',
-    machine: 'TEST',
-    tankFrom: 'TEST-TANK',
-    tankTo: '—',
-    tankType: '—',
-    tankId: 'TEST',
-    operator: 'System Test',
-    filterType: '—',
-    qty: 0,
-    stockBefore: '—',
-    stockAfter: '—',
-    receiveDate: '—',
-    note: 'ทดสอบการเชื่อมต่อจาก Filter Tracker App'
+    _id: 'test_' + Date.now(), timestamp: now(), action: 'TEST',
+    machine: 'TEST', tankFrom: 'TEST-TANK', tankTo: '—',
+    tankType: '—', tankId: 'TEST', operator: 'System Test',
+    filterType: '—', qty: 0, stockBefore: '—', stockAfter: '—',
+    receiveDate: '—', note: 'ทดสอบการเชื่อมต่อจาก Filter Tracker App'
   };
-
   try {
     await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(testPayload),
-      mode: 'no-cors'
+      method: 'POST', headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(testPayload), mode: 'no-cors'
     });
-    // no-cors: ถ้าไม่ throw = ส่งได้ (ไม่รู้ response แต่ Sheet ควรมีข้อมูล)
     st.innerHTML = `<span style="color:var(--green)">✅ ส่ง POST สำเร็จ (no-cors mode)<br>
-      <small style="color:var(--text3);">กรุณาตรวจสอบ Google Sheet — ควรมีแถว <b>TEST</b> เพิ่มขึ้นใน Sheet "Filter_Log"</small></span>`;
+      <small style="color:var(--text3);">ตรวจสอบ Google Sheet — ควรมีแถว TEST เพิ่มขึ้น</small></span>`;
     updateSyncUI(true, `POST test: ${now()}`);
   } catch(e) {
-    st.innerHTML = `<span style="color:var(--red)">❌ POST ล้มเหลว: ${e.message}<br>
-      <small>ตรวจสอบ:<br>
-      1. URL ถูกต้อง?<br>
-      2. Deploy เป็น Web App หรือยัง?<br>
-      3. Who has access = Anyone?</small></span>`;
+    st.innerHTML = `<span style="color:var(--red)">❌ POST ล้มเหลว: ${e.message}</span>`;
     updateSyncUI(false, e.message);
   }
 }
 
-// ── Update UI ──
 function updateSyncUI(ok, detail) {
   const dot  = document.getElementById('sync-dot');
   const lbl  = document.getElementById('sync-label-text');
@@ -1171,14 +1279,12 @@ function updateSyncUI(ok, detail) {
   if (!dot) return;
   if (ok) {
     dot.className = 'sync-dot ok';
-    if (lbl) lbl.textContent = '✅ เชื่อมต่อ Google Sheets แล้ว';
-    if (lbl) lbl.style.color = 'var(--green)';
+    if (lbl) { lbl.textContent = '✅ เชื่อมต่อ Google Sheets แล้ว'; lbl.style.color = 'var(--green)'; }
   } else {
     dot.className = 'sync-dot err';
-    if (lbl) lbl.textContent = '❌ เชื่อมต่อไม่ได้';
-    if (lbl) lbl.style.color = 'var(--red)';
+    if (lbl) { lbl.textContent = '❌ เชื่อมต่อไม่ได้'; lbl.style.color = 'var(--red)'; }
   }
-  if (sub) sub.textContent = detail || '';
+  if (sub)  sub.textContent  = detail || '';
   if (last) last.textContent = `อัปเดต: ${now()}`;
 }
 
@@ -1186,20 +1292,15 @@ function updateQueueBadge() {
   const badge = document.getElementById('queue-badge');
   if (!badge) return;
   const n = STATE.pendingQueue.length;
-  if (n === 0) {
-    badge.className = 'queue-badge zero';
-    badge.textContent = '✓ ส่งแล้ว';
-  } else {
-    badge.className = 'queue-badge';
-    badge.textContent = `⏳ รอส่ง ${n} รายการ`;
-  }
+  if (n === 0) { badge.className = 'queue-badge zero'; badge.textContent = '✓ ส่งแล้ว'; }
+  else         { badge.className = 'queue-badge'; badge.textContent = `⏳ รอส่ง ${n} รายการ`; }
 }
 
 function copyScriptCode() {
   const code = document.getElementById('apps-script-code').textContent;
   navigator.clipboard.writeText(code)
     .then(() => showToast('✅ Copy Code แล้ว', 'success'))
-    .catch(() => showToast('❌ ไม่สามารถ Copy ได้ — ลองเลือก Text แล้ว Copy เอง', 'error'));
+    .catch(() => showToast('❌ ไม่สามารถ Copy ได้', 'error'));
 }
 
 // ============================================================
@@ -1217,11 +1318,9 @@ function renderSparePage() {
   spareQtyEdit = v.qty;
   document.getElementById('spare-qty-disp').textContent = spareQtyEdit;
   document.getElementById('spare-threshold').value = v.threshold;
-
   const todayISO = new Date().toISOString().slice(0, 10);
   if (!document.getElementById('receive-date').value)
     document.getElementById('receive-date').value = todayISO;
-
   renderReceiveHistory();
   updateLastReceiveBanner();
 }
@@ -1242,9 +1341,7 @@ function saveSpare() {
   const spareKey = 'Filter (รวมทุกประเภท)';
   STATE.spare[spareKey].qty = spareQtyEdit;
   STATE.spare[spareKey].threshold = parseInt(document.getElementById('spare-threshold').value) || 14;
-  save();
-  renderSparePage();
-  showToast('✅ บันทึก Spare Part แล้ว', 'success');
+  save(); renderSparePage(); showToast('✅ บันทึก Spare Part แล้ว', 'success');
 }
 
 function receiveSpare() {
@@ -1254,12 +1351,10 @@ function receiveSpare() {
   const note = document.getElementById('receive-note').value.trim();
   if (!dateVal) { showToast('❌ กรุณาเลือกวันที่รับ', 'error'); return; }
   if (qty < 1)  { showToast('❌ จำนวนต้องมากกว่า 0', 'error'); return; }
-
   const receiveDate = new Date(dateVal).toLocaleDateString('th-TH');
   const stockBefore = STATE.spare[spareKey]?.qty ?? 0;
   const stockAfter  = stockBefore + qty;
   STATE.spare[spareKey].qty = stockAfter;
-
   const entry = {
     ts: now(), receiveDate, action: 'receive_spare',
     filterType: spareKey, qty, stockBefore, stockAfter,
@@ -1269,7 +1364,6 @@ function receiveSpare() {
   STATE.log.unshift(entry);
   save();
   sendToSheets(entry);
-
   receiveQtyEdit = 1;
   document.getElementById('receive-qty-disp').textContent = 1;
   document.getElementById('receive-note').value = '';
@@ -1363,15 +1457,12 @@ function renderConfig() {
   document.getElementById('cfg-script-url').value = STATE.config.scriptUrl || '';
   renderOperatorDisplay();
   updateQueueBadge();
-  if (STATE.config.scriptUrl) {
-    updateSyncUI(true, 'มี URL ตั้งค่าแล้ว — กด ทดสอบ เพื่อยืนยัน');
-  }
+  if (STATE.config.scriptUrl) updateSyncUI(true, 'มี URL ตั้งค่าแล้ว — กด ทดสอบ เพื่อยืนยัน');
 }
 
 function saveConfig() {
   STATE.config.scriptUrl = document.getElementById('cfg-script-url').value.trim();
-  save();
-  updateQueueBadge();
+  save(); updateQueueBadge();
   showToast('✅ บันทึกการตั้งค่าแล้ว', 'success');
   if (STATE.config.scriptUrl && STATE.pendingQueue.length > 0) retryPending();
 }
@@ -1399,7 +1490,7 @@ function renderOperatorDisplay() {
 }
 
 // ============================================================
-// QUICK SWITCH MODAL (from Dashboard tap)
+// QUICK SWITCH MODAL (from Dashboard tank card tap)
 // ============================================================
 function openQuickSwitchModal(machine, tankId) {
   const tank = STATE.tanks[machine][tankId];
@@ -1434,11 +1525,9 @@ function doQuickSwitch(machine, fromId) {
   const toId = document.getElementById('quick-target').value;
   const operator = document.getElementById('quick-operator').value.trim() || 'ไม่ระบุ';
   if (!toId) { showToast('❌ กรุณาเลือกถังปลายทาง', 'error'); return; }
-
   STATE.tanks[machine][fromId].status = 'dirty';
   STATE.tanks[machine][fromId].lastSwitched = now();
   STATE.tanks[machine][toId].status = 'active';
-
   const entry = {
     ts: now(), machine, tankFrom: fromId, tankTo: toId, tankId: fromId,
     action: 'switch', operator, note: '(Quick Switch)',
@@ -1470,7 +1559,6 @@ renderDashboard();
 renderOperatorList();
 receiveQtyEdit = 1;
 updateQueueBadge();
-// Retry pending queue เมื่อ app เปิด (ถ้ามี URL)
 if (STATE.config.scriptUrl && STATE.pendingQueue.length > 0) {
   setTimeout(retryPending, 2000);
 }
