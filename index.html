@@ -105,12 +105,11 @@
   .tank-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; flex: 1; }
 
   .tank-item {
-    background: var(--bg2); padding: 14px 10px 12px; cursor: pointer;
+    background: var(--bg2); padding: 14px 10px 12px;
     transition: background 0.15s; position: relative;
     border-right: 1px solid var(--border); user-select: none; -webkit-user-select: none;
   }
   .tank-item:last-child { border-right: none; }
-  .tank-item:active { background: var(--bg3); }
   .tank-id { font-size: 12px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
   .tank-status-pill {
     display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px;
@@ -141,45 +140,46 @@
     grid-template-columns: 1fr 1fr;
     border-top: 1px solid var(--border);
   }
+  /* wrapper cell — ครอบพื้นที่ครึ่งหนึ่ง แต่ไม่ clickable ในส่วน padding */
+  .swap-cell {
+    display: flex; align-items: center; justify-content: center;
+    padding: 8px 6px;
+  }
+  .swap-cell.clean-cell { border-right: 2px solid rgba(59,130,246,0.25); }
+
+  /* ตัวปุ่มจริง — เล็ก กระชับ กดได้เฉพาะตรงนี้ */
   .swap-group-btn {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    padding: 9px 6px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+    padding: 6px 14px;
     font-size: 11px; font-weight: 600;
-    border: none; cursor: pointer;
-    transition: background 0.15s, opacity 0.15s;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s, opacity 0.15s;
     touch-action: manipulation; user-select: none; -webkit-user-select: none;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
-  }
-  .swap-group-btn.clean-swap {
-    border-right: 2px solid rgba(59,130,246,0.25);
-    background: rgba(16,185,129,0.10);
-    color: var(--green);
-    border-top: none;
-  }
-  .swap-group-btn.pre-swap {
-    background: rgba(16,185,129,0.10);
-    color: var(--green);
-    border-top: none;
+    white-space: nowrap;
   }
   .swap-group-btn.can-swap {
-    /* glow effect when available */
-    box-shadow: inset 0 0 0 1px rgba(16,185,129,0.3);
+    background: rgba(16,185,129,0.14);
+    color: var(--green);
+    border-color: rgba(16,185,129,0.45);
+    box-shadow: 0 0 0 0 rgba(16,185,129,0.4);
   }
   .swap-group-btn.can-swap:active {
-    background: rgba(16,185,129,0.22);
-    transform: scale(0.97);
+    background: rgba(16,185,129,0.26);
+    transform: scale(0.95);
   }
   .swap-group-btn.no-swap {
-    background: rgba(255,255,255,0.02);
+    background: rgba(255,255,255,0.03);
     color: var(--text3);
+    border-color: var(--border);
+    opacity: 0.5;
     cursor: not-allowed;
-    opacity: 0.45;
-    pointer-events: none;
   }
-  .swap-group-btn .swap-icon { font-size: 13px; }
   .swap-pulse {
     display: inline-block;
-    width: 7px; height: 7px; border-radius: 50%;
+    width: 6px; height: 6px; border-radius: 50%;
     background: var(--green);
     box-shadow: 0 0 0 0 rgba(16,185,129,0.5);
     animation: swapPulse 1.6s infinite;
@@ -796,7 +796,7 @@ function renderTankGrid(machineId, containerId) {
   function tankHTML(id, t) {
     const s = getStatusLabel(t.status);
     const dateInfo = t.lastChanged ? `เปลี่ยน: ${t.lastChanged}` : t.lastSwitched ? `สลับ: ${t.lastSwitched}` : '—';
-    return `<div class="tank-item ${s.cls}" onclick="quickAction('${machineId}','${id}')">
+    return `<div class="tank-item ${s.cls}">
       <div class="tank-id">${id}</div>
       <div class="tank-status-pill"><div class="dot"></div>${s.text}</div>
       <div class="tank-date">${dateInfo}</div>
@@ -808,12 +808,18 @@ function renderTankGrid(machineId, containerId) {
   const cleanSwapContent = canSwapClean
     ? `<span class="swap-pulse"></span> สลับ Clean Tank`
     : `🔒 สลับ Clean Tank`;
+  const cleanSwapClick = canSwapClean
+    ? `openGroupSwapModal('${machineId}', 'clean')`
+    : `showToast('❌ ไม่มีถัง Clean Tank ที่พร้อมสลับ', 'error')`;
 
   // ปุ่มสลับถัง Pre
   const preSwapClass = canSwapPre ? 'can-swap' : 'no-swap';
   const preSwapContent = canSwapPre
     ? `<span class="swap-pulse"></span> สลับ Pre Tank`
     : `🔒 สลับ Pre Tank`;
+  const preSwapClick = canSwapPre
+    ? `openGroupSwapModal('${machineId}', 'pre')`
+    : `showToast('❌ ไม่มีถัง Pre Tank ที่พร้อมสลับ', 'error')`;
 
   el.innerHTML = `
     <div class="tank-layout">
@@ -827,14 +833,16 @@ function renderTankGrid(machineId, containerId) {
       </div>
     </div>
     <div class="swap-btn-row">
-      <button class="swap-group-btn clean-swap ${cleanSwapClass}"
-        onclick="openGroupSwapModal('${machineId}', 'clean')">
-        ${cleanSwapContent}
-      </button>
-      <button class="swap-group-btn pre-swap ${preSwapClass}"
-        onclick="openGroupSwapModal('${machineId}', 'pre')">
-        ${preSwapContent}
-      </button>
+      <div class="swap-cell clean-cell">
+        <button class="swap-group-btn ${cleanSwapClass}" onclick="${cleanSwapClick}">
+          ${cleanSwapContent}
+        </button>
+      </div>
+      <div class="swap-cell">
+        <button class="swap-group-btn ${preSwapClass}" onclick="${preSwapClick}">
+          ${preSwapContent}
+        </button>
+      </div>
     </div>`;
 }
 
