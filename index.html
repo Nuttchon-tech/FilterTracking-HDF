@@ -670,62 +670,102 @@
     </div>
 
     <!-- Apps Script Code -->
-    <div class="section-label">Apps Script Code</div>
+    <div class="section-label">Apps Script Code (v3 — Real-time Sync)</div>
     <div class="action-card">
       <div class="code-block" id="apps-script-code">// ============================================================
-// Filter Tracker — Google Apps Script v2
-// วางทั้งหมดนี้ใน Apps Script แล้ว Deploy เป็น Web App
-// Execute as: Me | Who has access: Anyone
+// Filter Tracker — Google Apps Script v3 (Real-time Sync)
+// Deploy เป็น Web App: Execute as Me | Who has access: Anyone
 // ============================================================
 
+var LOG_SHEET   = "Filter_Log";
+var STATE_SHEET = "Filter_State";
+
+// ── GET: ดึง shared state กลับมาที่แอป ──────────────────────
 function doGet(e) {
-  return ContentService
-    .createTextOutput(JSON.stringify({
-      status: "ok",
-      message: "Filter Tracker API is ready",
-      timestamp: new Date().toISOString()
-    }))
-    .setMimeType(ContentService.MimeType.JSON);
+  try {
+    var ss    = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName(STATE_SHEET);
+    if (!sheet || sheet.getLastRow() < 2) {
+      return buildResponse({ status: "ok", state: null,
+        message: "No state yet" });
+    }
+    var json = sheet.getRange(2, 1).getValue();
+    var state = JSON.parse(json);
+    return buildResponse({ status: "ok", state: state });
+  } catch(err) {
+    return buildResponse({ status: "error", message: err.toString() });
+  }
 }
 
+// ── POST: รับ action log + อัปเดต shared state ──────────────
 function doPost(e) {
   try {
     var payload = JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = ss.getSheetByName("Filter_Log");
-    if (!sheet) {
-      sheet = ss.insertSheet("Filter_Log");
-      var headers = sheet.getRange(1, 1, 1, 13);
-      headers.setValues([[
-        "Timestamp", "Action", "Machine", "Tank (From/ID)",
-        "Tank To", "Tank Type", "Operator",
-        "Filter Type", "Qty Used", "Stock Before",
-        "Stock After", "Receive Date", "Note"
-      ]]);
-      headers.setBackground("#1a1d27");
-      headers.setFontColor("#3b82f6");
-      headers.setFontWeight("bold");
-      sheet.setFrozenRows(1);
+
+    // 1) บันทึกลง Filter_Log (เหมือนเดิม)
+    var logSheet = getOrCreateLogSheet(ss);
+    if (payload.action !== "SAVE_STATE") {
+      logSheet.appendRow([
+        payload.timestamp  || new Date().toLocaleString("th-TH"),
+        payload.action     || "—",
+        payload.machine    || "—",
+        payload.tankFrom   || payload.tankId || "—",
+        payload.tankTo     || "—",
+        payload.tankType   || "—",
+        payload.operator   || "—",
+        payload.filterType || "—",
+        payload.qty        || 0,
+        payload.stockBefore !== undefined ? payload.stockBefore : "—",
+        payload.stockAfter  !== undefined ? payload.stockAfter  : "—",
+        payload.receiveDate || "—",
+        payload.note       || "—"
+      ]);
     }
-    sheet.appendRow([
-      payload.timestamp  || new Date().toLocaleString("th-TH"),
-      payload.action     || "—",
-      payload.machine    || "—",
-      payload.tankFrom   || payload.tankId || "—",
-      payload.tankTo     || "—",
-      payload.tankType   || "—",
-      payload.operator   || "—",
-      payload.filterType || "—",
-      payload.qty        || 0,
-      payload.stockBefore !== undefined ? payload.stockBefore : "—",
-      payload.stockAfter  !== undefined ? payload.stockAfter  : "—",
-      payload.receiveDate || "—",
-      payload.note       || "—"
-    ]);
-    return buildResponse({ status: "ok", rows: sheet.getLastRow() });
+
+    // 2) บันทึก shared state (tanks, spare, operators, log)
+    if (payload.sharedState) {
+      var stateSheet = getOrCreateStateSheet(ss);
+      stateSheet.getRange(2, 1).setValue(
+        JSON.stringify(payload.sharedState)
+      );
+      stateSheet.getRange(2, 2).setValue(
+        new Date().toLocaleString("th-TH")
+      );
+    }
+
+    return buildResponse({ status: "ok", rows: logSheet.getLastRow() });
   } catch (err) {
     return buildResponse({ status: "error", message: err.toString() });
   }
+}
+
+function getOrCreateLogSheet(ss) {
+  var sheet = ss.getSheetByName(LOG_SHEET);
+  if (!sheet) {
+    sheet = ss.insertSheet(LOG_SHEET);
+    var h = sheet.getRange(1,1,1,13);
+    h.setValues([["Timestamp","Action","Machine","Tank (From/ID)",
+      "Tank To","Tank Type","Operator","Filter Type",
+      "Qty Used","Stock Before","Stock After","Receive Date","Note"]]);
+    h.setBackground("#1a1d27");
+    h.setFontColor("#3b82f6");
+    h.setFontWeight("bold");
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
+function getOrCreateStateSheet(ss) {
+  var sheet = ss.getSheetByName(STATE_SHEET);
+  if (!sheet) {
+    sheet = ss.insertSheet(STATE_SHEET);
+    sheet.getRange(1,1).setValue("state_json");
+    sheet.getRange(1,2).setValue("last_updated");
+    sheet.getRange(1,1,1,2).setFontWeight("bold")
+         .setBackground("#1a1d27").setFontColor("#10b981");
+  }
+  return sheet;
 }
 
 function buildResponse(obj) {
@@ -761,7 +801,7 @@ const ADMIN_PIN = '1234'; // เปลี่ยนรหัสได้ที่
 // DEFAULT SCRIPT URL — ใส่ URL ของคุณที่นี่ครั้งเดียว
 // ทุกอุปกรณ์ที่เปิดไฟล์นี้จะเชื่อมต่อ URL นี้อัตโนมัติ
 // ============================================================
-const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYWDmpZrTD7eRmgcSYe68O0d68mgfKdvbuaBiHdDP-2hRaGKtcs7sh6EgeUzno060/exec'; // ← วาง Google Apps Script URL ที่นี่
+const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOE_jcwkdYca4-Erkhoev8YZNuNWySne25VdkSqjDe1H83ojnyVov2PJ3cpfHzhaJ2/exec'; // ← วาง Google Apps Script URL ที่นี่
 
 // ============================================================
 // STATE
@@ -1204,18 +1244,54 @@ function saveAdminStock() {
   STATE.spare[spareKey].qty = adminQtyEdit;
   STATE.spare[spareKey].threshold = th;
   save();
+  // push state ขึ้น Sheets
+  sendToSheets({ ts: now(), action: 'SAVE_STATE', machine:'—', tankId:'—',
+    tankFrom:'—', tankTo:'—', tankType:'—', operator:'admin',
+    filterType:'—', qty:0, note:'Admin updated stock' });
   showToast('✅ บันทึก Stock สำเร็จ', 'success');
   renderDashboard();
   renderSparePage();
 }
 
 // ============================================================
-// GOOGLE SHEETS
+// GOOGLE SHEETS — Bidirectional Sync
 // ============================================================
+
+// สร้าง sharedState snapshot เพื่อส่งขึ้น Sheets
+function buildSharedState() {
+  return {
+    tanks:     STATE.tanks,
+    spare:     STATE.spare,
+    operators: STATE.operators,
+    log:       STATE.log.slice(0, 200) // เก็บแค่ 200 รายการล่าสุด
+  };
+}
+
+// ดึง state จาก Sheets มาอัปเดตแอป
+async function pullFromSheets() {
+  const url = STATE.config.scriptUrl;
+  if (!url) return false;
+  try {
+    const resp = await fetch(url + '?t=' + Date.now(), { method: 'GET' });
+    const data = await resp.json();
+    if (data.status === 'ok' && data.state) {
+      const s = data.state;
+      if (s.tanks)     Object.assign(STATE.tanks, s.tanks);
+      if (s.spare)     Object.assign(STATE.spare, s.spare);
+      if (s.operators) STATE.operators = s.operators;
+      if (s.log)       STATE.log = s.log;
+      save();
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
 async function sendToSheets(entry) {
   const url = STATE.config.scriptUrl;
   if (!url) return;
   const payload = buildPayload(entry);
+  payload.sharedState = buildSharedState(); // แนบ state ไปด้วย
   try {
     await fetch(url, {
       method: 'POST',
@@ -1269,6 +1345,7 @@ async function retryPending() {
   if (!url || !STATE.pendingQueue.length) return;
   const queue = [...STATE.pendingQueue];
   for (const payload of queue) {
+    payload.sharedState = buildSharedState();
     try {
       await fetch(url, {
         method: 'POST',
@@ -1291,9 +1368,20 @@ async function syncNow() {
   btn.classList.add('syncing');
   btn.textContent = '⟳ Syncing...';
   if (STATE.config.scriptUrl) {
+    // 1) ดึง state ล่าสุดจาก Sheets ก่อน
+    const pulled = await pullFromSheets();
+    // 2) ส่ง pending ที่ค้างอยู่
     await retryPending();
+    if (pulled) {
+      renderDashboard();
+      renderOperatorList();
+      // re-render page ที่เปิดอยู่
+      const active = document.querySelector('.page.active');
+      if (active && active.id === 'page-spare') renderSparePage();
+      if (active && active.id === 'page-log')   renderLog();
+    }
     updateSyncUI(true, `Sync เสร็จ: ${now()}`);
-    showToast('✅ Sync เสร็จแล้ว', 'success');
+    showToast(pulled ? '✅ ดึงข้อมูลล่าสุดจาก Sheets แล้ว' : '✅ Sync เสร็จ', 'success');
   } else {
     showToast('⚠ ยังไม่ได้ตั้งค่า Script URL', '');
   }
@@ -1547,12 +1635,19 @@ function addOperator() {
     STATE.operators.push(v); save();
     document.getElementById('cfg-operator-add').value = '';
     renderOperatorDisplay(); renderOperatorList();
+    sendToSheets({ ts: now(), action: 'SAVE_STATE', machine:'—', tankId:'—',
+      tankFrom:'—', tankTo:'—', tankType:'—', operator:'admin',
+      filterType:'—', qty:0, note:'Operator added: ' + v });
     showToast(`✅ เพิ่ม "${v}" แล้ว`, 'success');
   }
 }
 function removeOperator(name) {
   STATE.operators = STATE.operators.filter(o => o !== name);
-  save(); renderOperatorDisplay(); renderOperatorList();
+  save();
+  renderOperatorDisplay(); renderOperatorList();
+  sendToSheets({ ts: now(), action: 'SAVE_STATE', machine:'—', tankId:'—',
+    tankFrom:'—', tankTo:'—', tankType:'—', operator:'admin',
+    filterType:'—', qty:0, note:'Operator removed: ' + name });
 }
 function renderOperatorDisplay() {
   document.getElementById('operator-list-display').innerHTML =
@@ -1579,13 +1674,6 @@ function showToast(msg, type='') {
 load();
 
 // ── Auto-apply DEFAULT_SCRIPT_URL ──────────────────────────
-// ถ้ากำหนด DEFAULT_SCRIPT_URL ไว้ใน code → ใช้เป็นค่า default เสมอ
-// อุปกรณ์ใหม่ที่ยังไม่เคย save จะได้ URL นี้ทันที
-if (DEFAULT_SCRIPT_URL && !STATE.config.scriptUrl) {
-  STATE.config.scriptUrl = DEFAULT_SCRIPT_URL;
-  save();
-}
-// ถ้า DEFAULT_SCRIPT_URL เปลี่ยน (อัปเดต code) → override localStorage ด้วย
 if (DEFAULT_SCRIPT_URL && STATE.config.scriptUrl !== DEFAULT_SCRIPT_URL) {
   STATE.config.scriptUrl = DEFAULT_SCRIPT_URL;
   save();
@@ -1598,13 +1686,36 @@ updateQueueBadge();
 
 if (STATE.config.scriptUrl) {
   updateSyncUI(true, DEFAULT_SCRIPT_URL
-    ? '✅ URL ตั้งค่าอัตโนมัติจาก code — พร้อมใช้งาน'
-    : 'URL บันทึกไว้แล้ว — กด Sync เพื่ออัปเดต');
+    ? '✅ URL ตั้งค่าอัตโนมัติ — กำลังดึงข้อมูล...'
+    : 'URL บันทึกไว้แล้ว — กำลังดึงข้อมูล...');
+
+  // ดึง state ล่าสุดจาก Sheets ทันทีที่เปิดแอป
+  pullFromSheets().then(pulled => {
+    if (pulled) {
+      renderDashboard();
+      renderOperatorList();
+      updateSyncUI(true, `ข้อมูลล่าสุดจาก Sheets: ${now()}`);
+    }
+  });
 }
 
 if (STATE.config.scriptUrl && STATE.pendingQueue.length > 0) {
-  setTimeout(retryPending, 2000);
+  setTimeout(retryPending, 3000);
 }
+
+// Auto-sync ทุก 60 วินาที (ดึงข้อมูลใหม่จาก Sheets อัตโนมัติ)
+setInterval(async () => {
+  if (!STATE.config.scriptUrl) return;
+  const pulled = await pullFromSheets();
+  if (pulled) {
+    renderDashboard();
+    renderOperatorList();
+    const active = document.querySelector('.page.active');
+    if (active && active.id === 'page-spare') renderSparePage();
+    if (active && active.id === 'page-log')   renderLog();
+    updateSyncUI(true, `Auto-sync: ${now()}`);
+  }
+}, 60000);
 </script>
 </body>
 </html>
