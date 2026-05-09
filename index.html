@@ -564,6 +564,10 @@
 
   <div class="section-label">การตั้งค่า Google Sheets</div>
   <div class="action-card">
+    <div id="default-url-banner" style="display:none;background:var(--green-bg);border:1px solid var(--green-border);border-radius:9px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--green);line-height:1.6;">
+      ✅ <b>URL ตั้งค่าอัตโนมัติจาก code</b><br>
+      <span style="color:var(--text3);font-size:11px;">ทุกอุปกรณ์ที่เปิดไฟล์นี้จะเชื่อมต่อ URL เดียวกันโดยอัตโนมัติ</span>
+    </div>
     <div class="form-group">
       <label class="form-label">🔗 Google Apps Script Web App URL</label>
       <input class="url-input" type="url" id="cfg-script-url" placeholder="https://script.google.com/macros/s/.../exec">
@@ -752,6 +756,12 @@ function buildResponse(obj) {
 // ADMIN PASSWORD
 // ============================================================
 const ADMIN_PIN = '1234'; // เปลี่ยนรหัสได้ที่นี่
+
+// ============================================================
+// DEFAULT SCRIPT URL — ใส่ URL ของคุณที่นี่ครั้งเดียว
+// ทุกอุปกรณ์ที่เปิดไฟล์นี้จะเชื่อมต่อ URL นี้อัตโนมัติ
+// ============================================================
+const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYWDmpZrTD7eRmgcSYe68O0d68mgfKdvbuaBiHdDP-2hRaGKtcs7sh6EgeUzno060/exec'; // ← วาง Google Apps Script URL ที่นี่
 
 // ============================================================
 // STATE
@@ -1510,11 +1520,18 @@ function clearLog() {
 // ============================================================
 function renderConfig() {
   document.getElementById('cfg-script-url').value = STATE.config.scriptUrl || '';
+  // Show auto-URL banner if DEFAULT_SCRIPT_URL is set
+  const banner = document.getElementById('default-url-banner');
+  if (banner) banner.style.display = DEFAULT_SCRIPT_URL ? 'block' : 'none';
   // Always show locked panel when entering config page
   document.getElementById('admin-locked-panel').style.display = 'block';
   document.getElementById('admin-unlocked-panel').style.display = 'none';
   updateQueueBadge();
-  if (STATE.config.scriptUrl) updateSyncUI(true, 'มี URL ตั้งค่าแล้ว — กด ทดสอบ เพื่อยืนยัน');
+  if (STATE.config.scriptUrl) {
+    updateSyncUI(true, DEFAULT_SCRIPT_URL
+      ? '✅ URL ตั้งค่าอัตโนมัติจาก code'
+      : 'มี URL ตั้งค่าแล้ว — กด ทดสอบ เพื่อยืนยัน');
+  }
 }
 
 function saveConfig() {
@@ -1557,17 +1574,32 @@ function showToast(msg, type='') {
 }
 
 // ============================================================
-// INIT — auto-load scriptUrl from localStorage across devices
+// INIT
 // ============================================================
 load();
+
+// ── Auto-apply DEFAULT_SCRIPT_URL ──────────────────────────
+// ถ้ากำหนด DEFAULT_SCRIPT_URL ไว้ใน code → ใช้เป็นค่า default เสมอ
+// อุปกรณ์ใหม่ที่ยังไม่เคย save จะได้ URL นี้ทันที
+if (DEFAULT_SCRIPT_URL && !STATE.config.scriptUrl) {
+  STATE.config.scriptUrl = DEFAULT_SCRIPT_URL;
+  save();
+}
+// ถ้า DEFAULT_SCRIPT_URL เปลี่ยน (อัปเดต code) → override localStorage ด้วย
+if (DEFAULT_SCRIPT_URL && STATE.config.scriptUrl !== DEFAULT_SCRIPT_URL) {
+  STATE.config.scriptUrl = DEFAULT_SCRIPT_URL;
+  save();
+}
+
 renderDashboard();
 renderOperatorList();
 receiveQtyEdit = 1;
 updateQueueBadge();
 
-// Auto-connect: ถ้ามี scriptUrl ใน localStorage แล้ว แสดง status ทันที
 if (STATE.config.scriptUrl) {
-  updateSyncUI(true, `URL บันทึกไว้แล้ว — กด Sync เพื่ออัปเดต`);
+  updateSyncUI(true, DEFAULT_SCRIPT_URL
+    ? '✅ URL ตั้งค่าอัตโนมัติจาก code — พร้อมใช้งาน'
+    : 'URL บันทึกไว้แล้ว — กด Sync เพื่ออัปเดต');
 }
 
 if (STATE.config.scriptUrl && STATE.pendingQueue.length > 0) {
