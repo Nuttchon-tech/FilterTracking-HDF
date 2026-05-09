@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Filter Tracker — Hydroforming</title>
 <style>
   :root {
@@ -80,44 +80,68 @@
 
   .machine-card {
     background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius); margin-bottom: 20px; overflow: hidden;
+    border-radius: var(--radius); margin-bottom: 24px; overflow: hidden;
   }
   .machine-header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 13px 14px; border-bottom: 1px solid var(--border);
+    padding: 14px 16px; border-bottom: 1px solid var(--border);
   }
-  .machine-name { font-size: 17px; font-weight: 700; }
-  .machine-meta { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .machine-name { font-size: 18px; font-weight: 700; }
+  .machine-meta { font-size: 12px; color: var(--text2); margin-top: 3px; }
   .machine-badge {
     font-size: 10px; padding: 3px 8px; border-radius: 6px;
     background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border);
   }
 
-  .tank-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-  .tank-col { display: flex; flex-direction: column; }
-  .tank-col.clean-col { border-right: 2px solid rgba(59,130,246,0.25); }
-  .tank-col-header {
-    text-align: center; font-size: 10px; font-weight: 700;
-    letter-spacing: 0.1em; padding: 8px 4px 7px; border-bottom: 1px solid var(--border);
+  /* ── Tank Layout: single row, gap between clean and pre ── */
+  .tank-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px;
   }
-  .tank-col-header.clean-header { background: rgba(59,130,246,0.10); color: var(--blue); border-bottom: 1px solid rgba(59,130,246,0.2); }
-  .tank-col-header.pre-header { background: rgba(245,158,11,0.10); color: var(--yellow); border-bottom: 1px solid rgba(245,158,11,0.2); }
-  .tank-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; flex: 1; }
+  .tank-col { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+  .tank-col-header {
+    text-align: center; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; padding: 8px 4px 7px;
+    border-radius: 8px 8px 0 0;
+    border: 1px solid transparent; border-bottom: none;
+  }
+  .tank-col-header.clean-header { background: rgba(59,130,246,0.18); color: var(--blue); border-color: rgba(59,130,246,0.3); }
+  .tank-col-header.pre-header { background: rgba(245,158,11,0.18); color: var(--yellow); border-color: rgba(245,158,11,0.3); }
+
+  /* Each tank row = horizontal, tanks side by side within column */
+  .tank-row {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+  }
+  .tank-col.clean-col .tank-row { border-color: rgba(59,130,246,0.25); }
+  .tank-col.pre-col   .tank-row { border-color: rgba(245,158,11,0.25); }
 
   .tank-item {
-    background: var(--bg2); padding: 14px 10px 12px;
-    transition: background 0.15s; position: relative;
-    border-right: 1px solid var(--border); user-select: none; -webkit-user-select: none;
+    background: var(--bg2);
+    padding: 16px 8px 14px;
+    position: relative;
+    user-select: none; -webkit-user-select: none;
+    flex: 1;
+    min-height: 110px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border-right: 1px solid var(--border);
   }
   .tank-item:last-child { border-right: none; }
-  .tank-id { font-size: 12px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+
+  .tank-id { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text); text-align: center; }
   .tank-status-pill {
-    display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px;
-    border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.02em;
-    border: 1px solid transparent; width: 100%; justify-content: center; margin-bottom: 6px;
+    display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px;
+    border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+    border: 1px solid transparent; width: 100%; justify-content: center; margin-bottom: 8px;
   }
-  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-  .tank-date { font-size: 9px; color: var(--text3); line-height: 1.4; text-align: center; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .tank-date { font-size: 10px; color: var(--text3); line-height: 1.5; text-align: center; }
 
   .status-active .tank-status-pill { background: var(--yellow-bg); color: var(--yellow); border-color: var(--yellow-border); }
   .status-active .dot { background: var(--yellow); box-shadow: 0 0 5px rgba(245,158,11,0.6); }
@@ -134,23 +158,23 @@
 
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-  /* ── Swap Button Row (under each tank group) ── */
+  /* ── Swap Button Row ── */
   .swap-btn-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 0 10px 10px;
   }
-  /* wrapper cell — ครอบพื้นที่ครึ่งหนึ่ง แต่ไม่ clickable ในส่วน padding */
   .swap-cell {
+    flex: 1;
     display: flex; align-items: center; justify-content: center;
-    padding: 8px 6px;
+    padding: 6px 0;
   }
-  .swap-cell.clean-cell { border-right: 2px solid rgba(59,130,246,0.25); }
+  .swap-cell.clean-cell { }
 
-  /* ตัวปุ่มจริง — เล็ก กระชับ กดได้เฉพาะตรงนี้ */
   .swap-group-btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 5px;
-    padding: 6px 14px;
+    padding: 7px 14px;
     font-size: 11px; font-weight: 600;
     border-radius: 20px;
     border: 1px solid transparent;
@@ -164,7 +188,6 @@
     background: rgba(16,185,129,0.14);
     color: var(--green);
     border-color: rgba(16,185,129,0.45);
-    box-shadow: 0 0 0 0 rgba(16,185,129,0.4);
   }
   .swap-group-btn.can-swap:active {
     background: rgba(16,185,129,0.26);
@@ -191,20 +214,11 @@
     100% { box-shadow: 0 0 0 0   rgba(16,185,129,0); }
   }
 
-  .alert-banner {
-    background: var(--red-bg); border: 1px solid var(--red-border);
-    border-radius: var(--radius-sm); padding: 10px 12px;
-    margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
-  }
-  .alert-banner .alert-icon { font-size: 16px; flex-shrink: 0; }
-  .alert-banner .alert-text { font-size: 12px; color: var(--red); font-weight: 500; }
-
-  .spare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .spare-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
+  /* ── Spare ── */
+  .spare-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
   .spare-label { font-size: 11px; color: var(--text2); margin-bottom: 2px; }
-  .spare-type { font-size: 12px; font-weight: 500; margin-bottom: 10px; }
-  .spare-count { font-size: 28px; font-weight: 700; line-height: 1; }
-  .spare-unit { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .spare-count { font-size: 32px; font-weight: 700; line-height: 1; }
+  .spare-unit { font-size: 12px; color: var(--text2); margin-top: 3px; }
   .spare-low .spare-count { color: var(--red); }
   .spare-ok .spare-count { color: var(--green); }
   .spare-warn .spare-count { color: var(--yellow); }
@@ -258,10 +272,17 @@
   .btn-purple { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border) !important; margin-bottom: 10px; }
   .btn-purple:active { opacity: 0.8; transform: scale(0.98); }
   .btn-danger:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+  .btn-green { display: block; width: 100%; padding: 15px; border-radius: var(--radius);
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    touch-action: manipulation; user-select: none; text-align: center; line-height: 1.2;
+    background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border) !important;
+    transition: opacity 0.15s, transform 0.1s; }
+  .btn-green:not(:disabled):active { opacity: 0.7; transform: scale(0.98); }
+  .btn-green:disabled { opacity: 0.35; cursor: not-allowed; }
 
   .tank-status-badge {
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 700;
+    padding: 9px 14px; border-radius: 10px; font-size: 13px; font-weight: 700;
     margin-bottom: 4px; width: 100%; justify-content: center;
   }
   .tsb-active  { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
@@ -272,7 +293,6 @@
   .tsb-dirty .tsb-dot { animation: blink 1s infinite; }
   .tank-status-extra { font-size: 11px; color: var(--text3); margin-top: 6px; text-align: center; }
 
-  #change-filter-wrapper { position: relative; z-index: 2; }
   #change-filter-hint {
     margin-top: 6px; background: var(--bg3); border: 1px solid var(--border2);
     border-radius: 9px; padding: 10px 12px; font-size: 12px; color: var(--text2); text-align: center;
@@ -306,14 +326,6 @@
     color: var(--text2); white-space: nowrap; transition: all 0.15s; touch-action: manipulation;
   }
   .log-filter-btn.active { background: var(--blue-bg); color: var(--blue); border-color: var(--blue-border); }
-
-  .config-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px; background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); margin-bottom: 8px;
-  }
-  .config-label { font-size: 14px; }
-  .config-meta { font-size: 11px; color: var(--text2); margin-top: 2px; }
 
   .sync-card {
     background: var(--bg2); border: 1px solid var(--border);
@@ -383,9 +395,7 @@
   .receive-summary-icon { font-size: 22px; }
   .receive-summary-text { font-size: 12px; color: var(--purple); font-weight: 500; line-height: 1.5; }
 
-  .step-row {
-    display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start;
-  }
+  .step-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
   .step-num {
     width: 24px; height: 24px; border-radius: 50%; background: var(--blue);
     color: white; font-size: 12px; font-weight: 700;
@@ -394,6 +404,15 @@
   .step-text { font-size: 12px; color: var(--text2); line-height: 1.6; padding-top: 2px; }
   .step-text b { color: var(--text); }
   .step-text code { background: var(--bg3); padding: 1px 5px; border-radius: 4px; font-size: 11px; color: var(--green); }
+
+  /* Password modal */
+  .pin-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .pin-digit {
+    flex: 1; height: 52px; text-align: center; font-size: 22px; font-weight: 700;
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 9px; color: var(--text); caret-color: var(--blue);
+  }
+  .pin-digit:focus { outline: none; border-color: var(--blue); }
 
   @media (min-width: 500px) {
     .page { max-width: 480px; margin: 0 auto; }
@@ -413,15 +432,14 @@
 <div class="nav-tabs">
   <div class="nav-tab active" onclick="showPage('dashboard', this)"><span class="tab-icon">📊</span>Dashboard</div>
   <div class="nav-tab" onclick="showPage('action', this)"><span class="tab-icon">🔄</span>ดำเนินการ</div>
-  <div class="nav-tab" onclick="showPage('spare', this)"><span class="tab-icon">📦</span>Spare</div>
+  <div class="nav-tab" onclick="showPage('spare', this)"><span class="tab-icon">📦</span>Spare Part</div>
   <div class="nav-tab" onclick="showPage('log', this)"><span class="tab-icon">📋</span>Log</div>
   <div class="nav-tab" onclick="showPage('config', this)"><span class="tab-icon">⚙️</span>ตั้งค่า</div>
 </div>
 
 <!-- ===== DASHBOARD ===== -->
 <div class="page active" id="page-dashboard">
-  <div id="alert-container"></div>
-  <div class="section-label">Hydroforming #1</div>
+  <div class="section-label" style="margin-top:14px;">Hydroforming #1</div>
   <div class="machine-card">
     <div class="machine-header">
       <div>
@@ -444,7 +462,7 @@
     <div id="hf2-tanks"></div>
   </div>
   <div class="section-label">Spare Part คงเหลือ</div>
-  <div class="spare-grid" id="dash-spare"></div>
+  <div id="dash-spare"></div>
 </div>
 
 <!-- ===== ACTION PAGE ===== -->
@@ -475,38 +493,20 @@
       <datalist id="operator-list"></datalist>
     </div>
   </div>
-  <div class="section-label">เลือกการดำเนินการ</div>
-  <div style="position:relative;z-index:2;margin-bottom:10px;">
-    <button class="btn-switch" onclick="openModal('switch')">🔄 สลับถังใช้งาน (Switch)</button>
-  </div>
-  <div id="change-filter-wrapper">
-    <button class="btn-danger" id="btn-change-filter" onclick="openModal('change')">🔧 บันทึกการเปลี่ยน Filter</button>
+  <div class="section-label">บันทึกการดำเนินการ</div>
+  <div>
+    <button class="btn-green" id="btn-change-filter" onclick="openModal('change')">🔧 ทำการเปลี่ยน Filter</button>
     <div id="change-filter-hint" style="display:none;">
       🔒 สามารถเปลี่ยน Filter ได้เฉพาะถังที่มีสถานะ <b style="color:var(--red);">⚠ ต้องเปลี่ยน (DIRTY)</b> เท่านั้น
     </div>
   </div>
 </div>
 
-<!-- ===== SPARE PAGE ===== -->
+<!-- ===== SPARE PART PAGE ===== -->
 <div class="page" id="page-spare">
-  <div class="section-label">จำนวน Filter คงเหลือ</div>
+  <div class="section-label" style="margin-top:14px;">จำนวน Filter คงเหลือ</div>
   <div id="spare-cards"></div>
-  <div class="section-label">อัปเดตจำนวน Spare</div>
-  <div class="action-card">
-    <div class="form-group">
-      <label class="form-label">จำนวนคงเหลือ (ชิ้น)</label>
-      <div class="qty-row">
-        <button class="qty-btn" onclick="changeSpareQty(-1)">−</button>
-        <div class="qty-display" id="spare-qty-disp">0</div>
-        <button class="qty-btn" onclick="changeSpareQty(1)">+</button>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">แจ้งเตือนเมื่อเหลือน้อยกว่า (ชิ้น)</label>
-      <input class="form-input" type="number" id="spare-threshold" value="14" min="1">
-    </div>
-    <button class="btn-primary" onclick="saveSpare()">💾 บันทึก</button>
-  </div>
+
   <div class="section-label">รับ Spare Part เข้า Stock</div>
   <div class="action-card">
     <div class="receive-summary-card" id="last-receive-banner" style="display:none;"></div>
@@ -526,7 +526,7 @@
       <label class="form-label">ผู้รับ / หมายเหตุ</label>
       <input class="form-input" type="text" id="receive-note" placeholder="ชื่อผู้รับ / เลข PO / ยี่ห้อ ฯลฯ">
     </div>
-    <button class="btn-purple" onclick="receiveSpare()">📥 บันทึกรับ Spare เข้า Stock</button>
+    <button class="btn-purple" onclick="receiveSpare()">📥 บันทึกรับ Spare Part เข้า Stock</button>
   </div>
   <div class="section-label">ประวัติการรับ Spare Part</div>
   <div id="receive-history"></div>
@@ -549,7 +549,7 @@
 
 <!-- ===== CONFIG PAGE ===== -->
 <div class="page" id="page-config">
-  <div class="section-label">สถานะการเชื่อมต่อ</div>
+  <div class="section-label" style="margin-top:14px;">สถานะการเชื่อมต่อ</div>
   <div class="sync-card">
     <div class="sync-row">
       <div class="sync-dot" id="sync-dot"></div>
@@ -574,36 +574,101 @@
     <div id="cfg-status" style="margin-top:10px;font-size:12px;line-height:1.6;"></div>
   </div>
 
-  <div class="section-label">วิธีเชื่อมต่อ Google Sheets (ทีละขั้น)</div>
-  <div class="action-card">
-    <div class="step-row">
-      <div class="step-num">1</div>
-      <div class="step-text">เปิด <b>Google Sheet</b> ที่ต้องการบันทึกข้อมูล → เมนูบน <b>Extensions</b> → <b>Apps Script</b></div>
-    </div>
-    <div class="step-row">
-      <div class="step-num">2</div>
-      <div class="step-text">ลบ Code เดิมทั้งหมดออก แล้ว <b>Copy Code</b> ด้านล่างวางแทน แล้วกด <b>💾 Save</b> (Ctrl+S)</div>
-    </div>
-    <div class="step-row">
-      <div class="step-num">3</div>
-      <div class="step-text">กด <b>Deploy</b> → <b>New deployment</b> → ประเภท <b>Web App</b><br>
-        • Execute as: <code>Me</code><br>
-        • Who has access: <code>Anyone</code><br>
-        → กด <b>Deploy</b> → อนุญาต Permission → Copy URL
+  <!-- ── ADMIN ZONE ── -->
+  <div class="section-label">โซนผู้ดูแลระบบ</div>
+
+  <!-- Locked state (default) -->
+  <div id="admin-locked-panel">
+    <div class="action-card" style="border-color:rgba(139,92,246,0.3);background:rgba(139,92,246,0.05);">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+        <div style="font-size:28px;">🔒</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">ส่วนผู้ดูแลระบบ</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px;">ต้องใส่รหัสผ่านเพื่อเข้าถึง</div>
+        </div>
       </div>
-    </div>
-    <div class="step-row">
-      <div class="step-num">4</div>
-      <div class="step-text">นำ URL ที่ได้มาวางในช่อง <b>Script URL</b> ด้านบน → กด <b>บันทึก</b> → กด <b>ทดสอบส่งข้อมูล (POST)</b> เพื่อยืนยัน</div>
-    </div>
-    <div style="background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:9px;padding:10px 12px;margin-top:8px;font-size:12px;color:var(--yellow);">
-      ⚠️ <b>หากแก้ไข Code Apps Script</b> ให้ Deploy ใหม่ทุกครั้ง (New deployment) ไม่ใช่ Manage deployment
+      <div style="font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.7;">
+        รายการที่ล็อกอยู่:<br>
+        &nbsp;• แก้ไข Stock Spare Part<br>
+        &nbsp;• จัดการชื่อผู้ปฏิบัติงาน<br>
+        &nbsp;• วิธีเชื่อมต่อ Google Sheets<br>
+        &nbsp;• Apps Script Code
+      </div>
+      <button class="btn-purple" style="margin-bottom:0;" onclick="openAdminLoginPanel()">🔑 เข้าสู่ระบบผู้ดูแล</button>
     </div>
   </div>
 
-  <div class="section-label">Apps Script Code (Copy ทั้งหมด)</div>
-  <div class="action-card">
-    <div class="code-block" id="apps-script-code">// ============================================================
+  <!-- Unlocked state (hidden by default) -->
+  <div id="admin-unlocked-panel" style="display:none;">
+
+    <!-- Admin badge -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:20px;padding:6px 14px;">
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(16,185,129,0.6);"></div>
+        <span style="font-size:12px;font-weight:600;color:var(--green);">ผู้ดูแลระบบ — เข้าสู่ระบบแล้ว</span>
+      </div>
+      <button onclick="lockAdminPanel()" style="font-size:11px;color:var(--text3);background:none;border:none;cursor:pointer;padding:4px 8px;touch-action:manipulation;">🔒 ออก</button>
+    </div>
+
+    <!-- Stock Spare Part -->
+    <div class="section-label" style="margin-top:4px;">แก้ไข Stock Spare Part</div>
+    <div class="action-card">
+      <div class="form-group">
+        <label class="form-label">จำนวนคงเหลือ (ชิ้น)</label>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="adminChangeQty(-1)">−</button>
+          <div class="qty-display" id="admin-qty-disp">0</div>
+          <button class="qty-btn" onclick="adminChangeQty(1)">+</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">แจ้งเตือนเมื่อเหลือน้อยกว่า (ชิ้น)</label>
+        <input class="form-input" type="number" id="admin-threshold" value="14" min="1">
+      </div>
+      <button class="btn-primary" onclick="saveAdminStock()">💾 บันทึก Stock</button>
+    </div>
+
+    <!-- Operator Management -->
+    <div class="section-label">ชื่อผู้ปฏิบัติงาน</div>
+    <div class="action-card">
+      <div class="form-group">
+        <label class="form-label">เพิ่มชื่อ (กด Enter)</label>
+        <input class="form-input" type="text" id="cfg-operator-add" placeholder="ชื่อ-นามสกุล" onkeydown="if(event.key==='Enter')addOperator()">
+      </div>
+      <button class="btn-primary" onclick="addOperator()">+ เพิ่มชื่อ</button>
+      <div id="operator-list-display" style="margin-top:12px;"></div>
+    </div>
+
+    <!-- How to connect -->
+    <div class="section-label">วิธีเชื่อมต่อ Google Sheets</div>
+    <div class="action-card">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-text">เปิด <b>Google Sheet</b> → เมนู <b>Extensions</b> → <b>Apps Script</b></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-text">ลบ Code เดิมออก แล้ว <b>Copy Code</b> ด้านล่างวางแทน → กด <b>💾 Save</b></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-text">กด <b>Deploy → New deployment</b> → ประเภท <b>Web App</b><br>
+          • Execute as: <code>Me</code> &nbsp;•&nbsp; Who has access: <code>Anyone</code>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-text">Copy URL → วางในช่อง <b>Script URL</b> ด้านบน → กด <b>บันทึก</b></div>
+      </div>
+      <div style="background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:9px;padding:10px 12px;margin-top:8px;font-size:12px;color:var(--yellow);">
+        ⚠️ หากแก้ไข Code Apps Script ให้ Deploy ใหม่ทุกครั้ง (New deployment)
+      </div>
+    </div>
+
+    <!-- Apps Script Code -->
+    <div class="section-label">Apps Script Code</div>
+    <div class="action-card">
+      <div class="code-block" id="apps-script-code">// ============================================================
 // Filter Tracker — Google Apps Script v2
 // วางทั้งหมดนี้ใน Apps Script แล้ว Deploy เป็น Web App
 // Execute as: Me | Who has access: Anyone
@@ -664,18 +729,10 @@ function buildResponse(obj) {
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
 }</div>
-    <button class="btn-secondary" onclick="copyScriptCode()" style="margin-top:10px;">📋 Copy Code ทั้งหมด</button>
-  </div>
-
-  <div class="section-label">ชื่อผู้ปฏิบัติงาน (บันทึกไว้)</div>
-  <div class="action-card">
-    <div class="form-group">
-      <label class="form-label">เพิ่มชื่อ (กด Enter)</label>
-      <input class="form-input" type="text" id="cfg-operator-add" placeholder="ชื่อ-นามสกุล" onkeydown="if(event.key==='Enter')addOperator()">
+      <button class="btn-secondary" onclick="copyScriptCode()" style="margin-top:10px;">📋 Copy Code ทั้งหมด</button>
     </div>
-    <button class="btn-primary" onclick="addOperator()">+ เพิ่มชื่อ</button>
-    <div id="operator-list-display" style="margin-top:12px;"></div>
-  </div>
+
+  </div><!-- end admin-unlocked-panel -->
 </div>
 
 <!-- Modal -->
@@ -691,6 +748,11 @@ function buildResponse(obj) {
 <div class="toast" id="toast"></div>
 
 <script>
+// ============================================================
+// ADMIN PASSWORD
+// ============================================================
+const ADMIN_PIN = '1234'; // เปลี่ยนรหัสได้ที่นี่
+
 // ============================================================
 // STATE
 // ============================================================
@@ -772,9 +834,6 @@ function getStatusLabel(status) {
   return { text: 'ไม่ได้ใช้', cls: 'status-idle' };
 }
 
-// ============================================================
-// CHECK: มีถัง READY ให้สลับหรือไม่ (เฉพาะ type เดียวกัน)
-// ============================================================
 function hasReadyTankOfType(machineId, type) {
   const tanks = STATE.tanks[machineId];
   return Object.values(tanks).some(t => t.type === type && t.status === 'ready');
@@ -789,7 +848,6 @@ function renderTankGrid(machineId, containerId) {
   const cleanTanks = Object.entries(tanks).filter(([,t]) => t.type === 'clean');
   const preTanks   = Object.entries(tanks).filter(([,t]) => t.type === 'pre');
 
-  // ตรวจสอบว่าสลับได้หรือไม่
   const canSwapClean = hasReadyTankOfType(machineId, 'clean');
   const canSwapPre   = hasReadyTankOfType(machineId, 'pre');
 
@@ -803,20 +861,18 @@ function renderTankGrid(machineId, containerId) {
     </div>`;
   }
 
-  // ปุ่มสลับถัง Clean
   const cleanSwapClass = canSwapClean ? 'can-swap' : 'no-swap';
   const cleanSwapContent = canSwapClean
-    ? `<span class="swap-pulse"></span> สลับ Clean Tank`
-    : `🔒 สลับ Clean Tank`;
+    ? `<span class="swap-pulse"></span> สลับ Clean`
+    : `🔒 สลับ Clean`;
   const cleanSwapClick = canSwapClean
     ? `openGroupSwapModal('${machineId}', 'clean')`
     : `showToast('❌ ไม่มีถัง Clean Tank ที่พร้อมสลับ', 'error')`;
 
-  // ปุ่มสลับถัง Pre
   const preSwapClass = canSwapPre ? 'can-swap' : 'no-swap';
   const preSwapContent = canSwapPre
-    ? `<span class="swap-pulse"></span> สลับ Pre Tank`
-    : `🔒 สลับ Pre Tank`;
+    ? `<span class="swap-pulse"></span> สลับ Pre`
+    : `🔒 สลับ Pre`;
   const preSwapClick = canSwapPre
     ? `openGroupSwapModal('${machineId}', 'pre')`
     : `showToast('❌ ไม่มีถัง Pre Tank ที่พร้อมสลับ', 'error')`;
@@ -847,18 +903,6 @@ function renderTankGrid(machineId, containerId) {
 }
 
 function renderDashboard() {
-  const alerts = [];
-  Object.entries(STATE.tanks).forEach(([m, tanks]) => {
-    Object.entries(tanks).forEach(([id, t]) => {
-      if (t.status === 'dirty') alerts.push(`${m} — ${id} รอเปลี่ยน Filter!`);
-    });
-  });
-  const sp = STATE.spare['Filter (รวมทุกประเภท)'];
-  if (sp && sp.qty <= sp.threshold) alerts.push(`Filter Spare คงเหลือ ${sp.qty} ชิ้น — ต่ำกว่า ${sp.threshold} ชิ้น กรุณาสั่งซื้อ!`);
-
-  document.getElementById('alert-container').innerHTML =
-    alerts.map(a => `<div class="alert-banner"><div class="alert-icon">🚨</div><div class="alert-text">${a}</div></div>`).join('');
-
   ['HDF-01','HDF-02'].forEach(m => {
     const idx = m === 'HDF-01' ? 1 : 2;
     renderTankGrid(m, `hf${idx}-tanks`);
@@ -879,33 +923,26 @@ function renderDashboard() {
   const sp2 = STATE.spare['Filter (รวมทุกประเภท)'];
   if (sp2) {
     const cls = sp2.qty <= sp2.threshold ? 'spare-low' : sp2.qty <= sp2.threshold*1.5 ? 'spare-warn' : 'spare-ok';
-    ds.innerHTML = `<div class="spare-card ${cls}" style="grid-column:1/-1;">
-      <div class="spare-label">Filter Spare คงเหลือ (รวมทุกประเภท)</div>
+    ds.innerHTML = `<div class="spare-card ${cls}">
+      <div class="spare-label">Filter Spare Part คงเหลือ (รวมทุกประเภท)</div>
       <div class="spare-count">${sp2.qty}</div>
       <div class="spare-unit">ชิ้น ${sp2.qty <= sp2.threshold ? '⚠️ ต่ำกว่า ' + sp2.threshold + ' ชิ้น!' : '✓ พอเพียง'}</div>
     </div>`;
   }
 }
 
-function quickAction(machine, tankId) { openQuickSwitchModal(machine, tankId); }
-
 // ============================================================
-// GROUP SWAP MODAL (จากปุ่มสลับถังใต้ grid)
+// GROUP SWAP MODAL
 // ============================================================
 function openGroupSwapModal(machineId, type) {
   const tanks = STATE.tanks[machineId];
   const typeLabel = type === 'clean' ? 'Clean Tank' : 'Pre Tank';
   const typeIcon  = type === 'clean' ? '🔵' : '🟡';
 
-  // หา active tank ของ type นั้น
   const activeTanks = Object.entries(tanks).filter(([,t]) => t.type === type && t.status === 'active');
-  // หา ready tank ของ type นั้น
   const readyTanks  = Object.entries(tanks).filter(([,t]) => t.type === type && t.status === 'ready');
 
-  if (!readyTanks.length) {
-    showToast(`❌ ไม่มีถัง ${typeLabel} ที่พร้อมสลับ`, 'error');
-    return;
-  }
+  if (!readyTanks.length) { showToast(`❌ ไม่มีถัง ${typeLabel} ที่พร้อมสลับ`, 'error'); return; }
 
   const fromOptions = activeTanks.length
     ? activeTanks.map(([id]) => `<option value="${id}">${id} (ACTIVE)</option>`).join('')
@@ -1035,32 +1072,10 @@ function openModal(action) {
   const t = document.getElementById('act-tank').value;
   const tank = STATE.tanks[m]?.[t];
 
-  if (action === 'switch') {
-    const sameType = Object.entries(STATE.tanks[m]).filter(([id,tk]) => tk.type===tank.type && id!==t && tk.status==='ready');
-    if (!sameType.length) { showToast('❌ ไม่มีถัง READY ให้สลับ', 'error'); return; }
-    document.getElementById('modal-title').textContent = '🔄 สลับถังใช้งาน';
-    document.getElementById('modal-body').innerHTML = `
-      <div class="modal-info">
-        <b>${m}</b> — สลับจาก <b style="color:var(--yellow);">${t}</b><br>
-        ถัง ${t} จะเปลี่ยนเป็น <span style="color:var(--red);">🔴 DIRTY</span><br>
-        ถังปลายทางจะเปลี่ยนเป็น <span style="color:var(--yellow);">🟡 ACTIVE</span>
-      </div>
-      <div class="form-group">
-        <label class="form-label">เลือกถังปลายทาง</label>
-        <select class="form-select" id="modal-target">
-          ${sameType.map(([id]) => `<option value="${id}">${id}</option>`).join('')}
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">หมายเหตุ</label>
-        <textarea class="form-textarea" id="modal-note" placeholder="(ไม่บังคับ)"></textarea>
-      </div>
-      <button class="btn-switch" onclick="doSwitch()">✅ ยืนยันสลับ</button>
-      <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>`;
-  } else {
+  if (action === 'change') {
     const spQty = STATE.spare['Filter (รวมทุกประเภท)']?.qty ?? 0;
     const s = getStatusLabel(tank.status);
-    document.getElementById('modal-title').textContent = '🔧 บันทึกการเปลี่ยน Filter';
+    document.getElementById('modal-title').textContent = '🔧 ทำการเปลี่ยน Filter';
     document.getElementById('modal-body').innerHTML = `
       <div class="modal-info">
         เปลี่ยน Filter ถัง <b style="color:var(--text);">${t}</b><br>
@@ -1073,7 +1088,7 @@ function openModal(action) {
         <label class="form-label">หมายเหตุ</label>
         <textarea class="form-textarea" id="modal-note" placeholder="(ไม่บังคับ)"></textarea>
       </div>
-      <button class="btn-primary" onclick="doChangeFilter()">🔧 ยืนยันการเปลี่ยน Filter (7 ชิ้น)</button>
+      <button class="btn-green" onclick="doChangeFilter()">🔧 ยืนยันการเปลี่ยน Filter (7 ชิ้น)</button>
       <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>`;
   }
   document.getElementById('modal').classList.add('open');
@@ -1082,33 +1097,8 @@ function openModal(action) {
 function closeModal() { document.getElementById('modal').classList.remove('open'); }
 
 // ============================================================
-// ACTIONS (Action Page)
+// ACTIONS
 // ============================================================
-function doSwitch() {
-  const m = document.getElementById('act-machine').value;
-  const fromId = document.getElementById('act-tank').value;
-  const toId = document.getElementById('modal-target').value;
-  const operator = document.getElementById('act-operator').value.trim() || 'ไม่ระบุ';
-  const note = document.getElementById('modal-note').value.trim();
-
-  STATE.tanks[m][fromId].status = 'dirty';
-  STATE.tanks[m][fromId].lastSwitched = now();
-  STATE.tanks[m][toId].status = 'active';
-
-  const entry = {
-    ts: now(), machine: m, tankFrom: fromId, tankTo: toId,
-    tankId: fromId, action: 'switch', operator, note,
-    filterType: '—', qty: 0, tankType: STATE.tanks[m][fromId].type
-  };
-  STATE.log.unshift(entry);
-  save();
-  sendToSheets(entry);
-  closeModal();
-  showToast(`✅ สลับ ${fromId} → ${toId} สำเร็จ`, 'success');
-  renderDashboard();
-  updateCurrentStatus();
-}
-
 function doChangeFilter() {
   const m = document.getElementById('act-machine').value;
   const tankId = document.getElementById('act-tank').value;
@@ -1136,6 +1126,77 @@ function doChangeFilter() {
   showToast('✅ บันทึกการเปลี่ยน Filter สำเร็จ', 'success');
   renderDashboard();
   updateCurrentStatus();
+}
+
+// ============================================================
+// ADMIN PANEL (Inline — Password Protected)
+// ============================================================
+let adminQtyEdit = 0;
+
+function openAdminLoginPanel() {
+  document.getElementById('modal-title').textContent = '🔑 เข้าสู่ระบบผู้ดูแล';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="modal-info">ใส่รหัสผ่านผู้ดูแลเพื่อเข้าถึงส่วนตั้งค่าขั้นสูง</div>
+    <div class="form-group">
+      <label class="form-label">รหัสผ่าน</label>
+      <input class="form-input" type="password" id="admin-pin" maxlength="8" placeholder="••••"
+        style="font-size:24px;letter-spacing:8px;text-align:center;"
+        onkeydown="if(event.key==='Enter')verifyAdminPin()">
+    </div>
+    <button class="btn-primary" onclick="verifyAdminPin()">✅ ยืนยัน</button>
+    <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>`;
+  document.getElementById('modal').classList.add('open');
+  setTimeout(() => { const p = document.getElementById('admin-pin'); if(p) p.focus(); }, 300);
+}
+
+function verifyAdminPin() {
+  const pin = document.getElementById('admin-pin').value;
+  if (pin === ADMIN_PIN) {
+    closeModal();
+    unlockAdminPanel();
+  } else {
+    showToast('❌ รหัสผ่านไม่ถูกต้อง', 'error');
+    document.getElementById('admin-pin').value = '';
+    document.getElementById('admin-pin').focus();
+  }
+}
+
+function unlockAdminPanel() {
+  document.getElementById('admin-locked-panel').style.display = 'none';
+  document.getElementById('admin-unlocked-panel').style.display = 'block';
+  // sync current stock values into inputs
+  const spareKey = 'Filter (รวมทุกประเภท)';
+  const v = STATE.spare[spareKey];
+  adminQtyEdit = v.qty;
+  const qd = document.getElementById('admin-qty-disp');
+  const th = document.getElementById('admin-threshold');
+  if (qd) qd.textContent = adminQtyEdit;
+  if (th) th.value = v.threshold;
+  renderOperatorDisplay();
+  showToast('✅ เข้าสู่ระบบผู้ดูแลสำเร็จ', 'success');
+}
+
+function lockAdminPanel() {
+  document.getElementById('admin-unlocked-panel').style.display = 'none';
+  document.getElementById('admin-locked-panel').style.display = 'block';
+  showToast('🔒 ออกจากระบบผู้ดูแลแล้ว', '');
+}
+
+function adminChangeQty(d) {
+  adminQtyEdit = Math.max(0, adminQtyEdit + d);
+  const el = document.getElementById('admin-qty-disp');
+  if (el) el.textContent = adminQtyEdit;
+}
+
+function saveAdminStock() {
+  const spareKey = 'Filter (รวมทุกประเภท)';
+  const th = parseInt(document.getElementById('admin-threshold').value) || 14;
+  STATE.spare[spareKey].qty = adminQtyEdit;
+  STATE.spare[spareKey].threshold = th;
+  save();
+  showToast('✅ บันทึก Stock สำเร็จ', 'success');
+  renderDashboard();
+  renderSparePage();
 }
 
 // ============================================================
@@ -1312,20 +1373,20 @@ function copyScriptCode() {
 }
 
 // ============================================================
-// SPARE PAGE
+// SPARE PART PAGE
 // ============================================================
+let receiveQtyEdit = 1;
+
 function renderSparePage() {
   const spareKey = 'Filter (รวมทุกประเภท)';
   const v = STATE.spare[spareKey];
   const cls = v.qty <= v.threshold ? 'spare-low' : v.qty <= v.threshold*1.5 ? 'spare-warn' : 'spare-ok';
-  document.getElementById('spare-cards').innerHTML = `<div class="spare-card ${cls}" style="margin-bottom:10px;">
-    <div class="spare-label">Filter Spare คงเหลือ (รวมทุกประเภท)</div>
+  document.getElementById('spare-cards').innerHTML = `<div class="spare-card ${cls}">
+    <div class="spare-label">Filter Spare Part คงเหลือ (รวมทุกประเภท)</div>
     <div class="spare-count">${v.qty}</div>
     <div class="spare-unit">ชิ้น — แจ้งเตือนเมื่อ ≤ ${v.threshold} ชิ้น ${v.qty <= v.threshold ? '⚠️' : '✓'}</div>
   </div>`;
-  spareQtyEdit = v.qty;
-  document.getElementById('spare-qty-disp').textContent = spareQtyEdit;
-  document.getElementById('spare-threshold').value = v.threshold;
+
   const todayISO = new Date().toISOString().slice(0, 10);
   if (!document.getElementById('receive-date').value)
     document.getElementById('receive-date').value = todayISO;
@@ -1333,23 +1394,9 @@ function renderSparePage() {
   updateLastReceiveBanner();
 }
 
-let spareQtyEdit = 0;
-let receiveQtyEdit = 1;
-
-function changeSpareQty(d) {
-  spareQtyEdit = Math.max(0, spareQtyEdit + d);
-  document.getElementById('spare-qty-disp').textContent = spareQtyEdit;
-}
 function changeReceiveQty(d) {
   receiveQtyEdit = Math.max(1, receiveQtyEdit + d);
   document.getElementById('receive-qty-disp').textContent = receiveQtyEdit;
-}
-
-function saveSpare() {
-  const spareKey = 'Filter (รวมทุกประเภท)';
-  STATE.spare[spareKey].qty = spareQtyEdit;
-  STATE.spare[spareKey].threshold = parseInt(document.getElementById('spare-threshold').value) || 14;
-  save(); renderSparePage(); showToast('✅ บันทึก Spare Part แล้ว', 'success');
 }
 
 function receiveSpare() {
@@ -1383,13 +1430,13 @@ function renderReceiveHistory() {
   const history = STATE.log.filter(e => e.action === 'receive_spare').slice(0, 10);
   const el = document.getElementById('receive-history');
   if (!history.length) {
-    el.innerHTML = '<div class="log-empty" style="padding:20px 0;font-size:12px;">ยังไม่มีประวัติการรับ Spare</div>';
+    el.innerHTML = '<div class="log-empty" style="padding:20px 0;font-size:12px;">ยังไม่มีประวัติการรับ Spare Part</div>';
     return;
   }
   el.innerHTML = history.map(e => `
-    <div class="log-item" style="border-left:3px solid var(--purple);">
+    <div class="log-item" style="border-left:3px solid var(--purple);border-radius:var(--radius-sm);">
       <div class="log-header">
-        <div class="log-action" style="color:var(--purple);">📥 รับ Spare เข้า Stock</div>
+        <div class="log-action" style="color:var(--purple);">📥 รับ Spare Part เข้า Stock</div>
         <div class="log-time">${e.ts}</div>
       </div>
       <div class="log-detail">
@@ -1445,9 +1492,9 @@ function renderLog() {
       </div>`;
     } else if (e.action === 'receive_spare') {
       return `<div class="log-item" style="border-left:3px solid var(--purple);border-radius:var(--radius-sm);">
-        <div class="log-header"><div class="log-action" style="color:var(--purple);">📥 รับ Spare เข้า Stock</div><div class="log-time">${e.ts}</div></div>
+        <div class="log-header"><div class="log-action" style="color:var(--purple);">📥 รับ Spare Part เข้า Stock</div><div class="log-time">${e.ts}</div></div>
         <div class="log-detail">วันที่รับ: <b>${e.receiveDate || '—'}</b><br>จำนวน: <b style="color:var(--purple);">+${e.qty} ชิ้น</b> &nbsp;|&nbsp; Stock: ${e.stockBefore} → ${e.stockAfter}${e.note && e.note !== '—' ? '<br>รายละเอียด: ' + e.note : ''}</div>
-        <div><span class="log-tag log-tag-receive">📦 Spare</span>${syncTag}</div>
+        <div><span class="log-tag log-tag-receive">📦 Spare Part</span>${syncTag}</div>
       </div>`;
     }
     return '';
@@ -1463,7 +1510,9 @@ function clearLog() {
 // ============================================================
 function renderConfig() {
   document.getElementById('cfg-script-url').value = STATE.config.scriptUrl || '';
-  renderOperatorDisplay();
+  // Always show locked panel when entering config page
+  document.getElementById('admin-locked-panel').style.display = 'block';
+  document.getElementById('admin-unlocked-panel').style.display = 'none';
   updateQueueBadge();
   if (STATE.config.scriptUrl) updateSyncUI(true, 'มี URL ตั้งค่าแล้ว — กด ทดสอบ เพื่อยืนยัน');
 }
@@ -1498,58 +1547,6 @@ function renderOperatorDisplay() {
 }
 
 // ============================================================
-// QUICK SWITCH MODAL (from Dashboard tank card tap)
-// ============================================================
-function openQuickSwitchModal(machine, tankId) {
-  const tank = STATE.tanks[machine][tankId];
-  const sameType = Object.entries(STATE.tanks[machine])
-    .filter(([id, t]) => t.type === tank.type && id !== tankId && t.status === 'ready');
-  if (!sameType.length) { showToast('❌ ไม่มีถัง READY ให้สลับ', 'error'); return; }
-
-  const s = getStatusLabel(tank.status);
-  document.getElementById('modal-title').textContent = '🔄 สลับถัง (Quick)';
-  document.getElementById('modal-body').innerHTML = `
-    <div class="modal-info">
-      <b>${machine}</b><br>
-      ถัง <b style="color:var(--yellow);">${tankId}</b> — สถานะ: <b>${s.text}</b><br>
-      ถัง ${tankId} จะเปลี่ยนเป็น <span style="color:var(--red);">🔴 DIRTY</span>
-    </div>
-    <div class="form-group">
-      <label class="form-label">เลือกถังปลายทาง</label>
-      <select class="form-select" id="quick-target">
-        ${sameType.map(([id]) => `<option value="${id}">${id}</option>`).join('')}
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">👤 ผู้ดำเนินการ</label>
-      <input class="form-input" id="quick-operator" placeholder="กรอกชื่อ" list="operator-list" autocomplete="off">
-    </div>
-    <button class="btn-switch" onclick="doQuickSwitch('${machine}','${tankId}')">✅ ยืนยันสลับ</button>
-    <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>`;
-  document.getElementById('modal').classList.add('open');
-}
-
-function doQuickSwitch(machine, fromId) {
-  const toId = document.getElementById('quick-target').value;
-  const operator = document.getElementById('quick-operator').value.trim() || 'ไม่ระบุ';
-  if (!toId) { showToast('❌ กรุณาเลือกถังปลายทาง', 'error'); return; }
-  STATE.tanks[machine][fromId].status = 'dirty';
-  STATE.tanks[machine][fromId].lastSwitched = now();
-  STATE.tanks[machine][toId].status = 'active';
-  const entry = {
-    ts: now(), machine, tankFrom: fromId, tankTo: toId, tankId: fromId,
-    action: 'switch', operator, note: '(Quick Switch)',
-    filterType: '—', qty: 0, tankType: STATE.tanks[machine][fromId].type
-  };
-  STATE.log.unshift(entry);
-  save();
-  sendToSheets(entry);
-  closeModal();
-  renderDashboard();
-  showToast(`✅ ${fromId} → ${toId}`, 'success');
-}
-
-// ============================================================
 // TOAST
 // ============================================================
 function showToast(msg, type='') {
@@ -1560,13 +1557,19 @@ function showToast(msg, type='') {
 }
 
 // ============================================================
-// INIT
+// INIT — auto-load scriptUrl from localStorage across devices
 // ============================================================
 load();
 renderDashboard();
 renderOperatorList();
 receiveQtyEdit = 1;
 updateQueueBadge();
+
+// Auto-connect: ถ้ามี scriptUrl ใน localStorage แล้ว แสดง status ทันที
+if (STATE.config.scriptUrl) {
+  updateSyncUI(true, `URL บันทึกไว้แล้ว — กด Sync เพื่ออัปเดต`);
+}
+
 if (STATE.config.scriptUrl && STATE.pendingQueue.length > 0) {
   setTimeout(retryPending, 2000);
 }
