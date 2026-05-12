@@ -787,25 +787,12 @@ function buildResponse(obj) {
     <div id="modal-body"></div>
   </div>
 </div>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ============================================================
 // ADMIN PASSWORD
-// ============================================================
 const ADMIN_PIN = '1234'; // เปลี่ยนรหัสได้ที่นี่
-
-// ============================================================
-// DEFAULT SCRIPT URL — ใส่ URL ของคุณที่นี่ครั้งเดียว
-// ทุกอุปกรณ์ที่เปิดไฟล์นี้จะเชื่อมต่อ URL นี้อัตโนมัติ
-// ============================================================
-const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOE_jcwkdYca4-Erkhoev8YZNuNWySne25VdkSqjDe1H83ojnyVov2PJ3cpfHzhaJ2/exec'; // ← วาง Google Apps Script URL ที่นี่
-
-// ============================================================
-// STATE
-// ============================================================
+const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOE_jcwkdYca4-Erkhoev8YZNuNWySne25VdkSqjDe1H83ojnyVov2PJ3cpfHzhaJ2/exec'; 
 const STATE = {
   tanks: {
     'HDF-01': {
@@ -838,10 +825,6 @@ function dateStr(daysAgo) {
 function now() {
   return new Date().toLocaleString('th-TH', { dateStyle:'short', timeStyle:'short' });
 }
-
-// ============================================================
-// PERSIST
-// ============================================================
 function save() { localStorage.setItem('hf_filter_v3', JSON.stringify(STATE)); }
 function load() {
   const s = localStorage.getItem('hf_filter_v3')
@@ -858,10 +841,6 @@ function load() {
     if (d.pendingQueue) STATE.pendingQueue = d.pendingQueue;
   } catch(e) {}
 }
-
-// ============================================================
-// NAV
-// ============================================================
 function showPage(id, tab) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -873,10 +852,7 @@ function showPage(id, tab) {
   if (id === 'log')       renderLog();
   if (id === 'config')    renderConfig();
 }
-
-// ============================================================
 // STATUS HELPERS
-// ============================================================
 function getStatusLabel(status) {
   if (status === 'active') return { text: 'ใช้งานอยู่',     cls: 'status-active' };
   if (status === 'ready')  return { text: 'พร้อมใช้ ✓',     cls: 'status-ready' };
@@ -888,10 +864,7 @@ function hasReadyTankOfType(machineId, type) {
   const tanks = STATE.tanks[machineId];
   return Object.values(tanks).some(t => t.type === type && t.status === 'ready');
 }
-
-// ============================================================
 // DASHBOARD
-// ============================================================
 function renderTankGrid(machineId, containerId) {
   const tanks = STATE.tanks[machineId];
   const el = document.getElementById(containerId);
@@ -980,10 +953,7 @@ function renderDashboard() {
     </div>`;
   }
 }
-
-// ============================================================
 // GROUP SWAP MODAL
-// ============================================================
 function openGroupSwapModal(machineId, type) {
   const tanks = STATE.tanks[machineId];
   const typeLabel = type === 'clean' ? 'Clean Tank' : 'Pre Tank';
@@ -1057,10 +1027,7 @@ function doGroupSwap(machineId, type) {
   renderDashboard();
   showToast(`✅ สลับ ${fromId} → ${toId} สำเร็จ`, 'success');
 }
-
-// ============================================================
 // ACTION PAGE
-// ============================================================
 function renderActionPage() { updateTankOptions(); renderOperatorList(); }
 
 function updateTankOptions() {
@@ -1145,10 +1112,7 @@ function openModal(action) {
 }
 
 function closeModal() { document.getElementById('modal').classList.remove('open'); }
-
-// ============================================================
 // ACTIONS
-// ============================================================
 function doChangeFilter() {
   const m = document.getElementById('act-machine').value;
   const tankId = document.getElementById('act-tank').value;
@@ -1177,10 +1141,7 @@ function doChangeFilter() {
   renderDashboard();
   updateCurrentStatus();
 }
-
-// ============================================================
 // ADMIN PANEL (Inline — Password Protected)
-// ============================================================
 let adminQtyEdit = 0;
 
 function openAdminLoginPanel() {
@@ -1225,7 +1186,6 @@ function unlockAdminPanel() {
   renderOperatorDisplay();
   showToast('✅ เข้าสู่ระบบผู้ดูแลสำเร็จ', 'success');
 }
-
 function lockAdminPanel() {
   document.getElementById('admin-unlocked-panel').style.display = 'none';
   document.getElementById('admin-locked-panel').style.display = 'block';
@@ -1252,11 +1212,7 @@ function saveAdminStock() {
   renderDashboard();
   renderSparePage();
 }
-
-// ============================================================
 // GOOGLE SHEETS — Bidirectional Sync
-// ============================================================
-
 // สร้าง sharedState snapshot เพื่อส่งขึ้น Sheets
 function buildSharedState() {
   return {
@@ -1602,10 +1558,7 @@ function renderLog() {
 function clearLog() {
   if (confirm('ล้างประวัติทั้งหมด?')) { STATE.log = []; save(); renderLog(); }
 }
-
-// ============================================================
 // CONFIG PAGE
-// ============================================================
 function renderConfig() {
   document.getElementById('cfg-script-url').value = STATE.config.scriptUrl || '';
   // Show auto-URL banner if DEFAULT_SCRIPT_URL is set
@@ -1657,20 +1610,14 @@ function renderOperatorDisplay() {
         <button onclick="removeOperator('${o}')" style="background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);font-size:12px;padding:3px 10px;border-radius:6px;cursor:pointer;touch-action:manipulation;">ลบ</button>
       </div>`).join('');
 }
-
-// ============================================================
 // TOAST
-// ============================================================
 function showToast(msg, type='') {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = 'toast show ' + type;
   setTimeout(() => t.classList.remove('show'), 2800);
 }
-
-// ============================================================
 // INIT
-// ============================================================
 load();
 
 // ── Auto-apply DEFAULT_SCRIPT_URL ──────────────────────────
