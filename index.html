@@ -443,7 +443,7 @@
   <div class="machine-card">
     <div class="machine-header">
       <div>
-        <div class="machine-name">🏭 HYDROFORNING  HDF-01</div>
+        <div class="machine-name">🏭 HDF-01</div>
         <div class="machine-meta" id="hf1-meta">กำลังใช้ : — Clean Tank / — Pre Tank</div>
       </div>
       <div class="machine-badge" id="hf1-badge">ปกติ</div>
@@ -454,7 +454,7 @@
   <div class="machine-card">
     <div class="machine-header">
       <div>
-        <div class="machine-name">🏭 HYDROFORNING HDF-02</div>
+        <div class="machine-name">🏭 HDF-02</div>
         <div class="machine-meta" id="hf2-meta">กำลังใช้ : — Clean Tank / — Pre Tank</div>
       </div>
       <div class="machine-badge" id="hf2-badge">ปกติ</div>
@@ -495,7 +495,7 @@
   </div>
   <div class="section-label">บันทึกการดำเนินการ</div>
   <div>
-    <button class="btn-green" id="btn-change-filter" onclick="openModal('change')">🔧 ทำการเปลี่ยน Filter</button>
+    <button class="btn-green" id="btn-change-filter" onclick="openModal('change')">🔧 Change Filter 🔧</button>
     <div id="change-filter-hint" style="display:none;">
       🔒 สามารถเปลี่ยน Filter ได้เฉพาะถังที่มีสถานะ <b style="color:var(--red);">⚠ (DIRTY)</b> เท่านั้น
     </div>
@@ -519,14 +519,14 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="form-label">วันที่รับเข้า</label>
+      <label class="form-label">วันที่ รับ หรือตรวจเช็ค Spare part </label>
       <input class="form-input" type="date" id="receive-date">
     </div>
     <div class="form-group">
       <label class="form-label">ผู้รับ / หมายเหตุ</label>
       <input class="form-input" type="text" id="receive-note" placeholder="ชื่อผู้รับ / เลข PO / ยี่ห้อ ฯลฯ">
     </div>
-    <button class="btn-purple" onclick="receiveSpare()">📥 บันทึกรับ Spare Part เข้า Stock</button>
+    <button class="btn-purple" onclick="receiveSpare()">📥 รับ Spare Part เข้า Stock</button>
   </div>
   <div class="section-label">ประวัติการรับ Spare Part</div>
   <div id="receive-history"></div>
@@ -535,8 +535,8 @@
 <!-- ===== LOG PAGE ===== -->
 <div class="page" id="page-log">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-    <div class="section-label" style="margin:0;">ประวัติการดำเนินการ</div>
-    <button style="font-size:11px;color:var(--text2);background:none;border:none;cursor:pointer;padding:4px 8px;touch-action:manipulation;" onclick="clearLog()">ล้าง Log</button>
+    <div class="section-label" style="margin:0;">History</div>
+    <button style="font-size:11px;color:var(--text2);background:none;border:none;cursor:pointer;padding:4px 8px;touch-action:manipulation;" onclick="clearLog()"> Clear Log</button>
   </div>
   <div class="log-filter-row">
     <button class="log-filter-btn active" onclick="setLogFilter('all', this)">ทั้งหมด</button>
