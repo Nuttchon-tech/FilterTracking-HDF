@@ -470,18 +470,18 @@
   <div class="section-label">เลือกถังที่ต้องการดำเนินการ</div>
   <div class="action-card">
     <div class="form-group">
-      <label class="form-label">เครื่อง</label>
+      <label class="form-label">Machine NO :</label>
       <select class="form-select" id="act-machine" onchange="updateTankOptions()">
         <option value="HDF-01">HDF-01</option>
         <option value="HDF-02">HDF-02</option>
       </select>
     </div>
     <div class="form-group">
-      <label class="form-label">ถัง</label>
+      <label class="form-label">Tank :</label>
       <select class="form-select" id="act-tank" onchange="updateCurrentStatus()"></select>
     </div>
     <div class="form-group">
-      <label class="form-label">สถานะถังที่เลือก</label>
+      <label class="form-label">Tank Status :</label>
       <div id="act-current-status">—</div>
     </div>
   </div>
@@ -497,7 +497,7 @@
   <div>
     <button class="btn-green" id="btn-change-filter" onclick="openModal('change')">🔧 ทำการเปลี่ยน Filter</button>
     <div id="change-filter-hint" style="display:none;">
-      🔒 สามารถเปลี่ยน Filter ได้เฉพาะถังที่มีสถานะ <b style="color:var(--red);">⚠ ต้องเปลี่ยน (DIRTY)</b> เท่านั้น
+      🔒 สามารถเปลี่ยน Filter ได้เฉพาะถังที่มีสถานะ <b style="color:var(--red);">⚠ (DIRTY)</b> เท่านั้น
     </div>
   </div>
 </div>
