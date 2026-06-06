@@ -364,9 +364,15 @@
 </head>
 <body>
 <div class="app-header">
-  <div>
-    <div class="app-title">Filter Element Tracking</div>
-    <div class="app-sub">70111697 Element Filter N40 For Hydroforming Machine — TSAT-4 Maintenance</div>
+  <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+    <!-- Logo: injected by process_logo.py as base64 -->
+    <div id="logo-wrap" style="display:none;flex-shrink:0;">
+      <img id="header-logo" alt="STS" style="height:40px;width:40px;object-fit:contain;border-radius:8px;background:white;padding:2px;">
+    </div>
+    <div style="min-width:0;">
+      <div class="app-title">Filter Element Tracking</div>
+      <div class="app-sub">70111697 Element Filter N40 For Hydroforming Machine — TSAT-4 Maintenance</div>
+    </div>
   </div>
   <div class="header-btns">
     <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="เปลี่ยนธีม">☀️</button>
@@ -459,10 +465,8 @@
         <button class="qty-btn" onclick="changeReceiveQty(1)">+</button>
       </div>
     </div>
-    <div class="form-group">
-      <label class="form-label">วันที่ รับ หรือตรวจเช็ค Spare part</label>
-      <input class="form-input" type="date" id="receive-date">
-    </div>
+    <!-- วันที่รับ — ซ่อน, ตั้งค่าอัตโนมัติ Timestamp ปัจจุบัน -->
+    <input type="hidden" id="receive-date">
     <div class="form-group">
       <label class="form-label">ผู้รับ / หมายเหตุ</label>
       <input class="form-input" type="text" id="receive-note" placeholder="ชื่อผู้รับ / เลข PO / ยี่ห้อ ฯลฯ">
@@ -1270,8 +1274,8 @@ function renderSparePage() {
     <div class="spare-count">${v.qty}</div>
     <div class="spare-unit">ชิ้น — แจ้งเตือนเมื่อ ≤ ${v.threshold} ชิ้น ${v.qty<=v.threshold?'⚠️':'✓'}</div>
   </div>`;
-  if (!document.getElementById('receive-date').value)
-    document.getElementById('receive-date').value = new Date().toISOString().slice(0,10);
+  // Auto-set today's date every time the page renders
+  document.getElementById('receive-date').value = new Date().toISOString().slice(0,10);
   renderReceiveHistory();
   updateLastReceiveBanner();
 }
@@ -1285,7 +1289,6 @@ function confirmReceiveSpare() {
   const qty      = receiveQtyEdit;
   const dateVal  = document.getElementById('receive-date').value;
   const note     = document.getElementById('receive-note').value.trim();
-  if (!dateVal) { showToast('❌ กรุณาเลือกวันที่รับ', 'error'); return; }
   if (qty < 1)  { showToast('❌ จำนวนต้องมากกว่า 0',  'error'); return; }
   const receiveDate  = new Date(dateVal).toLocaleDateString('th-TH');
   const spareKey     = 'Filter (รวมทุกประเภท)';
