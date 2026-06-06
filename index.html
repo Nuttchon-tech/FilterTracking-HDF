@@ -590,7 +590,34 @@
 
 <!-- ===== CONFIG PAGE ===== -->
 <div class="page" id="page-config">
-  <div class="section-label" style="margin-top:14px;">สถานะการเชื่อมต่อ</div>
+
+  <!-- ── LOCK SCREEN ───────────────────────────────────────── -->
+  <div id="config-lock-overlay" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 16px;min-height:65vh;">
+    <div style="font-size:58px;margin-bottom:18px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3));">🔒</div>
+    <div style="font-size:20px;font-weight:700;margin-bottom:6px;color:var(--text);">Setting</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:30px;text-align:center;line-height:1.7;">
+      ป้อนรหัสผ่านเพื่อเข้าถึงการตั้งค่าระบบ
+    </div>
+    <div style="width:100%;max-width:280px;">
+      <input class="form-input" type="password" id="config-pin-input"
+             placeholder="••••••" maxlength="8"
+             style="font-size:26px;letter-spacing:10px;text-align:center;margin-bottom:12px;"
+             onkeydown="if(event.key==='Enter')unlockConfig()">
+      <button class="btn-primary" onclick="unlockConfig()" style="font-size:16px;padding:14px;">
+        🔓 เข้าสู่ระบบ
+      </button>
+      <div id="config-pin-error" style="display:none;margin-top:10px;text-align:center;font-size:12px;color:var(--red);">
+        ❌ รหัสผ่านไม่ถูกต้อง
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CONTENT (hidden until unlocked) ──────────────────── -->
+  <div id="config-content" style="display:none;">
+  <div style="display:flex;align-items:center;justify-content:flex-end;margin-bottom:4px;">
+    <button onclick="lockConfig()" style="font-size:11px;color:var(--text3);background:none;border:none;cursor:pointer;padding:4px 8px;touch-action:manipulation;">🔒 ล็อค Setting</button>
+  </div>
+  <div class="section-label" style="margin-top:4px;">สถานะการเชื่อมต่อ</div>
   <div class="sync-card">
     <div class="sync-row">
       <div class="sync-dot" id="sync-dot"></div>
@@ -778,7 +805,8 @@ function buildResponse(obj) {
       <button class="btn-secondary" onclick="copyScriptCode()" style="margin-top:10px;">📋 Copy Code ทั้งหมด</button>
     </div>
   </div>
-</div>
+  </div><!-- /config-content -->
+</div><!-- /page-config -->
 
 <!-- Modal -->
 <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
@@ -861,7 +889,13 @@ function applyTheme() {
   updateThemeToggleUI(saved);
 }
 
+// ── CONFIG PAGE LOCK ─────────────────────────────────────────
+let configUnlocked = false;
+
 function showPage(id, tab) {
+  // Re-lock config when navigating away
+  if (id !== 'config') lockConfig(true);
+
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
@@ -870,7 +904,63 @@ function showPage(id, tab) {
   if (id === 'action')    renderActionPage();
   if (id === 'spare')     renderSparePage();
   if (id === 'log')       { populateMonthFilter(); renderLog(); }
-  if (id === 'config')    renderConfig();
+  if (id === 'config') {
+    if (configUnlocked) {
+      renderConfig();
+    } else {
+      // Show lock screen immediately
+      document.getElementById('config-lock-overlay').style.display = 'flex';
+      document.getElementById('config-content').style.display = 'none';
+      document.getElementById('config-pin-error').style.display = 'none';
+      document.getElementById('config-pin-input').value = '';
+      setTimeout(() => {
+        const el = document.getElementById('config-pin-input');
+        if (el) el.focus();
+      }, 150);
+    }
+  }
+}
+
+function unlockConfig() {
+  const pin = document.getElementById('config-pin-input').value;
+  const errEl = document.getElementById('config-pin-error');
+  if (pin === ADMIN_PIN) {
+    configUnlocked = true;
+    document.getElementById('config-lock-overlay').style.display = 'none';
+    document.getElementById('config-content').style.display = 'block';
+    if (errEl) errEl.style.display = 'none';
+    document.getElementById('config-pin-input').value = '';
+    renderConfig();
+    showToast('✅ เข้าสู่ระบบสำเร็จ', 'success');
+  } else {
+    if (errEl) errEl.style.display = 'block';
+    document.getElementById('config-pin-input').value = '';
+    document.getElementById('config-pin-input').focus();
+    // shake animation
+    const inp = document.getElementById('config-pin-input');
+    inp.style.animation = 'none';
+    inp.style.borderColor = 'var(--red)';
+    setTimeout(() => { inp.style.borderColor = ''; }, 1200);
+  }
+}
+
+function lockConfig(silent = false) {
+  if (!configUnlocked) return;
+  configUnlocked = false;
+  const overlay = document.getElementById('config-lock-overlay');
+  const content = document.getElementById('config-content');
+  const errEl   = document.getElementById('config-pin-error');
+  const pinEl   = document.getElementById('config-pin-input');
+  if (overlay) overlay.style.display = 'flex';
+  if (content) content.style.display = 'none';
+  if (errEl)   errEl.style.display   = 'none';
+  if (pinEl)   pinEl.value = '';
+  // Re-lock admin panel too
+  const al = document.getElementById('admin-locked-panel');
+  const au = document.getElementById('admin-unlocked-panel');
+  if (al) al.style.display = 'block';
+  if (au) au.style.display = 'none';
+  if (!silent) showToast('🔒 ล็อค Setting แล้ว', '');
 }
 
 // STATUS HELPERS
