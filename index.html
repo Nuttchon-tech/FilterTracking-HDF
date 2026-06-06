@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,9 +33,18 @@
     --radius-sm: 9px;
     --font: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   }
+  [data-theme="light"] {
+    --bg: #f0f2f7;
+    --bg2: #ffffff;
+    --bg3: #e8eaf0;
+    --border: rgba(0,0,0,0.08);
+    --border2: rgba(0,0,0,0.15);
+    --text: #1a1d27;
+    --text2: #5a5f78;
+    --text3: #9499b0;
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overscroll-behavior: none; }
-
+  html, body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overscroll-behavior: none; transition: background 0.2s, color 0.2s; }
   .app-header {
     background: var(--bg2);
     border-bottom: 1px solid var(--border);
@@ -45,6 +54,13 @@
   }
   .app-title { font-size: 15px; font-weight: 600; letter-spacing: 0.01em; }
   .app-sub { font-size: 11px; color: var(--text2); margin-top: 1px; }
+  .header-btns { display: flex; gap: 8px; align-items: center; }
+  .theme-btn {
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 8px; padding: 6px 10px; font-size: 15px;
+    cursor: pointer; line-height: 1; transition: background 0.15s;
+  }
+  .theme-btn:active { opacity: 0.7; }
   .sync-btn {
     background: var(--blue-bg); border: 1px solid var(--blue-border);
     color: var(--blue); border-radius: 8px; padding: 6px 12px;
@@ -53,7 +69,6 @@
   .sync-btn:active { opacity: 0.7; }
   .sync-btn.syncing { animation: pulse 1s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-
   .nav-tabs {
     display: flex; background: var(--bg2);
     border-bottom: 1px solid var(--border);
@@ -69,15 +84,12 @@
   }
   .nav-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
   .nav-tab .tab-icon { font-size: 16px; display: block; margin-bottom: 2px; }
-
   .page { display: none; padding: 14px 12px 80px; }
   .page.active { display: block; }
-
   .section-label {
     font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
     color: var(--text3); text-transform: uppercase; margin: 24px 0 10px;
   }
-
   .machine-card {
     background: var(--bg2); border: 1px solid var(--border);
     border-radius: var(--radius); margin-bottom: 24px; overflow: hidden;
@@ -92,48 +104,31 @@
     font-size: 10px; padding: 3px 8px; border-radius: 6px;
     background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border);
   }
-
-  /* ── Tank Layout: single row, gap between clean and pre ── */
   .tank-layout {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    padding: 10px;
+    display: flex; flex-direction: row; gap: 10px; padding: 10px;
   }
   .tank-col { display: flex; flex-direction: column; flex: 1; min-width: 0; }
   .tank-col-header {
     text-align: center; font-size: 11px; font-weight: 700;
     letter-spacing: 0.1em; padding: 8px 4px 7px;
-    border-radius: 8px 8px 0 0;
-    border: 1px solid transparent; border-bottom: none;
+    border-radius: 8px 8px 0 0; border: 1px solid transparent; border-bottom: none;
   }
   .tank-col-header.clean-header { background: rgba(59,130,246,0.18); color: var(--blue); border-color: rgba(59,130,246,0.3); }
   .tank-col-header.pre-header { background: rgba(245,158,11,0.18); color: var(--yellow); border-color: rgba(245,158,11,0.3); }
-
-  /* Each tank row = horizontal, tanks side by side within column */
   .tank-row {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    border: 1px solid var(--border);
-    border-radius: 0 0 8px 8px;
-    overflow: hidden;
+    display: flex; flex-direction: row; flex: 1;
+    border: 1px solid var(--border); border-radius: 0 0 8px 8px; overflow: hidden;
   }
   .tank-col.clean-col .tank-row { border-color: rgba(59,130,246,0.25); }
   .tank-col.pre-col   .tank-row { border-color: rgba(245,158,11,0.25); }
-
   .tank-item {
-    background: var(--bg2);
-    padding: 16px 8px 14px;
-    position: relative;
+    background: var(--bg2); padding: 16px 8px 14px; position: relative;
     user-select: none; -webkit-user-select: none;
-    flex: 1;
-    min-height: 110px;
+    flex: 1; min-height: 110px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     border-right: 1px solid var(--border);
   }
   .tank-item:last-child { border-right: none; }
-
   .tank-id { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text); text-align: center; }
   .tank-status-pill {
     display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px;
@@ -142,7 +137,6 @@
   }
   .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
   .tank-date { font-size: 10px; color: var(--text3); line-height: 1.5; text-align: center; }
-
   .status-active .tank-status-pill { background: var(--yellow-bg); color: var(--yellow); border-color: var(--yellow-border); }
   .status-active .dot { background: var(--yellow); box-shadow: 0 0 5px rgba(245,158,11,0.6); }
   .status-active { border-top: 3px solid var(--yellow) !important; }
@@ -155,66 +149,32 @@
   .status-idle .tank-status-pill { background: rgba(255,255,255,0.04); color: var(--text3); border-color: var(--border); }
   .status-idle .dot { background: var(--text3); }
   .status-idle { border-top: 3px solid var(--text3) !important; }
-
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-  /* ── Swap Button Row ── */
   .swap-btn-row {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    padding: 0 10px 10px;
+    display: flex; flex-direction: row; gap: 10px; padding: 0 10px 10px;
   }
-  .swap-cell {
-    flex: 1;
-    display: flex; align-items: center; justify-content: center;
-    padding: 6px 0;
-  }
-  .swap-cell.clean-cell { }
-
+  .swap-cell { flex: 1; display: flex; align-items: center; justify-content: center; padding: 6px 0; }
   .swap-group-btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 5px;
-    padding: 7px 14px;
-    font-size: 11px; font-weight: 600;
-    border-radius: 20px;
-    border: 1px solid transparent;
-    cursor: pointer;
+    padding: 7px 14px; font-size: 11px; font-weight: 600;
+    border-radius: 20px; border: 1px solid transparent; cursor: pointer;
     transition: background 0.15s, transform 0.1s, opacity 0.15s;
     touch-action: manipulation; user-select: none; -webkit-user-select: none;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-    white-space: nowrap;
+    -webkit-tap-highlight-color: rgba(0,0,0,0); white-space: nowrap;
   }
-  .swap-group-btn.can-swap {
-    background: rgba(16,185,129,0.14);
-    color: var(--green);
-    border-color: rgba(16,185,129,0.45);
-  }
-  .swap-group-btn.can-swap:active {
-    background: rgba(16,185,129,0.26);
-    transform: scale(0.95);
-  }
-  .swap-group-btn.no-swap {
-    background: rgba(255,255,255,0.03);
-    color: var(--text3);
-    border-color: var(--border);
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+  .swap-group-btn.can-swap { background: rgba(16,185,129,0.14); color: var(--green); border-color: rgba(16,185,129,0.45); }
+  .swap-group-btn.can-swap:active { background: rgba(16,185,129,0.26); transform: scale(0.95); }
+  .swap-group-btn.no-swap { background: rgba(255,255,255,0.03); color: var(--text3); border-color: var(--border); opacity: 0.5; cursor: not-allowed; }
   .swap-pulse {
-    display: inline-block;
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 0 0 rgba(16,185,129,0.5);
-    animation: swapPulse 1.6s infinite;
-    flex-shrink: 0;
+    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green); box-shadow: 0 0 0 0 rgba(16,185,129,0.5);
+    animation: swapPulse 1.6s infinite; flex-shrink: 0;
   }
   @keyframes swapPulse {
     0%   { box-shadow: 0 0 0 0   rgba(16,185,129,0.55); }
     60%  { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
     100% { box-shadow: 0 0 0 0   rgba(16,185,129,0); }
   }
-
-  /* ── Spare ── */
   .spare-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
   .spare-label { font-size: 11px; color: var(--text2); margin-bottom: 2px; }
   .spare-count { font-size: 32px; font-weight: 700; line-height: 1; }
@@ -222,7 +182,6 @@
   .spare-low .spare-count { color: var(--red); }
   .spare-ok .spare-count { color: var(--green); }
   .spare-warn .spare-count { color: var(--yellow); }
-
   .action-card {
     background: var(--bg2); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 16px; margin-bottom: 12px; position: relative; z-index: 1;
@@ -239,7 +198,6 @@
   .form-select:focus, .form-input:focus, .form-textarea:focus { outline: none; border-color: var(--blue); }
   .form-textarea { resize: none; height: 72px; cursor: text; }
   .form-input { cursor: text; }
-
   .qty-row { display: flex; align-items: center; gap: 10px; }
   .qty-btn {
     width: 44px; height: 44px; border-radius: 9px;
@@ -254,7 +212,6 @@
     background: var(--bg3); border: 1px solid var(--border2);
     border-radius: 9px; padding: 6px; color: var(--text);
   }
-
   .btn-primary, .btn-secondary, .btn-danger, .btn-switch, .btn-purple {
     display: block; width: 100%; padding: 15px; border-radius: var(--radius);
     font-size: 15px; font-weight: 600; border: none; cursor: pointer;
@@ -279,7 +236,6 @@
     transition: opacity 0.15s, transform 0.1s; }
   .btn-green:not(:disabled):active { opacity: 0.7; transform: scale(0.98); }
   .btn-green:disabled { opacity: 0.35; cursor: not-allowed; }
-
   .tank-status-badge {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 9px 14px; border-radius: 10px; font-size: 13px; font-weight: 700;
@@ -292,12 +248,12 @@
   .tsb-dot { width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
   .tsb-dirty .tsb-dot { animation: blink 1s infinite; }
   .tank-status-extra { font-size: 11px; color: var(--text3); margin-top: 6px; text-align: center; }
-
-  #change-filter-hint {
-    margin-top: 6px; background: var(--bg3); border: 1px solid var(--border2);
-    border-radius: 9px; padding: 10px 12px; font-size: 12px; color: var(--text2); text-align: center;
+  .no-dirty-state {
+    text-align: center; padding: 20px 16px;
+    background: var(--green-bg); border: 1px solid var(--green-border);
+    border-radius: var(--radius-sm); margin-top: 4px;
+    font-size: 13px; color: var(--green); line-height: 1.7;
   }
-
   .log-item {
     background: var(--bg2); border: 1px solid var(--border);
     border-radius: var(--radius-sm); padding: 12px; margin-bottom: 8px;
@@ -315,7 +271,6 @@
   .log-tag-sync-ok  { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
   .log-tag-sync-err { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
   .log-empty { text-align: center; color: var(--text3); font-size: 13px; padding: 40px 0; }
-
   .log-filter-row {
     display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; scrollbar-width: none;
   }
@@ -326,7 +281,6 @@
     color: var(--text2); white-space: nowrap; transition: all 0.15s; touch-action: manipulation;
   }
   .log-filter-btn.active { background: var(--blue-bg); color: var(--blue); border-color: var(--blue-border); }
-
   .sync-card {
     background: var(--bg2); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 14px; margin-bottom: 12px;
@@ -338,7 +292,6 @@
   .sync-dot.wait { background: var(--yellow); animation: pulse 1s infinite; }
   .sync-label { font-size: 13px; font-weight: 600; flex: 1; }
   .sync-sublabel { font-size: 11px; color: var(--text2); margin-top: 2px; }
-
   .queue-badge {
     display: inline-flex; align-items: center; gap: 5px;
     background: var(--yellow-bg); border: 1px solid var(--yellow-border);
@@ -346,15 +299,12 @@
     padding: 3px 8px; border-radius: 6px;
   }
   .queue-badge.zero { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
-
   .code-block {
     background: var(--bg3); border-radius: 9px; padding: 12px;
     font-size: 10.5px; font-family: monospace; color: var(--text2);
     overflow-x: auto; white-space: pre; line-height: 1.7;
-    max-height: 320px; overflow-y: auto;
-    border: 1px solid var(--border);
+    max-height: 320px; overflow-y: auto; border: 1px solid var(--border);
   }
-
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.75);
     z-index: 200; display: none; align-items: flex-end;
@@ -368,7 +318,6 @@
   .modal-handle { width: 40px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 16px; }
   .modal-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
   .modal-info { background: var(--bg3); border-radius: 9px; padding: 12px; margin-bottom: 14px; font-size: 13px; color: var(--text2); line-height: 1.6; }
-
   .toast {
     position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
     background: var(--bg3); border: 1px solid var(--border2);
@@ -379,14 +328,12 @@
   .toast.show { opacity: 1; }
   .toast.success { border-color: var(--green-border); color: var(--green); }
   .toast.error { border-color: var(--red-border); color: var(--red); }
-
   .url-input {
     width: 100%; background: var(--bg3); border: 1px solid var(--border2);
     border-radius: 9px; color: var(--text); font-size: 12px;
     padding: 10px 12px; font-family: monospace; margin-top: 6px;
   }
   .url-input:focus { outline: none; border-color: var(--blue); }
-
   .receive-summary-card {
     background: var(--purple-bg); border: 1px solid var(--purple-border);
     border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 12px;
@@ -394,7 +341,6 @@
   }
   .receive-summary-icon { font-size: 22px; }
   .receive-summary-text { font-size: 12px; color: var(--purple); font-weight: 500; line-height: 1.5; }
-
   .step-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
   .step-num {
     width: 24px; height: 24px; border-radius: 50%; background: var(--blue);
@@ -404,8 +350,6 @@
   .step-text { font-size: 12px; color: var(--text2); line-height: 1.6; padding-top: 2px; }
   .step-text b { color: var(--text); }
   .step-text code { background: var(--bg3); padding: 1px 5px; border-radius: 4px; font-size: 11px; color: var(--green); }
-
-  /* Password modal */
   .pin-row { display: flex; gap: 8px; margin-bottom: 12px; }
   .pin-digit {
     flex: 1; height: 52px; text-align: center; font-size: 22px; font-weight: 700;
@@ -413,22 +357,22 @@
     border-radius: 9px; color: var(--text); caret-color: var(--blue);
   }
   .pin-digit:focus { outline: none; border-color: var(--blue); }
-
   @media (min-width: 500px) {
     .page { max-width: 480px; margin: 0 auto; }
   }
 </style>
 </head>
 <body>
-
 <div class="app-header">
   <div>
     <div class="app-title">Filter Element Tracking</div>
-    <div class="app-sub">70111697 Element Filter N40 For Hydroforming Machine  — TSAT-4 Maintenance</div>
+    <div class="app-sub">70111697 Element Filter N40 For Hydroforming Machine — TSAT-4 Maintenance</div>
   </div>
-  <button class="sync-btn" onclick="syncNow()" id="syncBtn">⟳ Sync</button>
+  <div class="header-btns">
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="เปลี่ยนธีม">☀️</button>
+    <button class="sync-btn" onclick="syncNow()" id="syncBtn">⟳ Sync</button>
+  </div>
 </div>
-
 <div class="nav-tabs">
   <div class="nav-tab active" onclick="showPage('dashboard', this)"><span class="tab-icon">📊</span>Status</div>
   <div class="nav-tab" onclick="showPage('action', this)"><span class="tab-icon">🔄</span>Change Filter</div>
@@ -461,13 +405,13 @@
     </div>
     <div id="hf2-tanks"></div>
   </div>
-  <div class="section-label">Spare Part In Stock </div>
+  <div class="section-label">Spare Part In Stock</div>
   <div id="dash-spare"></div>
 </div>
 
 <!-- ===== ACTION PAGE ===== -->
 <div class="page" id="page-action">
-  <div class="section-label">เลือกถังที่ต้องการดำเนินการ</div>
+  <div class="section-label" style="margin-top:14px;">เลือก Machine</div>
   <div class="action-card">
     <div class="form-group">
       <label class="form-label">Machine NO :</label>
@@ -476,16 +420,13 @@
         <option value="HDF-02">HDF-02</option>
       </select>
     </div>
-    <div class="form-group">
-      <label class="form-label">Tank :</label>
-      <select class="form-select" id="act-tank" onchange="updateCurrentStatus()"></select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Tank Status :</label>
-      <div id="act-current-status">—</div>
-    </div>
   </div>
-  <div class="action-card">
+
+  <div id="dirty-tank-section">
+    <!-- filled by updateTankOptions() -->
+  </div>
+
+  <div class="action-card" id="act-operator-card">
     <div class="action-title">👤 ผู้ดำเนินการ</div>
     <div class="form-group">
       <label class="form-label">ชื่อ-นามสกุล</label>
@@ -493,10 +434,11 @@
       <datalist id="operator-list"></datalist>
     </div>
   </div>
+
   <div class="section-label">บันทึกการดำเนินการ</div>
   <div>
-    <button class="btn-green" id="btn-change-filter" onclick="openModal('change')">🔧 Change Filter 🔧</button>
-    <div id="change-filter-hint" style="display:none;">
+    <button class="btn-green" id="btn-change-filter" onclick="openModal('change')" disabled style="opacity:0.35;cursor:not-allowed;pointer-events:none;">🔧 Change Filter 🔧</button>
+    <div id="change-filter-hint" style="display:none;margin-top:6px;background:var(--bg3);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;font-size:12px;color:var(--text2);text-align:center;">
       🔒 สามารถเปลี่ยน Filter ได้เฉพาะถังที่มีสถานะ <b style="color:var(--red);">⚠ (DIRTY)</b> เท่านั้น
     </div>
   </div>
@@ -506,7 +448,6 @@
 <div class="page" id="page-spare">
   <div class="section-label" style="margin-top:14px;">จำนวน Filter คงเหลือ</div>
   <div id="spare-cards"></div>
-
   <div class="section-label">รับ Spare Part เข้า Stock</div>
   <div class="action-card">
     <div class="receive-summary-card" id="last-receive-banner" style="display:none;"></div>
@@ -519,14 +460,14 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="form-label">วันที่ รับ หรือตรวจเช็ค Spare part </label>
+      <label class="form-label">วันที่ รับ หรือตรวจเช็ค Spare part</label>
       <input class="form-input" type="date" id="receive-date">
     </div>
     <div class="form-group">
       <label class="form-label">ผู้รับ / หมายเหตุ</label>
       <input class="form-input" type="text" id="receive-note" placeholder="ชื่อผู้รับ / เลข PO / ยี่ห้อ ฯลฯ">
     </div>
-    <button class="btn-purple" onclick="receiveSpare()">📥 รับ Spare Part เข้า Stock</button>
+    <button class="btn-purple" onclick="confirmReceiveSpare()">📥 รับ Spare Part เข้า Stock</button>
   </div>
   <div class="section-label">ประวัติการรับ Spare Part</div>
   <div id="receive-history"></div>
@@ -536,7 +477,14 @@
 <div class="page" id="page-log">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
     <div class="section-label" style="margin:0;">History</div>
-    <button style="font-size:11px;color:var(--text2);background:none;border:none;cursor:pointer;padding:4px 8px;touch-action:manipulation;" onclick="clearLog()"> Clear Log</button>
+    <button style="font-size:11px;color:var(--text2);background:none;border:none;cursor:pointer;padding:4px 8px;touch-action:manipulation;" onclick="clearLog()">🗑 Clear Log</button>
+  </div>
+  <!-- Month filter + Export -->
+  <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
+    <select class="form-select" id="log-month-filter" onchange="renderLog()" style="flex:1;font-size:12px;padding:8px 10px;">
+      <option value="all">📅 ทุกเดือน</option>
+    </select>
+    <button onclick="exportCSV()" style="background:var(--green-bg);border:1px solid var(--green-border);color:var(--green);border-radius:9px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;touch-action:manipulation;">📥 Export CSV</button>
   </div>
   <div class="log-filter-row">
     <button class="log-filter-btn active" onclick="setLogFilter('all', this)">ทั้งหมด</button>
@@ -544,6 +492,7 @@
     <button class="log-filter-btn" onclick="setLogFilter('change_filter', this)">🔧 เปลี่ยน Filter</button>
     <button class="log-filter-btn" onclick="setLogFilter('receive_spare', this)">📥 รับ Spare</button>
   </div>
+  <div id="log-summary" style="margin-bottom:10px;"></div>
   <div id="log-list"></div>
 </div>
 
@@ -560,8 +509,8 @@
       <div class="queue-badge zero" id="queue-badge">✓ ส่งแล้ว</div>
     </div>
     <div style="font-size:11px;color:var(--text3);margin-top:4px;" id="sync-last-time">—</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:2px;" id="auto-sync-countdown">⏱ Auto-sync ทุก 30 นาที</div>
   </div>
-
   <div class="section-label">การตั้งค่า Google Sheets</div>
   <div class="action-card">
     <div id="default-url-banner" style="display:none;background:var(--green-bg);border:1px solid var(--green-border);border-radius:9px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--green);line-height:1.6;">
@@ -578,10 +527,8 @@
     <div id="cfg-status" style="margin-top:10px;font-size:12px;line-height:1.6;"></div>
   </div>
 
-  <!-- ── ADMIN ZONE ── -->
+  <!-- ADMIN ZONE -->
   <div class="section-label">โซนผู้ดูแลระบบ</div>
-
-  <!-- Locked state (default) -->
   <div id="admin-locked-panel">
     <div class="action-card" style="border-color:rgba(139,92,246,0.3);background:rgba(139,92,246,0.05);">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
@@ -601,11 +548,7 @@
       <button class="btn-purple" style="margin-bottom:0;" onclick="openAdminLoginPanel()">🔑 LOGIN</button>
     </div>
   </div>
-
-  <!-- Unlocked state (hidden by default) -->
   <div id="admin-unlocked-panel" style="display:none;">
-
-    <!-- Admin badge -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
       <div style="display:inline-flex;align-items:center;gap:8px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:20px;padding:6px 14px;">
         <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(16,185,129,0.6);"></div>
@@ -613,8 +556,6 @@
       </div>
       <button onclick="lockAdminPanel()" style="font-size:11px;color:var(--text3);background:none;border:none;cursor:pointer;padding:4px 8px;touch-action:manipulation;">🔒 ออก</button>
     </div>
-
-    <!-- Stock Spare Part -->
     <div class="section-label" style="margin-top:4px;">แก้ไข Stock Spare Part</div>
     <div class="action-card">
       <div class="form-group">
@@ -631,8 +572,6 @@
       </div>
       <button class="btn-primary" onclick="saveAdminStock()">💾 บันทึก Stock</button>
     </div>
-
-    <!-- Operator Management -->
     <div class="section-label">ชื่อผู้ปฏิบัติงาน</div>
     <div class="action-card">
       <div class="form-group">
@@ -642,44 +581,24 @@
       <button class="btn-primary" onclick="addOperator()">+ เพิ่มชื่อ</button>
       <div id="operator-list-display" style="margin-top:12px;"></div>
     </div>
-
-    <!-- How to connect -->
     <div class="section-label">วิธีเชื่อมต่อ Google Sheets</div>
     <div class="action-card">
-      <div class="step-row">
-        <div class="step-num">1</div>
-        <div class="step-text">เปิด <b>Google Sheet</b> → เมนู <b>Extensions</b> → <b>Apps Script</b></div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">2</div>
-        <div class="step-text">ลบ Code เดิมออก แล้ว <b>Copy Code</b> ด้านล่างวางแทน → กด <b>💾 Save</b></div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">3</div>
-        <div class="step-text">กด <b>Deploy → New deployment</b> → ประเภท <b>Web App</b><br>
-          • Execute as: <code>Me</code> &nbsp;•&nbsp; Who has access: <code>Anyone</code>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">4</div>
-        <div class="step-text">Copy URL → วางในช่อง <b>Script URL</b> ด้านบน → กด <b>บันทึก</b></div>
-      </div>
+      <div class="step-row"><div class="step-num">1</div><div class="step-text">เปิด <b>Google Sheet</b> → เมนู <b>Extensions</b> → <b>Apps Script</b></div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-text">ลบ Code เดิมออก แb> <b>Copy Code</b> ด้านล่างวางแทน → กด <b>💾 Save</b></div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-text">กด <b>Deploy → New deployment</b> → ประเภท <b>Web App</b><br>• Execute as: <code>Me</code> &nbsp;•&nbsp; Who has access: <code>Anyone</code></div></div>
+      <div class="step-row"><div class="step-num">4</div><div class="step-text">Copy URL → วางในช่อง <b>Script URL</b> ด้านบน → กด <b>บันทึก</b></div></div>
       <div style="background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:9px;padding:10px 12px;margin-top:8px;font-size:12px;color:var(--yellow);">
         ⚠️ หากแก้ไข Code Apps Script ให้ Deploy ใหม่ทุกครั้ง (New deployment)
       </div>
     </div>
-
-    <!-- Apps Script Code -->
     <div class="section-label">Apps Script Code (v3 — Real-time Sync)</div>
     <div class="action-card">
       <div class="code-block" id="apps-script-code">// ============================================================
 // Filter Tracker — Google Apps Script v3 (Real-time Sync)
 // Deploy เป็น Web App: Execute as Me | Who has access: Anyone
 // ============================================================
-
 var LOG_SHEET   = "Filter_Log";
 var STATE_SHEET = "Filter_State";
-
 // ── GET: ดึง shared state กลับมาที่แอป ──────────────────────
 function doGet(e) {
   try {
@@ -696,14 +615,11 @@ function doGet(e) {
     return buildResponse({ status: "error", message: err.toString() });
   }
 }
-
 // ── POST: รับ action log + อัปเดต shared state ──────────────
 function doPost(e) {
   try {
     var payload = JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-
-    // 1) บันทึกลง Filter_Log (เหมือนเดิม)
     var logSheet = getOrCreateLogSheet(ss);
     if (payload.action !== "SAVE_STATE") {
       logSheet.appendRow([
@@ -722,8 +638,6 @@ function doPost(e) {
         payload.note       || "—"
       ]);
     }
-
-    // 2) บันทึก shared state (tanks, spare, operators, log)
     if (payload.sharedState) {
       var stateSheet = getOrCreateStateSheet(ss);
       stateSheet.getRange(2, 1).setValue(
@@ -733,13 +647,11 @@ function doPost(e) {
         new Date().toLocaleString("th-TH")
       );
     }
-
     return buildResponse({ status: "ok", rows: logSheet.getLastRow() });
   } catch (err) {
     return buildResponse({ status: "error", message: err.toString() });
   }
 }
-
 function getOrCreateLogSheet(ss) {
   var sheet = ss.getSheetByName(LOG_SHEET);
   if (!sheet) {
@@ -755,7 +667,6 @@ function getOrCreateLogSheet(ss) {
   }
   return sheet;
 }
-
 function getOrCreateStateSheet(ss) {
   var sheet = ss.getSheetByName(STATE_SHEET);
   if (!sheet) {
@@ -767,7 +678,6 @@ function getOrCreateStateSheet(ss) {
   }
   return sheet;
 }
-
 function buildResponse(obj) {
   return ContentService
     .createTextOutput(JSON.stringify(obj))
@@ -775,8 +685,7 @@ function buildResponse(obj) {
 }</div>
       <button class="btn-secondary" onclick="copyScriptCode()" style="margin-top:10px;">📋 Copy Code ทั้งหมด</button>
     </div>
-
-  </div><!-- end admin-unlocked-panel -->
+  </div>
 </div>
 
 <!-- Modal -->
@@ -790,15 +699,16 @@ function buildResponse(obj) {
 <div class="toast" id="toast"></div>
 
 <script>
-// ADMIN PASSWORD
-const ADMIN_PIN = '1234'; // เปลี่ยนรหัสได้ที่นี่
-const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOE_jcwkdYca4-Erkhoev8YZNuNWySne25VdkSqjDe1H83ojnyVov2PJ3cpfHzhaJ2/exec'; 
+// ── ADMIN PASSWORD (เปลี่ยนได้ที่นี่) ──
+const ADMIN_PIN = '1234';
+const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOE_jcwkdYca4-Erkhoev8YZNuNWySne25VdkSqjDe1H83ojnyVov2PJ3cpfHzhaJ2/exec';
+
 const STATE = {
   tanks: {
     'HDF-01': {
-      'Clean-B1': { type:'clean', status:'active',  lastChanged:null,       lastSwitched:dateStr(-8) },
+      'Clean-B1': { type:'clean', status:'active',  lastChanged:null,        lastSwitched:dateStr(-8) },
       'Clean-B2': { type:'clean', status:'ready',   lastChanged:dateStr(-5), lastSwitched:null },
-      'Pre-A1':   { type:'pre',   status:'active',  lastChanged:null,       lastSwitched:null },
+      'Pre-A1':   { type:'pre',   status:'active',  lastChanged:null,        lastSwitched:null },
       'Pre-A2':   { type:'pre',   status:'dirty',   lastChanged:dateStr(-3), lastSwitched:null }
     },
     'HDF-02': {
@@ -808,9 +718,7 @@ const STATE = {
       'Pre-C2':   { type:'pre',  status:'ready',  lastChanged:dateStr(-7), lastSwitched:null }
     }
   },
-  spare: {
-    'Filter (รวมทุกประเภท)': { qty: 20, threshold: 14 }
-  },
+  spare: { 'Filter (รวมทุกประเภท)': { qty: 20, threshold: 14 } },
   log: [],
   operators: ['ช่างสมชาย', 'ช่างวิชัย', 'ช่างประสิทธิ์'],
   config: { scriptUrl: '' },
@@ -818,8 +726,7 @@ const STATE = {
 };
 
 function dateStr(daysAgo) {
-  const d = new Date();
-  d.setDate(d.getDate() + daysAgo);
+  const d = new Date(); d.setDate(d.getDate() + daysAgo);
   return d.toLocaleDateString('th-TH');
 }
 function now() {
@@ -841,6 +748,23 @@ function load() {
     if (d.pendingQueue) STATE.pendingQueue = d.pendingQueue;
   } catch(e) {}
 }
+
+// ── THEME ────────────────────────────────────────────────────
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('hf_theme', next);
+}
+function applyTheme() {
+  const saved = localStorage.getItem('hf_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  const btn = document.getElementById('themeBtn');
+  if (btn) btn.textContent = saved === 'dark' ? '☀️' : '🌙';
+}
+
 function showPage(id, tab) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -849,31 +773,29 @@ function showPage(id, tab) {
   if (id === 'dashboard') renderDashboard();
   if (id === 'action')    renderActionPage();
   if (id === 'spare')     renderSparePage();
-  if (id === 'log')       renderLog();
+  if (id === 'log')       { populateMonthFilter(); renderLog(); }
   if (id === 'config')    renderConfig();
 }
+
 // STATUS HELPERS
 function getStatusLabel(status) {
-  if (status === 'active') return { text: 'ใช้งานอยู่',     cls: 'status-active' };
-  if (status === 'ready')  return { text: 'พร้อมใช้ ✓',     cls: 'status-ready' };
-  if (status === 'dirty')  return { text: '⚠ ต้องเปลี่ยน!', cls: 'status-dirty' };
+  if (status === 'active') return { text: 'ใช้งานอยู่',      cls: 'status-active' };
+  if (status === 'ready')  return { text: 'พร้อมใช้ ✓',      cls: 'status-ready' };
+  if (status === 'dirty')  return { text: '⚠ ต้องเปลี่ยน!',  cls: 'status-dirty' };
   return { text: 'ไม่ได้ใช้', cls: 'status-idle' };
 }
-
 function hasReadyTankOfType(machineId, type) {
-  const tanks = STATE.tanks[machineId];
-  return Object.values(tanks).some(t => t.type === type && t.status === 'ready');
+  return Object.values(STATE.tanks[machineId]).some(t => t.type === type && t.status === 'ready');
 }
+
 // DASHBOARD
 function renderTankGrid(machineId, containerId) {
   const tanks = STATE.tanks[machineId];
   const el = document.getElementById(containerId);
   const cleanTanks = Object.entries(tanks).filter(([,t]) => t.type === 'clean');
   const preTanks   = Object.entries(tanks).filter(([,t]) => t.type === 'pre');
-
   const canSwapClean = hasReadyTankOfType(machineId, 'clean');
   const canSwapPre   = hasReadyTankOfType(machineId, 'pre');
-
   function tankHTML(id, t) {
     const s = getStatusLabel(t.status);
     const dateInfo = t.lastChanged ? `เปลี่ยน: ${t.lastChanged}` : t.lastSwitched ? `สลับ: ${t.lastSwitched}` : '—';
@@ -883,48 +805,28 @@ function renderTankGrid(machineId, containerId) {
       <div class="tank-date">${dateInfo}</div>
     </div>`;
   }
-
   const cleanSwapClass = canSwapClean ? 'can-swap' : 'no-swap';
-  const cleanSwapContent = canSwapClean
-    ? `<span class="swap-pulse"></span> สลับ Clean`
-    : `🔒 สลับ Clean`;
-  const cleanSwapClick = canSwapClean
-    ? `openGroupSwapModal('${machineId}', 'clean')`
-    : `showToast('❌ ไม่มีถัง Clean Tank ที่พร้อมสลับ', 'error')`;
-
-  const preSwapClass = canSwapPre ? 'can-swap' : 'no-swap';
-  const preSwapContent = canSwapPre
-    ? `<span class="swap-pulse"></span> สลับ Pre`
-    : `🔒 สลับ Pre`;
-  const preSwapClick = canSwapPre
-    ? `openGroupSwapModal('${machineId}', 'pre')`
-    : `showToast('❌ ไม่มีถัง Pre Tank ที่พร้อมสลับ', 'error')`;
-
+  const cleanSwapContent = canSwapClean ? `<span class="swap-pulse"></span> สลับ Clean` : `🔒 สลับ Clean`;
+  const cleanSwapClick  = canSwapClean ? `openGroupSwapModal('${machineId}','clean')` : `showToast('❌ ไม่มีถัง Clean Tank ที่พร้อมสลับ','error')`;
+  const preSwapClass   = canSwapPre ? 'can-swap' : 'no-swap';
+  const preSwapContent = canSwapPre ? `<span class="swap-pulse"></span> สลับ Pre` : `🔒 สลับ Pre`;
+  const preSwapClick   = canSwapPre ? `openGroupSwapModal('${machineId}','pre')` : `showToast('❌ ไม่มีถัง Pre Tank ที่พร้อมสลับ','error')`;
   el.innerHTML = `
     <div class="tank-layout">
       <div class="tank-col clean-col">
         <div class="tank-col-header clean-header">🔵 CLEAN TANK</div>
-        <div class="tank-row">${cleanTanks.map(([id, t]) => tankHTML(id, t)).join('')}</div>
+        <div class="tank-row">${cleanTanks.map(([id,t]) => tankHTML(id,t)).join('')}</div>
       </div>
       <div class="tank-col pre-col">
         <div class="tank-col-header pre-header">🟡 PRE TANK</div>
-        <div class="tank-row">${preTanks.map(([id, t]) => tankHTML(id, t)).join('')}</div>
+        <div class="tank-row">${preTanks.map(([id,t]) => tankHTML(id,t)).join('')}</div>
       </div>
     </div>
     <div class="swap-btn-row">
-      <div class="swap-cell clean-cell">
-        <button class="swap-group-btn ${cleanSwapClass}" onclick="${cleanSwapClick}">
-          ${cleanSwapContent}
-        </button>
-      </div>
-      <div class="swap-cell">
-        <button class="swap-group-btn ${preSwapClass}" onclick="${preSwapClick}">
-          ${preSwapContent}
-        </button>
-      </div>
+      <div class="swap-cell"><button class="swap-group-btn ${cleanSwapClass}" onclick="${cleanSwapClick}">${cleanSwapContent}</button></div>
+      <div class="swap-cell"><button class="swap-group-btn ${preSwapClass}" onclick="${preSwapClick}">${preSwapContent}</button></div>
     </div>`;
 }
-
 function renderDashboard() {
   ['HDF-01','HDF-02'].forEach(m => {
     const idx = m === 'HDF-01' ? 1 : 2;
@@ -933,7 +835,7 @@ function renderDashboard() {
     const activeClean = Object.entries(tanks).find(([,t]) => t.type==='clean' && t.status==='active');
     const activePre   = Object.entries(tanks).find(([,t]) => t.type==='pre'   && t.status==='active');
     document.getElementById(`hf${idx}-meta`).textContent =
-      `กำลังใช้: ${activeClean ? activeClean[0] : '—'} / ${activePre ? activePre[0] : '—'}`;
+      `กำลังใช้: ${activeClean?activeClean[0]:'—'} / ${activePre?activePre[0]:'—'}`;
     const hasDirty = Object.values(tanks).some(t => t.status==='dirty');
     const badge = document.getElementById(`hf${idx}-badge`);
     badge.textContent = hasDirty ? '⚠ ต้องดำเนินการ' : 'ปกติ ✓';
@@ -941,7 +843,6 @@ function renderDashboard() {
       ? 'background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);font-size:10px;padding:3px 8px;border-radius:6px;'
       : 'background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10px;padding:3px 8px;border-radius:6px;';
   });
-
   const ds = document.getElementById('dash-spare');
   const sp2 = STATE.spare['Filter (รวมทุกประเภท)'];
   if (sp2) {
@@ -949,29 +850,24 @@ function renderDashboard() {
     ds.innerHTML = `<div class="spare-card ${cls}">
       <div class="spare-label">Filter Spare Part คงเหลือ (รวมทุกประเภท)</div>
       <div class="spare-count">${sp2.qty}</div>
-      <div class="spare-unit">ชิ้น ${sp2.qty <= sp2.threshold ? '⚠️ ต่ำกว่า ' + sp2.threshold + ' ชิ้น!' : '✓ พอเพียง'}</div>
+      <div class="spare-unit">ชิ้น ${sp2.qty<=sp2.threshold ? '⚠️ ต่ำกว่า '+sp2.threshold+' ชิ้น!' : '✓ พอเพียง'}</div>
     </div>`;
   }
 }
+
 // GROUP SWAP MODAL
 function openGroupSwapModal(machineId, type) {
   const tanks = STATE.tanks[machineId];
   const typeLabel = type === 'clean' ? 'Clean Tank' : 'Pre Tank';
   const typeIcon  = type === 'clean' ? '🔵' : '🟡';
-
-  const activeTanks = Object.entries(tanks).filter(([,t]) => t.type === type && t.status === 'active');
-  const readyTanks  = Object.entries(tanks).filter(([,t]) => t.type === type && t.status === 'ready');
-
+  const activeTanks = Object.entries(tanks).filter(([,t]) => t.type===type && t.status==='active');
+  const readyTanks  = Object.entries(tanks).filter(([,t]) => t.type===type && t.status==='ready');
   if (!readyTanks.length) { showToast(`❌ ไม่มีถัง ${typeLabel} ที่พร้อมสลับ`, 'error'); return; }
-
   const fromOptions = activeTanks.length
     ? activeTanks.map(([id]) => `<option value="${id}">${id} (ACTIVE)</option>`).join('')
-    : Object.entries(tanks)
-        .filter(([,t]) => t.type === type && t.status !== 'ready')
+    : Object.entries(tanks).filter(([,t]) => t.type===type && t.status!=='ready')
         .map(([id,t]) => `<option value="${id}">${id} (${getStatusLabel(t.status).text})</option>`).join('');
-
   const toOptions = readyTanks.map(([id]) => `<option value="${id}">${id} (READY ✓)</option>`).join('');
-
   document.getElementById('modal-title').textContent = `🔄 สลับ${typeIcon} ${typeLabel} — ${machineId}`;
   document.getElementById('modal-body').innerHTML = `
     <div class="modal-info">
@@ -997,82 +893,104 @@ function openGroupSwapModal(machineId, type) {
     </div>
     <button class="btn-switch" onclick="doGroupSwap('${machineId}','${type}')">✅ ยืนยันสลับถัง</button>
     <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>`;
-
   document.getElementById('modal').classList.add('open');
 }
-
 function doGroupSwap(machineId, type) {
   const fromId   = document.getElementById('group-swap-from').value;
   const toId     = document.getElementById('group-swap-to').value;
   const operator = document.getElementById('group-swap-operator').value.trim() || 'ไม่ระบุ';
   const note     = document.getElementById('group-swap-note').value.trim();
-
-  if (!fromId || !toId) { showToast('❌ กรุณาเลือกถังให้ครบ', 'error'); return; }
+  if (!fromId || !toId)  { showToast('❌ กรุณาเลือกถังให้ครบ', 'error'); return; }
   if (fromId === toId)   { showToast('❌ ถังต้นทางและปลายทางต้องไม่ใช่ถังเดียวกัน', 'error'); return; }
-
   STATE.tanks[machineId][fromId].status = 'dirty';
   STATE.tanks[machineId][fromId].lastSwitched = now();
   STATE.tanks[machineId][toId].status = 'active';
-
   const entry = {
     ts: now(), machine: machineId, tankFrom: fromId, tankTo: toId,
     tankId: fromId, action: 'switch', operator,
-    note: note || `(สลับจากปุ่ม ${type === 'clean' ? 'Clean' : 'Pre'} Tank)`,
+    note: note || `(สลับจากปุ่ม ${type==='clean'?'Clean':'Pre'} Tank)`,
     filterType: '—', qty: 0, tankType: type
   };
   STATE.log.unshift(entry);
-  save();
-  sendToSheets(entry);
-  closeModal();
+  save(); sendToSheets(entry); closeModal();
   renderDashboard();
   showToast(`✅ สลับ ${fromId} → ${toId} สำเร็จ`, 'success');
 }
-// ACTION PAGE
+
+// ── ACTION PAGE ──────────────────────────────────────────────
+// Shows ONLY tanks with status === 'dirty'
 function renderActionPage() { updateTankOptions(); renderOperatorList(); }
 
 function updateTankOptions() {
   const m = document.getElementById('act-machine').value;
-  const sel = document.getElementById('act-tank');
   const tanks = STATE.tanks[m];
-  const clean = Object.keys(tanks).filter(id => tanks[id].type === 'clean');
-  const pre   = Object.keys(tanks).filter(id => tanks[id].type === 'pre');
-  sel.innerHTML = [...clean, ...pre].map(id =>
-    `<option value="${id}">${id} (${tanks[id].type === 'clean' ? 'Clean' : 'Pre'})</option>`
+  const dirtyTanks = Object.entries(tanks).filter(([, t]) => t.status === 'dirty');
+  const section = document.getElementById('dirty-tank-section');
+
+  if (dirtyTanks.length === 0) {
+    section.innerHTML = `
+      <div class="no-dirty-state">
+        ✅ <b>ไม่มีถังที่ต้องเปลี่ยน Filter</b><br>
+        <span style="font-size:12px;color:var(--green);opacity:0.8;">ถังทั้งหมดของ ${m} อยู่ในสภาพปกติ</span>
+      </div>`;
+    // Disable button
+    const btn = document.getElementById('btn-change-filter');
+    btn.disabled = true; btn.style.opacity='0.35';
+    btn.style.cursor='not-allowed'; btn.style.pointerEvents='none';
+    document.getElementById('change-filter-hint').style.display = 'none';
+    return;
+  }
+
+  const options = dirtyTanks.map(([id, t]) =>
+    `<option value="${id}">${id} — ${t.type==='clean'?'🔵 Clean':'🟡 Pre'} Tank ⚠ ต้องเปลี่ยน</option>`
   ).join('');
+
+  section.innerHTML = `
+    <div class="action-card">
+      <div class="form-group">
+        <label class="form-label">ถังที่ต้องเปลี่ยน Filter <span style="color:var(--red);font-weight:700;">(DIRTY)</span></label>
+        <select class="form-select" id="act-tank" onchange="updateCurrentStatus()">${options}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tank Status :</label>
+        <div id="act-current-status">—</div>
+      </div>
+    </div>`;
   updateCurrentStatus();
 }
 
 function updateCurrentStatus() {
   const m = document.getElementById('act-machine').value;
-  const t = document.getElementById('act-tank').value;
+  const tankSel = document.getElementById('act-tank');
+  if (!tankSel) return;
+  const t = tankSel.value;
+  if (!t) return;
   const tank = STATE.tanks[m]?.[t];
   const el = document.getElementById('act-current-status');
-  if (!tank) { el.innerHTML = '—'; return; }
-
+  if (!tank || !el) return;
   const statusMap = {
-    active: { cls: 'tsb-active', text: 'ใช้งานอยู่ (ACTIVE)' },
-    ready:  { cls: 'tsb-ready',  text: 'พร้อมใช้ (READY)' },
-    dirty:  { cls: 'tsb-dirty',  text: '⚠ ต้องเปลี่ยน Filter! (DIRTY)' },
-    idle:   { cls: 'tsb-idle',   text: 'ไม่ได้ใช้งาน (IDLE)' }
+    active: { cls:'tsb-active', text:'ใช้งานอยู่ (ACTIVE)' },
+    ready:  { cls:'tsb-ready',  text:'พร้อมใช้ (READY)' },
+    dirty:  { cls:'tsb-dirty',  text:'⚠ ต้องเปลี่ยน Filter! (DIRTY)' },
+    idle:   { cls:'tsb-idle',   text:'ไม่ได้ใช้งาน (IDLE)' }
   };
   const s = statusMap[tank.status] || statusMap.idle;
-  const typeLabel = tank.type === 'clean' ? '🔵 Clean Tank' : '🟡 Pre Tank';
+  const typeLabel = tank.type==='clean' ? '🔵 Clean Tank' : '🟡 Pre Tank';
   const dateInfo = tank.lastChanged ? `🗓 เปลี่ยน Filter ล่าสุด: ${tank.lastChanged}` : tank.lastSwitched ? `🔄 สลับถังล่าสุด: ${tank.lastSwitched}` : '';
-
   el.innerHTML = `
     <div class="tank-status-badge ${s.cls}"><div class="tsb-dot"></div>${s.text}</div>
-    <div class="tank-status-extra">${typeLabel}${dateInfo ? ' &nbsp;|&nbsp; ' + dateInfo : ''}</div>`;
+    <div class="tank-status-extra">${typeLabel}${dateInfo?' &nbsp;|&nbsp; '+dateInfo:''}</div>`;
 
-  const btn = document.getElementById('btn-change-filter');
+  const btn  = document.getElementById('btn-change-filter');
   const hint = document.getElementById('change-filter-hint');
   if (tank.status === 'dirty') {
-    btn.disabled = false; btn.style.opacity = '1';
-    btn.style.cursor = 'pointer'; btn.style.pointerEvents = 'auto';
-    if (hint) hint.style.display = 'none';
+    btn.disabled = false; btn.style.opacity='1';
+    btn.style.cursor='pointer'; btn.style.pointerEvents='auto';
+    if (hint) hint.style.display='none';
   } else {
-    btn.disabled = true; btn.style.opacity = '0.35';
-    btn.style.cursor = 'not-allowed'; btn.style.pointerEvents = 'none';
-    if (hint) hint.style.display = 'block';
+    btn.disabled = true; btn.style.opacity='0.35';
+    btn.style.cursor='not-allowed'; btn.style.pointerEvents='none';
+    if (hint) hint.style.display='block';
   }
 }
 
@@ -1081,14 +999,13 @@ function renderOperatorList() {
   if (dl) dl.innerHTML = STATE.operators.map(o => `<option value="${o}">`).join('');
 }
 
-// ============================================================
 // MODAL (Action Page)
-// ============================================================
 function openModal(action) {
   const m = document.getElementById('act-machine').value;
-  const t = document.getElementById('act-tank').value;
+  const tankSel = document.getElementById('act-tank');
+  if (!tankSel || !tankSel.value) { showToast('❌ ไม่มีถังที่ต้องเปลี่ยน', 'error'); return; }
+  const t = tankSel.value;
   const tank = STATE.tanks[m]?.[t];
-
   if (action === 'change') {
     const spQty = STATE.spare['Filter (รวมทุกประเภท)']?.qty ?? 0;
     const s = getStatusLabel(tank.status);
@@ -1110,23 +1027,22 @@ function openModal(action) {
   }
   document.getElementById('modal').classList.add('open');
 }
-
 function closeModal() { document.getElementById('modal').classList.remove('open'); }
-// ACTIONS
+
 function doChangeFilter() {
   const m = document.getElementById('act-machine').value;
-  const tankId = document.getElementById('act-tank').value;
+  const tankSel = document.getElementById('act-tank');
+  if (!tankSel || !tankSel.value) return;
+  const tankId   = tankSel.value;
   const operator = document.getElementById('act-operator').value.trim() || 'ไม่ระบุ';
-  const note = document.getElementById('modal-note').value.trim();
-  const qty = 7;
+  const note     = document.getElementById('modal-note').value.trim();
+  const qty      = 7;
   const spareKey = 'Filter (รวมทุกประเภท)';
   const stockBefore = STATE.spare[spareKey]?.qty ?? 0;
-  const stockAfter = Math.max(0, stockBefore - qty);
-
+  const stockAfter  = Math.max(0, stockBefore - qty);
   STATE.tanks[m][tankId].status = 'ready';
   STATE.tanks[m][tankId].lastChanged = now();
   if (STATE.spare[spareKey]) STATE.spare[spareKey].qty = stockAfter;
-
   const entry = {
     ts: now(), machine: m, tankId, tankFrom: tankId, tankTo: '—',
     action: 'change_filter', operator,
@@ -1134,16 +1050,14 @@ function doChangeFilter() {
     tankType: STATE.tanks[m][tankId].type
   };
   STATE.log.unshift(entry);
-  save();
-  sendToSheets(entry);
-  closeModal();
+  save(); sendToSheets(entry); closeModal();
   showToast('✅ บันทึกการเปลี่ยน Filter สำเร็จ', 'success');
   renderDashboard();
-  updateCurrentStatus();
+  updateTankOptions(); // refresh — tank may no longer be dirty
 }
-// ADMIN PANEL (Inline — Password Protected)
-let adminQtyEdit = 0;
 
+// ── ADMIN PANEL ──────────────────────────────────────────────
+let adminQtyEdit = 0;
 function openAdminLoginPanel() {
   document.getElementById('modal-title').textContent = '🔑 เข้าสู่ระบบผู้ดูแล';
   document.getElementById('modal-body').innerHTML = `
@@ -1159,25 +1073,19 @@ function openAdminLoginPanel() {
   document.getElementById('modal').classList.add('open');
   setTimeout(() => { const p = document.getElementById('admin-pin'); if(p) p.focus(); }, 300);
 }
-
 function verifyAdminPin() {
   const pin = document.getElementById('admin-pin').value;
-  if (pin === ADMIN_PIN) {
-    closeModal();
-    unlockAdminPanel();
-  } else {
+  if (pin === ADMIN_PIN) { closeModal(); unlockAdminPanel(); }
+  else {
     showToast('❌ รหัสผ่านไม่ถูกต้อง', 'error');
     document.getElementById('admin-pin').value = '';
     document.getElementById('admin-pin').focus();
   }
 }
-
 function unlockAdminPanel() {
   document.getElementById('admin-locked-panel').style.display = 'none';
   document.getElementById('admin-unlocked-panel').style.display = 'block';
-  // sync current stock values into inputs
-  const spareKey = 'Filter (รวมทุกประเภท)';
-  const v = STATE.spare[spareKey];
+  const v = STATE.spare['Filter (รวมทุกประเภท)'];
   adminQtyEdit = v.qty;
   const qd = document.getElementById('admin-qty-disp');
   const th = document.getElementById('admin-threshold');
@@ -1191,275 +1099,218 @@ function lockAdminPanel() {
   document.getElementById('admin-locked-panel').style.display = 'block';
   showToast('🔒 ออกจากระบบผู้ดูแลแล้ว', '');
 }
-
 function adminChangeQty(d) {
   adminQtyEdit = Math.max(0, adminQtyEdit + d);
   const el = document.getElementById('admin-qty-disp');
   if (el) el.textContent = adminQtyEdit;
 }
-
 function saveAdminStock() {
   const spareKey = 'Filter (รวมทุกประเภท)';
   const th = parseInt(document.getElementById('admin-threshold').value) || 14;
   STATE.spare[spareKey].qty = adminQtyEdit;
   STATE.spare[spareKey].threshold = th;
   save();
-  // push state ขึ้น Sheets
-  sendToSheets({ ts: now(), action: 'SAVE_STATE', machine:'—', tankId:'—',
+  sendToSheets({ ts:now(), action:'SAVE_STATE', machine:'—', tankId:'—',
     tankFrom:'—', tankTo:'—', tankType:'—', operator:'admin',
     filterType:'—', qty:0, note:'Admin updated stock' });
   showToast('✅ บันทึก Stock สำเร็จ', 'success');
-  renderDashboard();
-  renderSparePage();
-}
-// GOOGLE SHEETS — Bidirectional Sync
-// สร้าง sharedState snapshot เพื่อส่งขึ้น Sheets
-function buildSharedState() {
-  return {
-    tanks:     STATE.tanks,
-    spare:     STATE.spare,
-    operators: STATE.operators,
-    log:       STATE.log.slice(0, 200) // เก็บแค่ 200 รายการล่าสุด
-  };
+  renderDashboard(); renderSparePage();
 }
 
-// ดึง state จาก Sheets มาอัปเดตแอป
+// ── GOOGLE SHEETS SYNC ────────────────────────────────────────
+function buildSharedState() {
+  return { tanks:STATE.tanks, spare:STATE.spare, operators:STATE.operators, log:STATE.log.slice(0,200) };
+}
 async function pullFromSheets() {
   const url = STATE.config.scriptUrl;
   if (!url) return false;
   try {
-    const resp = await fetch(url + '?t=' + Date.now(), { method: 'GET' });
+    const resp = await fetch(url + '?t=' + Date.now(), { method:'GET' });
     const data = await resp.json();
-    if (data.status === 'ok' && data.state) {
+    if (data.status==='ok' && data.state) {
       const s = data.state;
       if (s.tanks)     Object.assign(STATE.tanks, s.tanks);
       if (s.spare)     Object.assign(STATE.spare, s.spare);
       if (s.operators) STATE.operators = s.operators;
       if (s.log)       STATE.log = s.log;
-      save();
-      return true;
+      save(); return true;
     }
   } catch(e) {}
   return false;
 }
-
 async function sendToSheets(entry) {
   const url = STATE.config.scriptUrl;
   if (!url) return;
   const payload = buildPayload(entry);
-  payload.sharedState = buildSharedState(); // แนบ state ไปด้วย
+  payload.sharedState = buildSharedState();
   try {
-    await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload),
-      mode: 'no-cors'
-    });
+    await fetch(url, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload), mode:'no-cors' });
     entry._synced = true;
     updateSyncUI(true, `ส่งล่าสุด: ${now()}`);
     removePending(payload._id);
-  } catch (err) {
+  } catch(err) {
     addPending(payload);
     updateSyncUI(false, `ส่งไม่ได้: ${err.message}`);
   }
-  save();
-  updateQueueBadge();
+  save(); updateQueueBadge();
 }
-
 function buildPayload(entry) {
   return {
-    _id: entry.ts + '_' + Math.random().toString(36).slice(2, 7),
-    timestamp:   entry.ts,
-    action:      entry.action,
-    machine:     entry.machine    || '—',
-    tankFrom:    entry.tankFrom   || entry.tankId || '—',
-    tankTo:      entry.tankTo     || '—',
-    tankType:    entry.tankType   || '—',
-    tankId:      entry.tankId     || '—',
-    operator:    entry.operator   || '—',
-    filterType:  entry.filterType || '—',
-    qty:         entry.qty        ?? 0,
-    stockBefore: entry.stockBefore !== undefined ? entry.stockBefore : '—',
-    stockAfter:  entry.stockAfter  !== undefined ? entry.stockAfter  : '—',
-    receiveDate: entry.receiveDate || '—',
-    note:        entry.note       || '—'
+    _id: entry.ts+'_'+Math.random().toString(36).slice(2,7),
+    timestamp: entry.ts, action: entry.action,
+    machine: entry.machine||'—', tankFrom: entry.tankFrom||entry.tankId||'—',
+    tankTo: entry.tankTo||'—', tankType: entry.tankType||'—',
+    tankId: entry.tankId||'—', operator: entry.operator||'—',
+    filterType: entry.filterType||'—', qty: entry.qty??0,
+    stockBefore: entry.stockBefore!==undefined?entry.stockBefore:'—',
+    stockAfter:  entry.stockAfter!==undefined ?entry.stockAfter :'—',
+    receiveDate: entry.receiveDate||'—', note: entry.note||'—'
   };
 }
-
 function addPending(payload) {
-  const exists = STATE.pendingQueue.find(p => p._id === payload._id);
-  if (!exists) STATE.pendingQueue.push(payload);
+  if (!STATE.pendingQueue.find(p=>p._id===payload._id)) STATE.pendingQueue.push(payload);
   save();
 }
-function removePending(id) {
-  STATE.pendingQueue = STATE.pendingQueue.filter(p => p._id !== id);
-  save();
-}
-
+function removePending(id) { STATE.pendingQueue=STATE.pendingQueue.filter(p=>p._id!==id); save(); }
 async function retryPending() {
   const url = STATE.config.scriptUrl;
   if (!url || !STATE.pendingQueue.length) return;
-  const queue = [...STATE.pendingQueue];
-  for (const payload of queue) {
+  for (const payload of [...STATE.pendingQueue]) {
     payload.sharedState = buildSharedState();
     try {
-      await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(payload),
-        mode: 'no-cors'
-      });
+      await fetch(url, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload), mode:'no-cors' });
       removePending(payload._id);
     } catch(e) {}
     await delay(400);
   }
-  updateQueueBadge();
-  save();
+  updateQueueBadge(); save();
 }
-
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
-
 async function syncNow() {
   const btn = document.getElementById('syncBtn');
-  btn.classList.add('syncing');
-  btn.textContent = '⟳ Syncing...';
+  btn.classList.add('syncing'); btn.textContent = '⟳ Syncing...';
   if (STATE.config.scriptUrl) {
-    // 1) ดึง state ล่าสุดจาก Sheets ก่อน
     const pulled = await pullFromSheets();
-    // 2) ส่ง pending ที่ค้างอยู่
     await retryPending();
     if (pulled) {
-      renderDashboard();
-      renderOperatorList();
-      // re-render page ที่เปิดอยู่
+      renderDashboard(); renderOperatorList();
       const active = document.querySelector('.page.active');
-      if (active && active.id === 'page-spare') renderSparePage();
-      if (active && active.id === 'page-log')   renderLog();
+      if (active && active.id==='page-spare') renderSparePage();
+      if (active && active.id==='page-log')   renderLog();
     }
     updateSyncUI(true, `Sync เสร็จ: ${now()}`);
     showToast(pulled ? '✅ ดึงข้อมูลล่าสุดจาก Sheets แล้ว' : '✅ Sync เสร็จ', 'success');
-  } else {
-    showToast('⚠ ยังไม่ได้ตั้งค่า Script URL', '');
-  }
+  } else { showToast('⚠ ยังไม่ได้ตั้งค่า Script URL', ''); }
   await delay(600);
-  btn.classList.remove('syncing');
-  btn.textContent = '⟳ Sync';
+  btn.classList.remove('syncing'); btn.textContent = '⟳ Sync';
 }
-
 async function testConnection() {
   const url = document.getElementById('cfg-script-url').value.trim();
   const st = document.getElementById('cfg-status');
-  if (!url) { st.innerHTML = '<span style="color:var(--red)">❌ กรุณากรอก URL ก่อน</span>'; return; }
-  st.innerHTML = '<span style="color:var(--text2)">⏳ กำลังทดสอบ GET...</span>';
+  if (!url) { st.innerHTML='<span style="color:var(--red)">❌ กรุณากรอก URL ก่อน</span>'; return; }
+  st.innerHTML='<span style="color:var(--text2)">⏳ กำลังทดสอบ GET...</span>';
   try {
-    const resp = await fetch(url, { method: 'GET' });
+    const resp = await fetch(url, { method:'GET' });
     const text = await resp.text();
-    let parsed;
-    try { parsed = JSON.parse(text); } catch(e) { parsed = null; }
-    if (parsed && parsed.status === 'ok') {
-      st.innerHTML = `<span style="color:var(--green)">✅ GET สำเร็จ! Apps Script ทำงานปกติ<br><small style="color:var(--text3);">${parsed.message || ''}</small></span>`;
+    let parsed; try { parsed=JSON.parse(text); } catch(e) { parsed=null; }
+    if (parsed && parsed.status==='ok') {
+      st.innerHTML=`<span style="color:var(--green)">✅ GET สำเร็จ! Apps Script ทำงานปกติ<br><small style="color:var(--text3);">${parsed.message||''}</small></span>`;
       updateSyncUI(true, 'GET test ผ่าน');
-    } else {
-      st.innerHTML = `<span style="color:var(--yellow)">⚠ ตอบกลับแล้วแต่ format ผิด: ${text.slice(0,100)}</span>`;
-    }
-  } catch(e) {
-    st.innerHTML = `<span style="color:var(--red)">❌ GET ไม่ได้: ${e.message}</span>`;
-    updateSyncUI(false, e.message);
-  }
+    } else { st.innerHTML=`<span style="color:var(--yellow)">⚠ ตอบกลับแล้วแต่ format ผิด: ${text.slice(0,100)}</span>`; }
+  } catch(e) { st.innerHTML=`<span style="color:var(--red)">❌ GET ไม่ได้: ${e.message}</span>`; updateSyncUI(false,e.message); }
 }
-
 async function testPostConnection() {
   const url = document.getElementById('cfg-script-url').value.trim();
-  const st = document.getElementById('cfg-status');
-  if (!url) { st.innerHTML = '<span style="color:var(--red)">❌ กรุณากรอก URL ก่อน</span>'; return; }
-  st.innerHTML = '<span style="color:var(--text2)">⏳ กำลังส่ง POST ทดสอบ...</span>';
+  const st  = document.getElementById('cfg-status');
+  if (!url) { st.innerHTML='<span style="color:var(--red)">❌ กรุณากรอก URL ก่อน</span>'; return; }
+  st.innerHTML='<span style="color:var(--text2)">⏳ กำลังส่ง POST ทดสอบ...</span>';
   const testPayload = {
-    _id: 'test_' + Date.now(), timestamp: now(), action: 'TEST',
-    machine: 'TEST', tankFrom: 'TEST-TANK', tankTo: '—',
-    tankType: '—', tankId: 'TEST', operator: 'System Test',
-    filterType: '—', qty: 0, stockBefore: '—', stockAfter: '—',
-    receiveDate: '—', note: 'ทดสอบการเชื่อมต่อจาก Filter Tracker App'
+    _id:'test_'+Date.now(), timestamp:now(), action:'TEST',
+    machine:'TEST', tankFrom:'TEST-TANK', tankTo:'—', tankType:'—',
+    tankId:'TEST', operator:'System Test', filterType:'—', qty:0,
+    stockBefore:'—', stockAfter:'—', receiveDate:'—',
+    note:'ทดสอบการเชื่อมต่อจาก Filter Tracker App'
   };
   try {
-    await fetch(url, {
-      method: 'POST', headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(testPayload), mode: 'no-cors'
-    });
-    st.innerHTML = `<span style="color:var(--green)">✅ ส่ง POST สำเร็จ (no-cors mode)<br>
-      <small style="color:var(--text3);">ตรวจสอบ Google Sheet — ควรมีแถว TEST เพิ่มขึ้น</small></span>`;
+    await fetch(url, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(testPayload), mode:'no-cors' });
+    st.innerHTML=`<span style="color:var(--green)">✅ ส่ง POST สำเร็จ (no-cors mode)<br><small style="color:var(--text3);">ตรวจสอบ Google Sheet — ควรมีแถว TEST เพิ่มขึ้น</small></span>`;
     updateSyncUI(true, `POST test: ${now()}`);
-  } catch(e) {
-    st.innerHTML = `<span style="color:var(--red)">❌ POST ล้มเหลว: ${e.message}</span>`;
-    updateSyncUI(false, e.message);
-  }
+  } catch(e) { st.innerHTML=`<span style="color:var(--red)">❌ POST ล้มเหลว: ${e.message}</span>`; updateSyncUI(false,e.message); }
 }
-
 function updateSyncUI(ok, detail) {
-  const dot  = document.getElementById('sync-dot');
-  const lbl  = document.getElementById('sync-label-text');
-  const sub  = document.getElementById('sync-sub-text');
-  const last = document.getElementById('sync-last-time');
+  const dot=document.getElementById('sync-dot'), lbl=document.getElementById('sync-label-text'),
+        sub=document.getElementById('sync-sub-text'), last=document.getElementById('sync-last-time');
   if (!dot) return;
-  if (ok) {
-    dot.className = 'sync-dot ok';
-    if (lbl) { lbl.textContent = '✅ เชื่อมต่อ Google Sheets แล้ว'; lbl.style.color = 'var(--green)'; }
-  } else {
-    dot.className = 'sync-dot err';
-    if (lbl) { lbl.textContent = '❌ เชื่อมต่อไม่ได้'; lbl.style.color = 'var(--red)'; }
-  }
-  if (sub)  sub.textContent  = detail || '';
+  dot.className = ok ? 'sync-dot ok' : 'sync-dot err';
+  if (lbl) { lbl.textContent = ok ? '✅ เชื่อมต่อ Google Sheets แล้ว' : '❌ เชื่อมต่อไม่ได้'; lbl.style.color = ok ? 'var(--green)' : 'var(--red)'; }
+  if (sub)  sub.textContent  = detail||'';
   if (last) last.textContent = `อัปเดต: ${now()}`;
 }
-
 function updateQueueBadge() {
   const badge = document.getElementById('queue-badge');
   if (!badge) return;
   const n = STATE.pendingQueue.length;
-  if (n === 0) { badge.className = 'queue-badge zero'; badge.textContent = '✓ ส่งแล้ว'; }
-  else         { badge.className = 'queue-badge'; badge.textContent = `⏳ รอส่ง ${n} รายการ`; }
+  badge.className = n===0 ? 'queue-badge zero' : 'queue-badge';
+  badge.textContent = n===0 ? '✓ ส่งแล้ว' : `⏳ รอส่ง ${n} รายการ`;
 }
-
 function copyScriptCode() {
-  const code = document.getElementById('apps-script-code').textContent;
-  navigator.clipboard.writeText(code)
-    .then(() => showToast('✅ Copy Code แล้ว', 'success'))
-    .catch(() => showToast('❌ ไม่สามารถ Copy ได้', 'error'));
+  navigator.clipboard.writeText(document.getElementById('apps-script-code').textContent)
+    .then(()=>showToast('✅ Copy Code แล้ว','success'))
+    .catch(()=>showToast('❌ ไม่สามารถ Copy ได้','error'));
 }
 
-// ============================================================
-// SPARE PART PAGE
-// ============================================================
+// ── SPARE PART PAGE ──────────────────────────────────────────
 let receiveQtyEdit = 1;
-
 function renderSparePage() {
   const spareKey = 'Filter (รวมทุกประเภท)';
   const v = STATE.spare[spareKey];
-  const cls = v.qty <= v.threshold ? 'spare-low' : v.qty <= v.threshold*1.5 ? 'spare-warn' : 'spare-ok';
+  const cls = v.qty<=v.threshold ? 'spare-low' : v.qty<=v.threshold*1.5 ? 'spare-warn' : 'spare-ok';
   document.getElementById('spare-cards').innerHTML = `<div class="spare-card ${cls}">
     <div class="spare-label">Filter Spare Part คงเหลือ (รวมทุกประเภท)</div>
     <div class="spare-count">${v.qty}</div>
-    <div class="spare-unit">ชิ้น — แจ้งเตือนเมื่อ ≤ ${v.threshold} ชิ้น ${v.qty <= v.threshold ? '⚠️' : '✓'}</div>
+    <div class="spare-unit">ชิ้น — แจ้งเตือนเมื่อ ≤ ${v.threshold} ชิ้น ${v.qty<=v.threshold?'⚠️':'✓'}</div>
   </div>`;
-
-  const todayISO = new Date().toISOString().slice(0, 10);
   if (!document.getElementById('receive-date').value)
-    document.getElementById('receive-date').value = todayISO;
+    document.getElementById('receive-date').value = new Date().toISOString().slice(0,10);
   renderReceiveHistory();
   updateLastReceiveBanner();
 }
-
 function changeReceiveQty(d) {
-  receiveQtyEdit = Math.max(1, receiveQtyEdit + d);
+  receiveQtyEdit = Math.max(1, receiveQtyEdit+d);
   document.getElementById('receive-qty-disp').textContent = receiveQtyEdit;
 }
 
-function receiveSpare() {
-  const spareKey = 'Filter (รวมทุกประเภท)';
-  const qty = receiveQtyEdit;
-  const dateVal = document.getElementById('receive-date').value;
-  const note = document.getElementById('receive-note').value.trim();
+// Step 1: validate + open confirmation modal
+function confirmReceiveSpare() {
+  const qty      = receiveQtyEdit;
+  const dateVal  = document.getElementById('receive-date').value;
+  const note     = document.getElementById('receive-note').value.trim();
   if (!dateVal) { showToast('❌ กรุณาเลือกวันที่รับ', 'error'); return; }
-  if (qty < 1)  { showToast('❌ จำนวนต้องมากกว่า 0', 'error'); return; }
+  if (qty < 1)  { showToast('❌ จำนวนต้องมากกว่า 0',  'error'); return; }
+  const receiveDate  = new Date(dateVal).toLocaleDateString('th-TH');
+  const spareKey     = 'Filter (รวมทุกประเภท)';
+  const stockBefore  = STATE.spare[spareKey]?.qty ?? 0;
+  const stockAfter   = stockBefore + qty;
+  document.getElementById('modal-title').textContent = '📥 ยืนยันรับ Spare Part';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="modal-info" style="font-size:14px;line-height:1.9;">
+      <div style="margin-bottom:8px;font-size:13px;color:var(--text3);">กรุณาตรวจสอบข้อมูลก่อนยืนยัน</div>
+      📅 วันที่รับ: <b style="color:var(--text);">${receiveDate}</b><br>
+      📦 จำนวนที่รับ: <b style="color:var(--purple);font-size:16px;">+${qty} ชิ้น</b><br>
+      📊 Stock: <b>${stockBefore}</b> → <b style="color:var(--green);">${stockAfter} ชิ้น</b><br>
+      ${note ? `📝 รายละเอียด: <b>${note}</b>` : ''}
+    </div>
+    <button class="btn-purple" onclick="doReceiveSpare()">✅ ยืนยันรับเข้า Stock</button>
+    <button class="btn-secondary" onclick="closeModal()">← แก้ไข</button>`;
+  document.getElementById('modal').classList.add('open');
+}
+
+// Step 2: actual receive (called from confirmation modal)
+function doReceiveSpare() {
+  const qty      = receiveQtyEdit;
+  const dateVal  = document.getElementById('receive-date').value;
+  const note     = document.getElementById('receive-note').value.trim();
+  const spareKey = 'Filter (รวมทุกประเภท)';
   const receiveDate = new Date(dateVal).toLocaleDateString('th-TH');
   const stockBefore = STATE.spare[spareKey]?.qty ?? 0;
   const stockAfter  = stockBefore + qty;
@@ -1467,27 +1318,24 @@ function receiveSpare() {
   const entry = {
     ts: now(), receiveDate, action: 'receive_spare',
     filterType: spareKey, qty, stockBefore, stockAfter,
-    note: note || '—', operator: note || '—',
-    machine: '—', tankId: '—', tankFrom: '—', tankTo: '—', tankType: '—'
+    note: note||'—', operator: note||'—',
+    machine:'—', tankId:'—', tankFrom:'—', tankTo:'—', tankType:'—'
   };
   STATE.log.unshift(entry);
-  save();
-  sendToSheets(entry);
+  save(); sendToSheets(entry);
   receiveQtyEdit = 1;
   document.getElementById('receive-qty-disp').textContent = 1;
   document.getElementById('receive-note').value = '';
+  closeModal();
   renderSparePage();
   showToast(`✅ รับ Filter ${qty} ชิ้น (รวม ${stockAfter} ชิ้น)`, 'success');
 }
 
 function renderReceiveHistory() {
-  const history = STATE.log.filter(e => e.action === 'receive_spare').slice(0, 10);
+  const history = STATE.log.filter(e=>e.action==='receive_spare').slice(0,10);
   const el = document.getElementById('receive-history');
-  if (!history.length) {
-    el.innerHTML = '<div class="log-empty" style="padding:20px 0;font-size:12px;">ยังไม่มีประวัติการรับ Spare Part</div>';
-    return;
-  }
-  el.innerHTML = history.map(e => `
+  if (!history.length) { el.innerHTML='<div class="log-empty" style="padding:20px 0;font-size:12px;">ยังไม่มีประวัติการรับ Spare Part</div>'; return; }
+  el.innerHTML = history.map(e=>`
     <div class="log-item" style="border-left:3px solid var(--purple);border-radius:var(--radius-sm);">
       <div class="log-header">
         <div class="log-action" style="color:var(--purple);">📥 รับ Spare Part เข้า Stock</div>
@@ -1496,173 +1344,265 @@ function renderReceiveHistory() {
       <div class="log-detail">
         วันที่รับ: <b>${e.receiveDate}</b><br>
         จำนวน: <b style="color:var(--purple);">+${e.qty} ชิ้น</b> &nbsp;|&nbsp; Stock: ${e.stockBefore} → ${e.stockAfter}<br>
-        ${e.note && e.note !== '—' ? 'รายละเอียด: ' + e.note : ''}
+        ${e.note&&e.note!=='—'?'รายละเอียด: '+e.note:''}
       </div>
     </div>`).join('');
 }
-
 function updateLastReceiveBanner() {
-  const last = STATE.log.find(e => e.action === 'receive_spare');
+  const last   = STATE.log.find(e=>e.action==='receive_spare');
   const banner = document.getElementById('last-receive-banner');
-  if (!last) { banner.style.display = 'none'; return; }
-  banner.style.display = 'flex';
-  banner.innerHTML = `
-    <div class="receive-summary-icon">📦</div>
-    <div class="receive-summary-text">รับล่าสุด: <b>+${last.qty} ชิ้น</b> (${last.receiveDate || last.ts})<br>${last.note && last.note !== '—' ? last.note : ''}</div>`;
+  if (!last) { banner.style.display='none'; return; }
+  banner.style.display='flex';
+  banner.innerHTML=`<div class="receive-summary-icon">📦</div>
+    <div class="receive-summary-text">รับล่าสุด: <b>+${last.qty} ชิ้น</b> (${last.receiveDate||last.ts})<br>${last.note&&last.note!=='—'?last.note:''}</div>`;
 }
 
-// ============================================================
-// LOG PAGE
-// ============================================================
-let currentLogFilter = 'all';
+// ── LOG PAGE ─────────────────────────────────────────────────
+const THAI_MONTHS = ['','มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
+  'กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
 
+// Parse Thai locale date string "d/m/yyyy, HH:mm" → { month:1-12, year:CE }
+function parseLogDate(ts) {
+  try {
+    const datePart = ts.split(',')[0].trim();
+    const parts = datePart.split('/');
+    if (parts.length === 3) {
+      return { month: parseInt(parts[1]), year: parseInt(parts[2]) - 543 };
+    }
+  } catch(e) {}
+  return null;
+}
+function monthKey(d) { return d ? `${d.year}-${String(d.month).padStart(2,'0')}` : null; }
+function monthLabel(d) { return d ? `${THAI_MONTHS[d.month]} ${d.year + 543}` : '—'; }
+
+function populateMonthFilter() {
+  const sel = document.getElementById('log-month-filter');
+  if (!sel) return;
+  const prev = sel.value;
+  // collect unique month keys from log
+  const keys = new Map();
+  STATE.log.forEach(e => {
+    const d = parseLogDate(e.ts);
+    const k = monthKey(d);
+    if (k && !keys.has(k)) keys.set(k, monthLabel(d));
+  });
+  const sorted = [...keys.entries()].sort((a,b) => b[0].localeCompare(a[0]));
+  sel.innerHTML = '<option value="all">📅 ทุกเดือน</option>'
+    + sorted.map(([k,v]) => `<option value="${k}">${v}</option>`).join('');
+  if ([...keys.keys()].includes(prev)) sel.value = prev;
+}
+
+let currentLogFilter = 'all';
 function setLogFilter(filter, btn) {
   currentLogFilter = filter;
-  document.querySelectorAll('.log-filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.log-filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderLog();
 }
 
-function renderLog() {
-  const el = document.getElementById('log-list');
+function getFilteredLogs() {
+  const monthSel = document.getElementById('log-month-filter');
+  const selectedMonth = monthSel ? monthSel.value : 'all';
   let logs = STATE.log;
   if (currentLogFilter !== 'all') logs = logs.filter(e => e.action === currentLogFilter);
-  if (!logs.length) { el.innerHTML = '<div class="log-empty">ยังไม่มีประวัติการดำเนินการ</div>'; return; }
-  el.innerHTML = logs.slice(0, 50).map(e => {
+  if (selectedMonth !== 'all') {
+    logs = logs.filter(e => {
+      const d = parseLogDate(e.ts);
+      return monthKey(d) === selectedMonth;
+    });
+  }
+  return logs;
+}
+
+function renderLog() {
+  const el = document.getElementById('log-list');
+  const sumEl = document.getElementById('log-summary');
+  const logs = getFilteredLogs();
+
+  // Summary bar
+  if (sumEl) {
+    if (logs.length > 0) {
+      const changes  = logs.filter(e => e.action === 'change_filter').length;
+      const switches = logs.filter(e => e.action === 'switch').length;
+      const receives = logs.filter(e => e.action === 'receive_spare').length;
+      const totalUsed    = logs.filter(e=>e.action==='change_filter').reduce((s,e)=>s+(e.qty||0),0);
+      const totalReceive = logs.filter(e=>e.action==='receive_spare').reduce((s,e)=>s+(e.qty||0),0);
+      sumEl.innerHTML = `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+        ${changes?`<div style="background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--green);">🔧 เปลี่ยน ${changes} ครั้ง (${totalUsed} ชิ้น)</div>`:''}
+        ${switches?`<div style="background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--yellow);">🔄 สลับ ${switches} ครั้ง</div>`:''}
+        ${receives?`<div style="background:var(--purple-bg);border:1px solid var(--purple-border);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--purple);">📥 รับ ${receives} ครั้ง (+${totalReceive} ชิ้น)</div>`:''}
+      </div>`;
+    } else { sumEl.innerHTML = ''; }
+  }
+
+  if (!logs.length) { el.innerHTML='<div class="log-empty">ไม่มีข้อมูลในช่วงที่เลือก</div>'; return; }
+  el.innerHTML = logs.slice(0,100).map(e => {
     const syncTag = e._synced
       ? '<span class="log-tag log-tag-sync-ok">☁ ส่งแล้ว</span>'
       : (STATE.config.scriptUrl ? '<span class="log-tag log-tag-sync-err">⏳ รอส่ง</span>' : '');
-    if (e.action === 'switch') {
+    if (e.action==='switch') {
       return `<div class="log-item">
         <div class="log-header"><div class="log-action">🔄 สลับถัง</div><div class="log-time">${e.ts}</div></div>
-        <div class="log-detail">${e.tankFrom} → ${e.tankTo}<br>ผู้ดำเนินการ: ${e.operator}${e.note ? '<br>หมายเหตุ: ' + e.note : ''}</div>
-        <div><span class="log-tag">${e.machine}</span>${syncTag}</div>
-      </div>`;
-    } else if (e.action === 'change_filter') {
+        <div class="log-detail">${e.tankFrom} → ${e.tankTo}<br>ผู้ดำเนินการ: ${e.operator}${e.note?'<br>หมายเหตุ: '+e.note:''}</div>
+        <div><span class="log-tag">${e.machine}</span>${syncTag}</div></div>`;
+    } else if (e.action==='change_filter') {
       return `<div class="log-item">
         <div class="log-header"><div class="log-action">🔧 เปลี่ยน Filter</div><div class="log-time">${e.ts}</div></div>
-        <div class="log-detail">${e.tankId} | ${e.filterType} x${e.qty} ชิ้น<br>ผู้ดำเนินการ: ${e.operator}${e.note ? '<br>หมายเหตุ: ' + e.note : ''}<br>Stock: ${e.stockBefore} → ${e.stockAfter}</div>
-        <div><span class="log-tag">${e.machine}</span>${e.stockAfter <= 14 ? '<span class="log-tag" style="background:var(--red-bg);color:var(--red);border-color:var(--red-border);">⚠ Stock ต่ำ</span>' : ''}${syncTag}</div>
-      </div>`;
-    } else if (e.action === 'receive_spare') {
+        <div class="log-detail">${e.tankId} | ${e.filterType} x${e.qty} ชิ้น<br>ผู้ดำเนินการ: ${e.operator}${e.note?'<br>หมายเหตุ: '+e.note:''}<br>Stock: ${e.stockBefore} → ${e.stockAfter}</div>
+        <div><span class="log-tag">${e.machine}</span>${e.stockAfter<=14?'<span class="log-tag" style="background:var(--red-bg);color:var(--red);border-color:var(--red-border);">⚠ Stock ต่ำ</span>':''}${syncTag}</div></div>`;
+    } else if (e.action==='receive_spare') {
       return `<div class="log-item" style="border-left:3px solid var(--purple);border-radius:var(--radius-sm);">
         <div class="log-header"><div class="log-action" style="color:var(--purple);">📥 รับ Spare Part เข้า Stock</div><div class="log-time">${e.ts}</div></div>
-        <div class="log-detail">วันที่รับ: <b>${e.receiveDate || '—'}</b><br>จำนวน: <b style="color:var(--purple);">+${e.qty} ชิ้น</b> &nbsp;|&nbsp; Stock: ${e.stockBefore} → ${e.stockAfter}${e.note && e.note !== '—' ? '<br>รายละเอียด: ' + e.note : ''}</div>
-        <div><span class="log-tag log-tag-receive">📦 Spare Part</span>${syncTag}</div>
-      </div>`;
+        <div class="log-detail">วันที่รับ: <b>${e.receiveDate||'—'}</b><br>จำนวน: <b style="color:var(--purple);">+${e.qty} ชิ้น</b> &nbsp;|&nbsp; Stock: ${e.stockBefore} → ${e.stockAfter}${e.note&&e.note!=='—'?'<br>รายละเอียด: '+e.note:''}</div>
+        <div><span class="log-tag log-tag-receive">📦 Spare Part</span>${syncTag}</div></div>`;
     }
     return '';
   }).join('');
 }
 
-function clearLog() {
-  if (confirm('ล้างประวัติทั้งหมด?')) { STATE.log = []; save(); renderLog(); }
+// ── CSV EXPORT ───────────────────────────────────────────────
+function exportCSV() {
+  const logs = getFilteredLogs();
+  if (!logs.length) { showToast('❌ ไม่มีข้อมูลในช่วงที่เลือก', 'error'); return; }
+
+  const headers = ['Timestamp','Action','Machine','Tank (From/ID)','Tank To','Tank Type',
+    'Operator','Filter Type','Qty','Stock Before','Stock After','Receive Date','Note'];
+
+  const actionLabel = { switch:'สลับถัง', change_filter:'เปลี่ยน Filter', receive_spare:'รับ Spare Part' };
+
+  const rows = logs.map(e => [
+    e.ts || '—',
+    actionLabel[e.action] || e.action || '—',
+    e.machine  || '—',
+    e.tankFrom || e.tankId || '—',
+    e.tankTo   || '—',
+    e.tankType || '—',
+    e.operator || '—',
+    e.filterType || '—',
+    e.qty ?? 0,
+    e.stockBefore !== undefined ? e.stockBefore : '—',
+    e.stockAfter  !== undefined ? e.stockAfter  : '—',
+    e.receiveDate || '—',
+    (e.note || '').replace(/"/g, '""')
+  ]);
+
+  const csvContent = '﻿' // BOM for Excel Thai support
+    + [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\r\n');
+
+  const monthSel = document.getElementById('log-month-filter');
+  const selectedMonth = monthSel?.value || 'all';
+  const filename = selectedMonth === 'all'
+    ? `FilterLog_ทั้งหมด_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.csv`
+    : `FilterLog_${monthSel.options[monthSel.selectedIndex].text.replace(/\s/g,'_')}.csv`;
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+  showToast(`✅ Export ${logs.length} รายการ สำเร็จ`, 'success');
 }
+
+function clearLog() {
+  if (confirm('ล้างประวัติทั้งหมด?')) { STATE.log=[]; save(); populateMonthFilter(); renderLog(); }
+}
+
 // CONFIG PAGE
 function renderConfig() {
-  document.getElementById('cfg-script-url').value = STATE.config.scriptUrl || '';
-  // Show auto-URL banner if DEFAULT_SCRIPT_URL is set
+  document.getElementById('cfg-script-url').value = STATE.config.scriptUrl||'';
   const banner = document.getElementById('default-url-banner');
   if (banner) banner.style.display = DEFAULT_SCRIPT_URL ? 'block' : 'none';
-  // Always show locked panel when entering config page
   document.getElementById('admin-locked-panel').style.display = 'block';
   document.getElementById('admin-unlocked-panel').style.display = 'none';
   updateQueueBadge();
-  if (STATE.config.scriptUrl) {
-    updateSyncUI(true, DEFAULT_SCRIPT_URL
-      ? '✅ URL ตั้งค่าอัตโนมัติจาก code'
-      : 'มี URL ตั้งค่าแล้ว — กด ทดสอบ เพื่อยืนยัน');
-  }
+  if (STATE.config.scriptUrl) updateSyncUI(true, DEFAULT_SCRIPT_URL ? '✅ URL ตั้งค่าอัตโนมัติจาก code' : 'มี URL ตั้งค่าแล้ว — กด ทดสอบ เพื่อยืนยัน');
 }
-
 function saveConfig() {
   STATE.config.scriptUrl = document.getElementById('cfg-script-url').value.trim();
   save(); updateQueueBadge();
-  showToast('✅ บันทึกการตั้งค่าแล้ว', 'success');
-  if (STATE.config.scriptUrl && STATE.pendingQueue.length > 0) retryPending();
+  showToast('✅ บันทึกการตั้งค่าแล้ว','success');
+  if (STATE.config.scriptUrl && STATE.pendingQueue.length>0) retryPending();
 }
-
 function addOperator() {
   const v = document.getElementById('cfg-operator-add').value.trim();
   if (v && !STATE.operators.includes(v)) {
     STATE.operators.push(v); save();
-    document.getElementById('cfg-operator-add').value = '';
+    document.getElementById('cfg-operator-add').value='';
     renderOperatorDisplay(); renderOperatorList();
-    sendToSheets({ ts: now(), action: 'SAVE_STATE', machine:'—', tankId:'—',
-      tankFrom:'—', tankTo:'—', tankType:'—', operator:'admin',
-      filterType:'—', qty:0, note:'Operator added: ' + v });
+    sendToSheets({ ts:now(), action:'SAVE_STATE', machine:'—', tankId:'—', tankFrom:'—', tankTo:'—', tankType:'—', operator:'admin', filterType:'—', qty:0, note:'Operator added: '+v });
     showToast(`✅ เพิ่ม "${v}" แล้ว`, 'success');
   }
 }
 function removeOperator(name) {
-  STATE.operators = STATE.operators.filter(o => o !== name);
-  save();
-  renderOperatorDisplay(); renderOperatorList();
-  sendToSheets({ ts: now(), action: 'SAVE_STATE', machine:'—', tankId:'—',
-    tankFrom:'—', tankTo:'—', tankType:'—', operator:'admin',
-    filterType:'—', qty:0, note:'Operator removed: ' + name });
+  STATE.operators = STATE.operators.filter(o=>o!==name);
+  save(); renderOperatorDisplay(); renderOperatorList();
+  sendToSheets({ ts:now(), action:'SAVE_STATE', machine:'—', tankId:'—', tankFrom:'—', tankTo:'—', tankType:'—', operator:'admin', filterType:'—', qty:0, note:'Operator removed: '+name });
 }
 function renderOperatorDisplay() {
   document.getElementById('operator-list-display').innerHTML =
-    STATE.operators.map(o => `
+    STATE.operators.map(o=>`
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;">
         <span>${o}</span>
         <button onclick="removeOperator('${o}')" style="background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);font-size:12px;padding:3px 10px;border-radius:6px;cursor:pointer;touch-action:manipulation;">ลบ</button>
       </div>`).join('');
 }
+
 // TOAST
 function showToast(msg, type='') {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show ' + type;
-  setTimeout(() => t.classList.remove('show'), 2800);
+  t.textContent=msg; t.className='toast show '+type;
+  setTimeout(()=>t.classList.remove('show'), 2800);
 }
-// INIT
+
+// ── INIT ─────────────────────────────────────────────────────
 load();
-
-// ── Auto-apply DEFAULT_SCRIPT_URL ──────────────────────────
+applyTheme();
 if (DEFAULT_SCRIPT_URL && STATE.config.scriptUrl !== DEFAULT_SCRIPT_URL) {
-  STATE.config.scriptUrl = DEFAULT_SCRIPT_URL;
-  save();
+  STATE.config.scriptUrl = DEFAULT_SCRIPT_URL; save();
 }
-
 renderDashboard();
 renderOperatorList();
 receiveQtyEdit = 1;
 updateQueueBadge();
-
 if (STATE.config.scriptUrl) {
-  updateSyncUI(true, DEFAULT_SCRIPT_URL
-    ? '✅ URL ตั้งค่าอัตโนมัติ — กำลังดึงข้อมูล...'
-    : 'URL บันทึกไว้แล้ว — กำลังดึงข้อมูล...');
-
-  // ดึง state ล่าสุดจาก Sheets ทันทีที่เปิดแอป
+  updateSyncUI(true, DEFAULT_SCRIPT_URL ? '✅ URL ตั้งค่าอัตโนมัติ — กำลังดึงข้อมูล...' : 'URL บันทึกไว้แล้ว — กำลังดึงข้อมูล...');
   pullFromSheets().then(pulled => {
-    if (pulled) {
-      renderDashboard();
-      renderOperatorList();
-      updateSyncUI(true, `ข้อมูลล่าสุดจาก Sheets: ${now()}`);
-    }
+    if (pulled) { renderDashboard(); renderOperatorList(); updateSyncUI(true, `ข้อมูลล่าสุดจาก Sheets: ${now()}`); }
   });
 }
+if (STATE.config.scriptUrl && STATE.pendingQueue.length>0) setTimeout(retryPending, 3000);
 
-if (STATE.config.scriptUrl && STATE.pendingQueue.length > 0) {
-  setTimeout(retryPending, 3000);
+// ── Auto-sync ทุก 30 นาที ──────────────────────────────────
+const AUTO_SYNC_MS = 30 * 60 * 1000; // 30 minutes
+let autoSyncRemaining = AUTO_SYNC_MS;
+
+function updateCountdownUI() {
+  const el = document.getElementById('auto-sync-countdown');
+  if (!el || !STATE.config.scriptUrl) return;
+  const mins = Math.floor(autoSyncRemaining / 60000);
+  const secs = Math.floor((autoSyncRemaining % 60000) / 1000);
+  el.textContent = `⏱ Auto-sync ครั้งถัดไปใน: ${mins}:${String(secs).padStart(2,'0')} นาที`;
 }
 
-// Auto-sync ทุก 60 วินาที (ดึงข้อมูลใหม่จาก Sheets อัตโนมัติ)
 setInterval(async () => {
   if (!STATE.config.scriptUrl) return;
+  autoSyncRemaining -= 1000;
+  if (autoSyncRemaining > 0) { updateCountdownUI(); return; }
+  // Time to sync
+  autoSyncRemaining = AUTO_SYNC_MS;
+  updateCountdownUI();
   const pulled = await pullFromSheets();
   if (pulled) {
-    renderDashboard();
-    renderOperatorList();
+    renderDashboard(); renderOperatorList();
     const active = document.querySelector('.page.active');
-    if (active && active.id === 'page-spare') renderSparePage();
-    if (active && active.id === 'page-log')   renderLog();
+    if (active && active.id==='page-spare') renderSparePage();
+    if (active && active.id==='page-log')   { populateMonthFilter(); renderLog(); }
     updateSyncUI(true, `Auto-sync: ${now()}`);
   }
-}, 60000);
+}, 1000);
+
+// Start countdown immediately
+setTimeout(updateCountdownUI, 500);
 </script>
 </body>
 </html>
