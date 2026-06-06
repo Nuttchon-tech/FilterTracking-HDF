@@ -357,25 +357,106 @@
     border-radius: 9px; color: var(--text); caret-color: var(--blue);
   }
   .pin-digit:focus { outline: none; border-color: var(--blue); }
-  @media (min-width: 500px) {
-    .page { max-width: 480px; margin: 0 auto; }
+
+  /* ── THEME TOGGLE ────────────────────────────────────────── */
+  .theme-toggle-wrap {
+    display: flex; align-items: center; gap: 7px;
+    cursor: pointer; user-select: none; -webkit-user-select: none;
+    touch-action: manipulation; text-decoration: none;
+  }
+  .theme-label {
+    font-size: 11px; font-weight: 600; color: var(--text2);
+    white-space: nowrap; transition: color 0.2s;
+  }
+  .theme-toggle {
+    position: relative; width: 42px; height: 24px; border-radius: 12px;
+    background: var(--bg3); border: 1px solid var(--border2);
+    transition: background 0.25s, border-color 0.25s; flex-shrink: 0;
+  }
+  .theme-toggle.is-light { background: var(--blue); border-color: var(--blue); }
+  .theme-toggle-knob {
+    position: absolute; top: 3px; left: 3px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+    transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+  }
+  .theme-toggle.is-light .theme-toggle-knob { transform: translateX(18px); }
+
+  /* ── LOGO ────────────────────────────────────────────────── */
+  .logo-wrap { display:flex; align-items:center; flex-shrink:0; }
+  .logo-svg  { height:42px; width:42px; }
+
+  /* ── MACHINES GRID (desktop: side by side) ───────────────── */
+  .machines-grid { display: grid; grid-template-columns: 1fr; }
+
+  /* ── RESPONSIVE ──────────────────────────────────────────── */
+  /* Small tablet */
+  @media (min-width: 540px) {
+    .page { max-width: 520px; margin: 0 auto; }
+  }
+  /* Tablet */
+  @media (min-width: 768px) {
+    .page { max-width: 740px; margin: 0 auto; padding: 18px 20px 80px; }
+    .app-title { font-size: 16px; }
+    .nav-tab { font-size: 12px; padding: 12px 6px; }
+    .nav-tab .tab-icon { font-size: 18px; }
+    .machine-name { font-size: 20px; }
+    .section-label { font-size: 11px; margin: 28px 0 12px; }
+    .action-card { padding: 20px; }
+    .form-label { font-size: 12px; }
+    .form-select, .form-input, .form-textarea { font-size: 15px; padding: 12px 14px; }
+    .btn-primary, .btn-green, .btn-purple, .btn-switch, .btn-secondary, .btn-danger { padding: 16px; font-size: 16px; }
+    .spare-count { font-size: 40px; }
+    .logo-svg { height:46px; width:46px; }
+    .theme-label { font-size: 12px; }
+  }
+  /* Desktop */
+  @media (min-width: 960px) {
+    .page { max-width: 920px; margin: 0 auto; padding: 20px 28px 80px; }
+    .machines-grid { grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+    .app-header { padding: 14px 28px 12px; }
+    .nav-tabs { padding: 0 8px; }
+    .tank-id { font-size: 14px; }
+    .tank-date { font-size: 11px; }
+    .tank-status-pill { font-size: 12px; }
+    .modal { max-width: 560px; margin: 0 auto 0; border-radius: 20px; border: 1px solid var(--border2); }
+    .modal-overlay { align-items: center; }
+    .logo-svg { height:48px; width:48px; }
+    .theme-label { font-size: 13px; }
+    .theme-toggle { width: 46px; height: 26px; }
+    .theme-toggle-knob { width: 18px; height: 18px; top: 3px; left: 3px; }
+    .theme-toggle.is-light .theme-toggle-knob { transform: translateX(20px); }
+    .app-title { font-size: 18px; }
+    .app-sub { font-size: 12px; }
+  }
+  /* Large Desktop */
+  @media (min-width: 1280px) {
+    .page { max-width: 1180px; }
+    .machines-grid { gap: 24px; }
   }
 </style>
 </head>
 <body>
 <div class="app-header">
-  <div style="display:flex;align-items:center;gap:10px;min-width:0;">
-    <!-- Logo: injected by process_logo.py as base64 -->
-    <div id="logo-wrap" style="display:none;flex-shrink:0;">
-      <img id="header-logo" alt="STS" style="height:40px;width:40px;object-fit:contain;border-radius:8px;background:white;padding:2px;">
+  <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;">
+    <!-- Logo: run process_logo.py to inject real logo here -->
+    <div class="logo-wrap" id="logo-wrap" style="display:none;">
+      <img id="header-logo" class="logo-svg" alt="STS Automotive"
+           style="object-fit:contain;background:transparent;" src="">
     </div>
     <div style="min-width:0;">
       <div class="app-title">Filter Element Tracking</div>
-      <div class="app-sub">70111697 Element Filter N40 For Hydroforming Machine — TSAT-4 Maintenance</div>
+      <div class="app-sub">70111697 Element Filter N40 For Hydroforming — TSAT-4 Maintenance</div>
     </div>
   </div>
   <div class="header-btns">
-    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="เปลี่ยนธีม">☀️</button>
+    <!-- Dark / Light toggle -->
+    <div class="theme-toggle-wrap" onclick="toggleTheme()" title="เปลี่ยนธีม">
+      <span class="theme-label" id="theme-label-txt">🌙 Dark</span>
+      <div class="theme-toggle" id="theme-toggle-sw">
+        <div class="theme-toggle-knob"></div>
+      </div>
+    </div>
     <button class="sync-btn" onclick="syncNow()" id="syncBtn">⟳ Sync</button>
   </div>
 </div>
@@ -389,27 +470,35 @@
 
 <!-- ===== DASHBOARD ===== -->
 <div class="page active" id="page-dashboard">
-  <div class="section-label" style="margin-top:14px;">Hydroforming Machine #1</div>
-  <div class="machine-card">
-    <div class="machine-header">
-      <div>
-        <div class="machine-name">🏭 HDF-01</div>
-        <div class="machine-meta" id="hf1-meta">กำลังใช้ : — Clean Tank / — Pre Tank</div>
+  <div class="machines-grid" style="margin-top:14px;">
+    <!-- HDF-01 -->
+    <div>
+      <div class="section-label" style="margin-top:0;">Hydroforming Machine #1</div>
+      <div class="machine-card">
+        <div class="machine-header">
+          <div>
+            <div class="machine-name">🏭 HDF-01</div>
+            <div class="machine-meta" id="hf1-meta">กำลังใช้ : — Clean Tank / — Pre Tank</div>
+          </div>
+          <div class="machine-badge" id="hf1-badge">ปกติ</div>
+        </div>
+        <div id="hf1-tanks"></div>
       </div>
-      <div class="machine-badge" id="hf1-badge">ปกติ</div>
     </div>
-    <div id="hf1-tanks"></div>
-  </div>
-  <div class="section-label">Hydroforming Machine #2</div>
-  <div class="machine-card">
-    <div class="machine-header">
-      <div>
-        <div class="machine-name">🏭 HDF-02</div>
-        <div class="machine-meta" id="hf2-meta">กำลังใช้ : — Clean Tank / — Pre Tank</div>
+    <!-- HDF-02 -->
+    <div>
+      <div class="section-label" style="margin-top:0;">Hydroforming Machine #2</div>
+      <div class="machine-card">
+        <div class="machine-header">
+          <div>
+            <div class="machine-name">🏭 HDF-02</div>
+            <div class="machine-meta" id="hf2-meta">กำลังใช้ : — Clean Tank / — Pre Tank</div>
+          </div>
+          <div class="machine-badge" id="hf2-badge">ปกติ</div>
+        </div>
+        <div id="hf2-tanks"></div>
       </div>
-      <div class="machine-badge" id="hf2-badge">ปกติ</div>
     </div>
-    <div id="hf2-tanks"></div>
   </div>
   <div class="section-label">Spare Part In Stock</div>
   <div id="dash-spare"></div>
@@ -755,18 +844,22 @@ function load() {
 
 // ── THEME ────────────────────────────────────────────────────
 function toggleTheme() {
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const next = isDark ? 'light' : 'dark';
-  html.setAttribute('data-theme', next);
-  document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️' : '🌙';
+  document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('hf_theme', next);
+  updateThemeToggleUI(next);
+}
+function updateThemeToggleUI(theme) {
+  const sw  = document.getElementById('theme-toggle-sw');
+  const lbl = document.getElementById('theme-label-txt');
+  if (sw)  sw.classList.toggle('is-light', theme === 'light');
+  if (lbl) lbl.textContent = theme === 'dark' ? '🌙 Dark' : '☀️ Light';
 }
 function applyTheme() {
   const saved = localStorage.getItem('hf_theme') || 'dark';
   document.documentElement.setAttribute('data-theme', saved);
-  const btn = document.getElementById('themeBtn');
-  if (btn) btn.textContent = saved === 'dark' ? '☀️' : '🌙';
+  updateThemeToggleUI(saved);
 }
 
 function showPage(id, tab) {
