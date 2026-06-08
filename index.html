@@ -481,6 +481,7 @@
           </div>
           <div class="machine-badge" id="hf1-badge">ปกติ</div>
         </div>
+        <div id="hf1-diagram"></div>
         <div id="hf1-tanks"></div>
       </div>
     </div>
@@ -495,6 +496,7 @@
           </div>
           <div class="machine-badge" id="hf2-badge">ปกติ</div>
         </div>
+        <div id="hf2-diagram"></div>
         <div id="hf2-tanks"></div>
       </div>
     </div>
@@ -974,6 +976,68 @@ function hasReadyTankOfType(machineId, type) {
   return Object.values(STATE.tanks[machineId]).some(t => t.type === type && t.status === 'ready');
 }
 
+// MACHINE DIAGRAM
+function renderMachineDiagram(machineId, svgId) {
+  const tanks = STATE.tanks[machineId];
+  const cleanTanks = Object.entries(tanks).filter(([,t]) => t.type === 'clean');
+  const preTanks   = Object.entries(tanks).filter(([,t]) => t.type === 'pre');
+
+  function statusColor(s) {
+    if (s === 'active') return { fill:'#f59e0b', top:'#d97706', text:'#fff' };
+    if (s === 'ready')  return { fill:'#22c55e', top:'#16a34a', text:'#fff' };
+    if (s === 'dirty')  return { fill:'#ef4444', top:'#c72626', text:'#fff' };
+    return                     { fill:'#374151', top:'#4b5563', text:'#9ca3af' };
+  }
+  function statusShort(s) {
+    return s==='active'?'ใช้งาน':s==='ready'?'พร้อม':s==='dirty'?'ต้องเปลี่ยน':'ว่าง';
+  }
+
+  const TW=52, TH=92, TY=26;
+  const gap=14;
+
+  function groupPositions(count, centerX) {
+    const totalW = count * TW + (count - 1) * gap;
+    const startX = centerX - totalW / 2;
+    return Array.from({length: count}, (_, i) => startX + i * (TW + gap));
+  }
+
+  function cylinderSVG(x, tankId, status) {
+    const c = statusColor(status);
+    const label = tankId.replace(/^(Clean-|Pre-)/, '');
+    const cx = x + TW / 2, ry = 9;
+    return `
+      <ellipse cx="${cx}" cy="${TY}" rx="${TW/2}" ry="${ry}" fill="${c.top}"/>
+      <rect x="${x}" y="${TY}" width="${TW}" height="${TH}" fill="${c.fill}"/>
+      <ellipse cx="${cx}" cy="${TY+TH}" rx="${TW/2}" ry="${ry}" fill="${c.fill}"/>
+      <ellipse cx="${cx}" cy="${TY+TH}" rx="${TW/2}" ry="${ry}" fill="rgba(0,0,0,0.18)"/>
+      <rect x="${x+5}" y="${TY+12}" width="8" height="${TH-24}" fill="white" opacity="0.13" rx="3"/>
+      <text x="${cx}" y="${TY+TH/2+2}" text-anchor="middle" fill="${c.text}" font-size="16" font-weight="700" font-family="system-ui,sans-serif">${label}</text>
+      <text x="${cx}" y="${TY+TH/2+19}" text-anchor="middle" fill="${c.text}" font-size="9" font-family="system-ui,sans-serif" opacity="0.92">${statusShort(status)}</text>
+    `;
+  }
+
+  const cleanPos = groupPositions(cleanTanks.length, 108);
+  const prePos   = groupPositions(preTanks.length,   312);
+  const midY     = TY + TH / 2;
+  const pipeL    = cleanPos[cleanPos.length - 1] + TW + 2;
+  const pipeR    = prePos[0] - 2;
+
+  const svgStr = `<svg viewBox="0 0 420 152" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-height:148px;display:block;margin:6px 0 2px;">
+    <rect x="16" y="16" width="388" height="120" rx="8" fill="none" stroke="currentColor" stroke-width="1" opacity="0.18"/>
+    <line x1="210" y1="20" x2="210" y2="132" stroke="currentColor" stroke-width="1" opacity="0.13" stroke-dasharray="4,3"/>
+    <text x="108" y="12" text-anchor="middle" fill="currentColor" font-size="10" font-family="system-ui,sans-serif" opacity="0.55">🔵 CLEAN TANK</text>
+    <text x="312" y="12" text-anchor="middle" fill="currentColor" font-size="10" font-family="system-ui,sans-serif" opacity="0.55">🟡 PRE TANK</text>
+    ${cleanTanks.map(([id,t],i) => cylinderSVG(cleanPos[i], id, t.status)).join('')}
+    ${preTanks.map(([id,t],i) => cylinderSVG(prePos[i], id, t.status)).join('')}
+    <line x1="${pipeL}" y1="${midY}" x2="${pipeR}" y2="${midY}" stroke="currentColor" stroke-width="3" opacity="0.18" stroke-linecap="round"/>
+    <circle cx="${(pipeL+pipeR)/2}" cy="${midY}" r="5" fill="currentColor" opacity="0.13"/>
+    <rect x="16" y="134" width="388" height="7" rx="3" fill="currentColor" opacity="0.07"/>
+  </svg>`;
+
+  const el = document.getElementById(svgId);
+  if (el) el.innerHTML = svgStr;
+}
+
 // DASHBOARD
 function renderTankGrid(machineId, containerId) {
   const tanks = STATE.tanks[machineId];
@@ -1016,6 +1080,7 @@ function renderTankGrid(machineId, containerId) {
 function renderDashboard() {
   ['HDF-01','HDF-02'].forEach(m => {
     const idx = m === 'HDF-01' ? 1 : 2;
+    renderMachineDiagram(m, `hf${idx}-diagram`);
     renderTankGrid(m, `hf${idx}-tanks`);
     const tanks = STATE.tanks[m];
     const activeClean = Object.entries(tanks).find(([,t]) => t.type==='clean' && t.status==='active');
